@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://kit.fontawesome.com/e600167fa0.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2021.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2020.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2019.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

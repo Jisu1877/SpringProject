@@ -26,4 +26,9 @@ public class UserServiceImpl implements UserService {
 	public void setUserLoginUpdate(String user_id) {
 		userDAO.setUserLoginUpdate(user_id);
 	}
+
+	@Override
+	public void setUserLog(int user_idx, String host_ip) {
+		userDAO.setUserLog(user_idx, host_ip);
+	}
 }

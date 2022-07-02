@@ -16,6 +16,18 @@ public class MessageController {
 			@RequestParam(value = "name", defaultValue = "", required = false) String name
 			) {
 		
+		if(msgFlag.equals("NeedLogin")) {
+			model.addAttribute("msg", "로그인 후 이용하세요.");
+			model.addAttribute("url", "user/userLogin");
+		}
+		if(msgFlag.equals("level0OnlyOk")) {
+			model.addAttribute("msg", "관리자만 접근 가능합니다.");
+			model.addAttribute("url", "user/userLogin");
+		}
+		if(msgFlag.equals("levelNo")) {
+			model.addAttribute("msg", "현재 레벨에서는 접근이 불가합니다.");
+			model.addAttribute("url", "user/userLogin");
+		}
 		if(msgFlag.equals("userJoinOk")) {
 			model.addAttribute("msg", name+"님 회원가입이 완료되었습니다.");
 			model.addAttribute("url", "user/userLogin");
@@ -27,6 +39,10 @@ public class MessageController {
 		else if(msgFlag.equals("userLoginOk")) {
 			model.addAttribute("msg", user_id+"님 환영합니다.");
 			model.addAttribute("url", "main/mainHome");
+		}
+		else if(msgFlag.equals("userLogoutOk")) {
+			model.addAttribute("msg", user_id+"님 로그아웃 되었습니다.");
+			model.addAttribute("url", "user/userLogin");
 		}
 		
 		return "include/message";

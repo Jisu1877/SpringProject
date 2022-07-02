@@ -52,7 +52,7 @@
 				<form name="myForm" method="post">
 					<div class="form-group">
 				      <label for="mid">ID :</label>
-				      <input type="text" class="form-control" id="user_id" value="${mid}" placeholder="아이디를 입력하세요." name="user_id" required autofocus>
+				      <input type="text" class="form-control" id="user_id" value="${cUser_id}" placeholder="아이디를 입력하세요." name="user_id" required autofocus>
 				    </div>
 					<div class="form-group" >
 				      <label for="pwd">Password :</label>
@@ -73,7 +73,7 @@
 				    <div class="form-group text-center">
 					<button type="submit" class="w3-btn w3-2019-toffee w3-round-large" onclick="fCheck()">로그인</button> &nbsp;&nbsp;		
 					</div>
-					<input type="hidden" name="hostIp" value="${pageContext.request.remoteAddr}"/>
+					<input type="hidden" name="host_ip" value="${pageContext.request.remoteAddr}"/>
 				</form>
 			</div>
 			<div class="w3-col m3 w3-margin-bottom"></div>

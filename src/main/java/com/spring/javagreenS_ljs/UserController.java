@@ -40,8 +40,17 @@ public class UserController {
 	@Autowired
     BCryptPasswordEncoder passwordEncoder;
 	
+	//로그인 창 호출
 	@RequestMapping(value = "/userLogin", method = RequestMethod.GET)
-	public String userLoginGet() {
+	public String userLoginGet(HttpServletRequest request, Model model) {
+		//쿠키에 저장된 아이디 가져오기
+		Cookie[] cookies = request.getCookies();
+		for(int i=0; i<cookies.length; i++) {
+			if(cookies[i].getName().equals("cUser_id")) {
+				model.addAttribute("cUser_id", cookies[i].getValue());
+				break;
+			}
+		}
 		return "user/userLogin";
 	}
 	
@@ -72,7 +81,7 @@ public class UserController {
 		
 		try {
 			String toMail = email;
-			String title = "[The Garden] 회원가입을 위한 Email 인증번호";
+			String title = "[The Garden] 이메일 인증번호 안내드립니다.";
 			String content = "";
 			
 			MimeMessage message = mailSender.createMimeMessage();
@@ -120,16 +129,13 @@ public class UserController {
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
 	public String userLoginPost(UserVO vo, Model model, HttpSession session,
 			HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(name ="idCheck", defaultValue = "", required = false) String idCheck) {
+			@RequestParam(name ="idCheck", defaultValue = "", required = false) String idCheck,
+			@RequestParam(name ="host_ip", defaultValue = "", required = false) String host_ip) {
 		//확인을 위해 입력 아이디로 정보 가져오기
 		UserVO vo2 = userService.getUserInfor(vo.getUser_id());
 		
-		//아이디가 일치하지 않을 경우
-		if(vo2 == null) { 
-			return "redirect:/msg/userLoginNo";
-		} 
-		//비밀번호가 일치하지 않을 경우
-		else if(!passwordEncoder.matches(vo.getUser_pwd(), vo2.getUser_pwd())) {
+		//아이디가 일치하지 않을 경우 //비밀번호가 일치하지 않을 경우  //탈퇴한 경우
+		if(vo2 == null || !passwordEncoder.matches(vo.getUser_pwd(), vo2.getUser_pwd()) || vo2.getLeave_date() != null) { 
 			return "redirect:/msg/userLoginNo";
 		}
 		else {
@@ -168,9 +174,21 @@ public class UserController {
 			userService.setUserLoginUpdate(vo.getUser_id());
 			
 			//4.로그인 기록 테이블에 자료 저장
+			userService.setUserLog(vo2.getUser_idx(), host_ip);
 			
 			model.addAttribute("user_id", vo.getUser_id());
 			return "redirect:/msg/userLoginOk";
 		}
+	}
+	
+	//로그아웃 처리
+	@RequestMapping(value = "/userLogout", method = RequestMethod.GET)
+	public String userLogoutGet(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		
+		session.invalidate();
+		
+		model.addAttribute("user_id", user_id);
+		return "redirect:/msg/userLogoutOk";
 	}
 }

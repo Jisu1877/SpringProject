@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS_ljs.dao.AdminDAO">
+	
+	<select id="getCategoryGroupInfor" resultType="com.spring.javagreenS_ljs.vo.CategoryGroupVO">
+		select * from ga_category_group where category_group_code = #{category_group_code}
+	</select>
+	
+	<select id="getCategoryGroupInfor2" resultType="com.spring.javagreenS_ljs.vo.CategoryGroupVO">
+		select * from ga_category_group
+	</select>
+	
+	<insert id="setCategoryGroup">
+		insert into ga_category_group values(DEFAULT, #{vo.category_group_code}, #{vo.category_group_name}, DEFAULT, #{vo.category_group_level}, DEFAULT)
+	</insert>
+	
+</mapper>

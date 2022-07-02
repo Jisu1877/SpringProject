@@ -10,4 +10,6 @@ public interface UserService {
 
 	public void setUserLoginUpdate(String user_id);
 
+	public void setUserLog(int user_idx, String host_ip);
+
 }

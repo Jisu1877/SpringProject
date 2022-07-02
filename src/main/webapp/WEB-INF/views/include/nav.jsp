@@ -135,12 +135,18 @@ body {
 		<span class="w3-button w3-white w3-hover-white w3-large mt-2"><a href="${ctp}/user/userLogin">LOGIN</a></span>
 		<span class="w3-button w3-white w3-hover-white w3-large mt-2"><a href="${ctp}/user/userJoin">JOIN</a></span>
 	</c:if>
+	<c:if test="${!empty sUser_id}">
+		<span class="w3-button w3-white w3-hover-white w3-large mt-2"><a href="${ctp}/user/userLogout">LOGOUT</a></span>
+	</c:if>
 	<span class="w3-button w3-white w3-hover-khaki w3-xlarge w3-right" id="SidebarMenu" onclick="sidebarMenuopen()">
 		<i class="fa fa-bars"></i>
 	</span> 
 	<span class="w3-button w3-white w3-hover-khaki w3-xlarge w3-right" id="hoverMenuBtn" onmouseover="hoverMenuOpen()">
 		<i class="fa fa-bars"></i>
 	</span> 
+	<c:if test="${sLevel == 0}">
+		<span class="w3-button w3-white w3-hover-white w3-large mt-2"><a href="${ctp}/admin/mainHome">ADMIN</a></span>
+	</c:if>
 	<span class="w3-button w3-white w3-hover-white w3-xlarge w3-right"><i class="fa fa-shopping-cart"></i></span>
 	<div class="w3-clear"></div>
 	<div id="hoverMenu" class="w3-white">
