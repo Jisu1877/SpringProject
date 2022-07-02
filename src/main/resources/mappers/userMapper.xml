@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS_ljs.dao.UserDAO">
+	<select id="getUserInfor" resultType="com.spring.javagreenS_ljs.vo.UserVO">
+		select * from ga_user where user_id = #{user_id};
+	</select>
+	
+	<insert id="setUserJoin">
+		insert into ga_user values (DEFAULT, #{vo.user_id}, #{vo.user_pwd}, #{vo.name}, #{vo.gender}, #{vo.email}, #{vo.tel}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{vo.agreement}, NULL, DEFAULT, NULL, NULL, NULL, NULL);
+	</insert>
+	
+	<update id="setUserLoginUpdate">
+		update ga_user set login_count = login_count + 1, login_date = now() where user_id = #{user_id};
+	</update>
+</mapper>
