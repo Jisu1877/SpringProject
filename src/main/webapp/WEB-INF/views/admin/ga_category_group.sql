@@ -10,3 +10,4 @@ create table ga_category_group(
 );
 
 desc ga_category_group;
+

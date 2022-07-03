@@ -14,6 +14,12 @@ public interface AdminService {
 	
 	
 	public void setCategoryGroup(CategoryGroupVO vo);
+
+	public void setCategoryUseNot(int category_group_idx);
+
+	public void setCategoryLevelSort(int changeLevel, int changeValue);
+
+	public int getCategoryLevel99();
 	
 
 }

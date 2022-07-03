@@ -28,4 +28,19 @@ public class AdminServiceImpl implements AdminService {
 	public ArrayList<CategoryGroupVO> getCategoryGroupInfor() {
 		return adminDAO.getCategoryGroupInfor2();
 	}
+
+	@Override
+	public void setCategoryUseNot(int category_group_idx) {
+		adminDAO.setCategoryUseNot(category_group_idx);
+	}
+
+	@Override
+	public void setCategoryLevelSort(int changeLevel, int changeValue) {
+		adminDAO.setCategoryLevelSort(changeLevel, changeValue);
+	}
+
+	@Override
+	public int getCategoryLevel99() {
+		return adminDAO.getCategoryLevel99();
+	}
 }

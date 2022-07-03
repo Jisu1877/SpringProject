@@ -27,26 +27,27 @@
 </style>
 <script>
 	'use strict';
+	/* 대분류 등록 */
 	function category_group_input() {
-		let category_group_name = myForm.category_group_name.value;
-		let category_group_level = myForm.category_group_level.value;
+		let name = myForm.name.value;
+		let level = ${vos.size() + 1};
 		
-		if(category_group_name == "") {
+		if(name == "") {
 			alert("대분류명을 입력하세요.");
-			myForm.category_group_name.focus();
+			myForm.name.focus();
 			return false;
 		}
-		else if(category_group_name.length > 10) {
+		else if(name.length > 10) {
 			alert("대분류명은 10자 이내로 입력하세요.");
-			myForm.category_group_name.focus();
+			myForm.name.focus();
 			return false;
 		}
 		
 		$.ajax({
 			type : "post",
 			url : "${ctp}/admin/category_group_input",
-			data : {category_group_name : category_group_name,
-					category_group_level : category_group_level
+			data : {category_group_name : name,
+					category_group_level : level
 			},
 			success : function(data) {
 				if(data == 1) {
@@ -60,8 +61,27 @@
 				alert("전송오류.");
 			}
 		});
-		
-		
+	}
+	
+	/* 사용안함 처리 */
+	function category_group_useNot(idx) {
+		$.ajax({
+			type : "post",
+			url : "${ctp}/admin/category_group_useNot",
+			data : {category_group_idx : idx},
+			success : function(data) {
+				if(data != null) {
+					//$("#level").html data를 int타입으로 바꾼다음 vos.size() 에서 빼서 html로 넣어주는 작업 진행 중..
+					location.reload();
+				}
+				else {
+					alert("사용안함 처리 실패. 다시 시도해주세요.");
+				}
+			},
+			error : function() {
+				alert("전송오류.");
+			}
+		});
 	}
 </script>
 </head>
@@ -85,43 +105,59 @@
  		<form name="myForm">
  			<div class="box w3-border">
 				<div class="w3-white w3-padding">
-					<div style="padding: 5px;">- 카테고리를 등록하고 순서를 조정할 수 있습니다.<br>- '대분류'를 등록한 뒤에, '중분류' 등록이 가능합니다.</div>
+					<div style="padding: 5px;">
+						- 카테고리를 등록하고 순서를 조정할 수 있습니다.<br>
+						- '대분류'는 최대 10개까지 등록가능합니다.<br>
+						- '대분류'를 등록한 뒤에, '중분류' 등록이 가능합니다.<br>
+						- 노출순서가 '99'인 경우 현재 사용중이지 않은 카테고리입니다.
+					</div>
 					<div class="w3-white" style="border: 10px solid lightslategray;">
-						<table class="table table-borderless w3-2020-brilliant-white" style="margin:0px;">
-							<tr><td colspan="3">&nbsp;</td></tr>
+						<table class="table table-border w3-2020-brilliant-white" style="margin:0px;">
+							<tr><td colspan="6">&nbsp;</td></tr>
 							<tr>
 								<td width="10%">노출 순서</td>
-								<td>분류명</td>
-								<td>카테고리 코드</td>
-								<td>사용유무</td>
-								<td>삭제유무</td>
+								<td width="35%">분류명</td>
+								<td width="15%">카테고리 코드</td>
+								<td width="10%" class="text-center">사용 여부</td>
+								<td width="17%"class="text-center">수정/삭제</td>
+								<td class="w3-center">중분류 추가</td>
 							</tr>
 							<c:forEach var="vo" items="${vos}" varStatus="st">
 								<tr>
-									<td>
-										<input type="text" value="${vo.category_group_level}" name="category_group_level" class="w3-input w3-center">
+									<td class="w3-center">
+										<span id="spanLevel${vo.category_group_idx}">${vo.category_group_level}</span>
+										<input type="text" value="${vo.category_group_level}" name="category_group_level" style="display:none" class="w3-input">
 									</td>
 									<td>
-										<input type="text" value="${vo.category_group_name}" name="category_group_name" class="w3-input">
+										<span id="spanName${vo.category_group_idx}">${vo.category_group_name}</span>
+										<input type="text" value="${vo.category_group_name}" name="category_group_name" style="display:none" class="w3-input">
 									</td>
 									<td>
 										${vo.category_group_code}
 									</td>
 									<td>
-										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="사용" onclick="category_group_input()">
-										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="사용안함" onclick="category_group_input()">
+										<c:if test="${vo.category_group_use_yn == 'y'}">
+											<input type="button" class="w3-button w3-white w3-hover-white w3-small" value="사용 안함" onclick="category_group_useNot(${vo.category_group_idx})">
+										</c:if>
+										<c:if test="${vo.category_group_use_yn == 'n'}">
+											<input type="button" class="w3-button w3-white w3-hover-white w3-small" value="사용" onclick="category_group_input()">
+										</c:if>
 									</td>		
-									<td>
-										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="삭제" onclick="category_group_input()">
-									</td>		
+									<td class="text-center">
+										<input type="button" class="w3-btn w3-2020-classic-blue w3-small" value="수정" onclick="">
+										<input type="button" class="w3-btn w3-2020-classic-blue w3-small" value="삭제" onclick="">
+									</td>
+									<td class="w3-center">
+										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="추가" onclick="">
+									</td>	
 								</tr>
 							</c:forEach>
 							<tr>
 								<td class="text-center">
-									<span name="category_group_level" value="${vos.size() + 1}">${vos.size() + 1}</span>
+									<span id="level"></span>
 								</td>
 								<td colspan="3">
-									<input type="text" name="category_group_name" placeholder="대분류명을 입력하세요.(10자 이내)" class="w3-input">
+									<input type="text" name="name" placeholder="대분류명을 입력하세요.(10자 이내)" class="w3-input">
 								</td>
 								<td>
 									<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="등록" onclick="category_group_input()">

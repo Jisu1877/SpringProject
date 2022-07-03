@@ -1,11 +1,13 @@
 package com.spring.javagreenS_ljs;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,5 +65,43 @@ public class AdminController {
 		adminService.setCategoryGroup(vo);
 		return "1";
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value = "/category_group_useNot", method = RequestMethod.POST)
+	public String category_group_useNotPost(int category_group_idx) {
+		//카테고리 사용안함 처리 && 노출 레벨(99)로 조정
+		adminService.setCategoryUseNot(category_group_idx);
+		
+		//노출 순서 조정 알고리즘
+		ArrayList<CategoryGroupVO> vos = adminService.getCategoryGroupInfor();
+		int cnt = 0;
+		int changeLevel = 0;
+		int changeValue = 0;
+		for(int i=0; i<vos.size(); i++) {
+			if(vos.size() == cnt + 1) {
+				break;
+			}
+			int beforeLevel = vos.get(i).getCategory_group_level();
+			if(beforeLevel != 99) {
+				int nextLevel = vos.get(i+1).getCategory_group_level();
+				if((beforeLevel + 1) != nextLevel) {
+					changeLevel = beforeLevel + 2;
+					changeValue = beforeLevel + 1;
+					adminService.setCategoryLevelSort(changeLevel, changeValue);
+				}
+				else if(beforeLevel == changeLevel) {
+					changeLevel = beforeLevel + 1;
+					changeValue = beforeLevel;
+					adminService.setCategoryLevelSort(changeLevel, changeValue);
+				}
+			}
+			cnt++;
+		}
+		
+		//노출레벨이 99개인 대분류 개수 알아오기
+		int value99 = adminService.getCategoryLevel99();
+		String strValue99 = String.valueOf(value99);
+		
+		return strValue99;
+	}
 }

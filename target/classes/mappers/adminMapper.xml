@@ -12,8 +12,19 @@
 		select * from ga_category_group
 	</select>
 	
+	<select id="getCategoryLevel99" resultType="int">
+		select count(*) from ga_category_group where category_group_level = 99
+	</select>
+	
 	<insert id="setCategoryGroup">
 		insert into ga_category_group values(DEFAULT, #{vo.category_group_code}, #{vo.category_group_name}, DEFAULT, #{vo.category_group_level}, DEFAULT)
 	</insert>
 	
+	<update id="setCategoryUseNot">
+		update ga_category_group set category_group_use_yn = 'n', category_group_level = 99 where category_group_idx = #{category_group_idx}
+	</update>
+	
+	<update id="setCategoryLevelSort">
+		update ga_category_group set category_group_level = #{changeValue} where category_group_level = #{changeLevel};
+	</update>
 </mapper>
