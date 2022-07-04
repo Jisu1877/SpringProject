@@ -33,7 +33,7 @@ create table ga_item_notice(
     notice_title1	VARCHAR(10) NOT NULL DEFAULT '품명/모델명',
 	notice_value1	VARCHAR(255) NOT NULL DEFAULT '상품상세참조',
 	notice_title2	VARCHAR(50) NOT NULL DEFAULT '법에 의한 인증, 허가 등을 받았음을 확인할 수 있는 경우 그에 대한 사항',
-	notice_value2	VARCHAR(255) NOT NULL DEFAULT '상품상세참조',
+	notice_value2	VARCHAR(255) NOT NULL DEFAULT '해당없음',
 	notice_title3	VARCHAR(10) NOT NULL DEFAULT '제조자(사)',
 	notice_value3	VARCHAR(255) NOT NULL DEFAULT '상품상세참조',
 	notice_title4	VARCHAR(10) NOT NULL DEFAULT '제조국',
@@ -44,3 +44,5 @@ create table ga_item_notice(
 );
 
 desc ga_item_notice;
+
+drop table ga_item_notice;

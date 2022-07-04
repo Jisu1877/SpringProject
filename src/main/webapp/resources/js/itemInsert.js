@@ -1,4 +1,193 @@
 'use strict';
+let categoryFlag = 0;
+let seller_discount_flag = 0;
+let seller_point_flag = 0;
+
+function itemInsert() {
+	let categoryGroup = basicForm.categoryGroup.value;
+	let category = basicForm.category.value;
+	let item_name = basicForm.item_name.value;
+	let item_summary = basicForm.item_summary.value;
+	let sale_price = basicForm.sale_price.value;
+	let seller_discount_amount = basicForm.seller_discount_amount.value;
+	let seller_point = basicForm.seller_point.value;
+	let stock_quantity = basicForm.stock_quantity.value;
+	let order_min_quantity = basicForm.order_min_quantity.value;
+	let order_max_quantity = basicForm.order_max_quantity.value;
+	
+	if(categoryGroup == "") {
+		alert("대분류를 선택하세요.");
+		return false;
+	}
+	else if(categoryFlag == 1 && category == "") {
+		alert("중분류를 선택하세요.");
+		return false;
+	}
+	else if(item_name == "") {
+		alert("상품명을 입력하세요.");
+		basicForm.item_name.focus();
+		return false;
+	}
+	else if(item_name.length > 100) {
+		alert("상품명은 100자 이내로 입력하세요.");
+		basicForm.item_name.focus();
+		return false;
+	}
+	else if(item_summary == "") {
+		alert("상품 간단설명을 입력하세요.");
+		basicForm.item_summary.focus();
+		return false;
+	}
+	else if(item_summary.length > 200) {
+		alert("상품 간단설명은 200자 이내로 입력하세요.");
+		basicForm.item_summary.focus();
+		return false;
+	}
+	else if(sale_price == "") {
+		alert("판매가를 입력하세요.");
+		basicForm.sale_price.focus();
+		return false;
+	}
+	else if(seller_discount_amount == "" && seller_discount_flag == 1) {
+		alert("할인금액을 입력하세요.");
+		basicForm.seller_discount_amount.focus();
+		return false;
+	}
+	else if(seller_point == "" && seller_point_flag == 1) {
+		alert("지급 포인트를 입력하세요.");
+		basicForm.seller_point.focus();
+		return false;
+	}
+	else if(stock_quantity == "") {
+		alert("재고 수량을 입력하세요.");
+		basicForm.stock_quantity.focus();
+		return false;
+	}
+	else if(order_min_quantity > order_max_quantity) {
+		alert("최대 주문 수량을 최소 주문 수량보다 적을 수 없습니다.");
+		basicForm.order_max_quantity.focus();
+		return false;
+	}
+	
+}
+
+//할인여부 설정
+$(document).ready(function(){
+	$("input[name='seller_discount_flag']").change(function(){
+		let seller_flag = $("input[name='seller_discount_flag']:checked").val();
+		if(seller_flag == 'y') {
+			document.getElementById("seller_discount_flagForm").style.display = "block";
+			seller_discount_flag = 1;
+		}
+		else {
+			document.getElementById("seller_discount_flagForm").style.display = "none";
+			seller_discount_flag = 0;
+		}
+	});
+
+});
+
+//포인트지급여부 설정
+$(document).ready(function(){
+	$("input[name='seller_point_flag']").change(function(){
+		let seller_point_flag_value = $("input[name='seller_point_flag']:checked").val();
+		if(seller_point_flag_value == 'y') {
+			document.getElementById("seller_pointForm").style.display = "block";
+			seller_point_flag = 1;
+		}
+		else {
+			document.getElementById("seller_pointForm").style.display = "none";
+			seller_point_flag = 0;
+		}
+	});
+
+});
+
+function calPrice() {
+	let sale_price = basicForm.sale_price.value;
+	let discount_price = basicForm.seller_discount_amount.value;
+	
+	if(sale_price <= discount_price) {
+		alert("할인금액은 판매가보다 적은 금액을 입력해야합니다.");
+		basicForm.seller_discount_amount.value = "";
+		basicForm.seller_discount_amount.focus();
+		return false;
+	}
+	else if(discount_price < 1) {
+		alert("할인금액은 최소 1원 이상이어야 합니다.");
+		basicForm.seller_discount_amount.value = "";
+		basicForm.seller_discount_amount.focus();
+		return false;
+	}
+	
+	let calPrice = sale_price - discount_price;
+	
+	$("#calPrice").html(calPrice);
+}
+
+function stock_quantityForm() {
+	let stock_quantity = basicForm.stock_quantity.value;
+	
+	if(stock_quantity < 0 && stock_quantity != "") {
+		alert("재고 수량은 음수값을 입력할 수 없습니다.");
+		basicForm.stock_quantity.value = "";
+		basicForm.stock_quantity.focus();
+		return false;
+	}
+	
+	if(stock_quantity == 0 && stock_quantity != "") { 
+		document.getElementById("schedule_date").style.display = "block";
+	}
+	else {
+		document.getElementById("schedule_date").style.display = "none";
+	}
+}
+
+function minValueCheck1() {
+	let sale_price = basicForm.sale_price.value;
+	
+	if(sale_price <= 0) {
+		alert("판매가를 0원 이상 입력하세요.");
+		basicForm.sale_price.value = "";
+		basicForm.sale_price.focus();
+		return false;
+	}
+	
+}
+
+function minValueCheck2() {
+	let seller_point = basicForm.seller_point.value;
+	
+	if(seller_point <= 0) {
+		alert("지급 포인트를 0원 이상 입력하세요.");
+		basicForm.seller_point.value = "";
+		basicForm.seller_point.focus();
+		return false;
+	}
+}
+
+function minValueCheck3() {
+	let order_min_quantity = basicForm.order_min_quantity.value;
+	
+	if(order_min_quantity < 1 && order_min_quantity != "") {
+		alert("최소 구매 수량은 1개 이상이어야 합니다.");
+		basicForm.order_min_quantity.value = "";
+		basicForm.order_min_quantity.focus();
+		return false;
+	}
+}
+
+function minValueCheck4() {
+	let order_max_quantity = basicForm.order_max_quantity.value;
+	
+	if(order_max_quantity < 1 && order_max_quantity != "") {
+		alert("최대 구매 수량은 1개 이상이어야 합니다.");
+		basicForm.order_max_quantity.value = "";
+		basicForm.order_max_quantity.focus();
+		return false;
+	}
+}
+
 
 $(function(){
 	$("#categoryGroup").change(function(){
@@ -13,14 +202,21 @@ $(function(){
 			url : "getCategory",
 			data : {category_group_idx : categoryGroup},
 			success : function(vos) {
+				let cnt = 0;
 				let str = '';
-	    				str += '<option value="">중분류</option>';
-	    				for(let i=0; i<vos.length; i++) {
-	    					if(vos[i].category_name == null) break;
-	    					str += '<option value="'+vos[i].category_idx+'">'+vos[i].category_name+'</option>'
-	    				}
-	    				
-	    				$("#category").html(str);
+				str += '<option value="">중분류</option>';
+				for(let i=0; i<vos.length; i++) {
+					if(vos[i].category_name == null) break;
+					cnt++;
+					str += '<option value="'+vos[i].category_idx+'">'+vos[i].category_name+'</option>'
+				}
+				if(cnt > 0) {
+					categoryFlag = 1;
+				}
+				else {
+					categoryFlag = 0;
+				}
+				$("#category").html(str);
 			},
 			error : function() {
 				
@@ -187,6 +383,5 @@ function fileBoxAppend() {
 function deleteBox(cnt) {
 	$("#fBox"+cnt).remove();
 }
-
 
 
