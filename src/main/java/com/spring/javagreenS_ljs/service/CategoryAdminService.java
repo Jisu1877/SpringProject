@@ -31,4 +31,9 @@ public interface CategoryAdminService {
 
 	public void setCategory(CategoryVO vo);
 
+	public ArrayList<CategoryGroupVO> getCategoryGroupInforOnlyUse();
+
+	public ArrayList<CategoryVO> getCategoryInfor(int category_group_idx);
+
+
 }

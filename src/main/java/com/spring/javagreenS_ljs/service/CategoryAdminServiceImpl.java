@@ -77,4 +77,15 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 	public void setCategory(CategoryVO vo) {
 		categoryDAO.setCategory(vo);
 	}
+
+	@Override
+	public ArrayList<CategoryGroupVO> getCategoryGroupInforOnlyUse() {
+		return categoryDAO.getCategoryGroupInforOnlyUse();
+	}
+
+	@Override
+	public ArrayList<CategoryVO> getCategoryInfor(int category_group_idx) {
+		return categoryDAO.getCategoryInfor(category_group_idx);
+	}
+
 }

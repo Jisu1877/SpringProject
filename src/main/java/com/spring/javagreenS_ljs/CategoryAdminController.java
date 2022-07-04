@@ -29,7 +29,7 @@ public class CategoryAdminController {
 	public String categoryHomeGet(Model model) {
 		ArrayList<CategoryGroupVO> vos = categoryAdminService.getCategoryGroupInfor();
 		model.addAttribute("vos", vos);
-		return "admin/categoryHome";
+		return "admin/item/categoryHome";
 	}
 	
 	@ResponseBody

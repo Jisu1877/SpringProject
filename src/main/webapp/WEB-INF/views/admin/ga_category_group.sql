@@ -10,6 +10,7 @@ create table ga_category_group(
 
 desc ga_category_group;
 
+select * from ga_category_group where category_group_use_yn = 'y';
 
 select g.*, c.* from ga_category_group g
 LEFT JOIN ga_category c ON g.category_group_idx = c.category_group_idx

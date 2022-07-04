@@ -24,6 +24,10 @@
 		select * from ga_category where category_group_idx = #{idx}
 	</select>
 	
+	<select id="getCategoryGroupInforOnlyUse" resultType="com.spring.javagreenS_ljs.vo.CategoryGroupVO">
+		select * from ga_category_group where category_group_use_yn = 'y';
+	</select>
+	
 	<insert id="setCategoryGroup">
 		insert into ga_category_group values(DEFAULT, #{vo.category_group_code}, #{vo.category_group_name}, DEFAULT, #{vo.category_group_level})
 	</insert>

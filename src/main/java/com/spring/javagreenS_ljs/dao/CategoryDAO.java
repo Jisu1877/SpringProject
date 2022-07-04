@@ -33,4 +33,7 @@ public interface CategoryDAO {
 
 	public ArrayList<CategoryVO> getCategoryInfor(@Param("idx") int idx);
 
+	public ArrayList<CategoryGroupVO> getCategoryGroupInforOnlyUse();
+
+
 }

@@ -167,7 +167,7 @@
 	            <br>
 		   </div>
 				  <p><br></p>
-			      <p style="text-align: center;"><button class="w3-btn w3-2019-toffee w3-round-large btn-lg" type="button" onclick="fCheck()">회원가입</button></p>
+			      <p style="text-align: center;"><button class="w3-btn w3-2019-toffee w3-round-large" type="button" onclick="fCheck()">회원가입</button></p>
 				  <input type="hidden" name="email" />
 				  <input type="hidden" name="tel" />
 				  <input type="hidden" name="agreement" />

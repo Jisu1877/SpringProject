@@ -30,6 +30,9 @@
 	let MaxLevel;
 	let IntLevel;
 	$(function(){
+		/* 중분류 숨기기 */
+		/* $(".subCategory").hide(); */
+		
 		/* 최대 노출 레벨 알아오기 */
 		$.ajax({
 			type : "post",
@@ -221,7 +224,7 @@
 	
 	/* 중분류 추가 */
 	function category_input(idx) {
-		let category_name = document.getElementById("category_name").value;
+		let category_name = document.getElementById("category_name"+idx).value;
 		
 		if(category_name == "") {
 			alert("중분류명을 입력하세요.");
@@ -256,7 +259,21 @@
 	}
 	
 	/* 중분류 보기 */
-	function showCategory() {
+	function showCategory(idx) {
+		$(".subCategory"+idx).show();
+		document.getElementById("hideCategoryBtn"+idx).style.display = "block";
+		document.getElementById("showCategoryBtn"+idx).style.display = "none";
+	}
+	
+	/* 중분류 가리기 */
+	function hideCategory(idx) {
+		$(".subCategory"+idx).hide();
+		document.getElementById("hideCategoryBtn"+idx).style.display = "none";
+		document.getElementById("showCategoryBtn"+idx).style.display = "block";
+	}
+	
+	/* 중분류 사용중지 */
+	function category_useNot() {
 		
 	}
 	
@@ -294,11 +311,12 @@
 							<tr><td colspan="6">&nbsp;</td></tr>
 							<tr>
 								<td width="10%">노출 순서</td>
-								<td width="35%">분류명</td>
+								<td width="30%">분류명</td>
 								<td width="13%">카테고리 코드</td>
 								<td width="8%" class="text-center">사용 처리</td>
 								<td width="20%"class="text-center">수정/삭제</td>
 								<td class="w3-center">중분류 추가</td>
+								<td></td>
 							</tr>
 							<c:forEach var="vo" items="${vos}" varStatus="st">
 								<tr>
@@ -312,12 +330,6 @@
 											<c:if test="${vo.category_group_use_yn == 'y'}">
 												<button class="badge badge-primary" disabled>사용중</button>
 											</c:if>
-											&nbsp;&nbsp;
-										<%-- 	
-											<c:if test="${vo.category_idx != 0}">
-												<button onclick="showCategory()"><i class="fa-solid fa-chevron-down"></i></button>
-											</c:if>
-											 --%>
 										</span>
 										<input id="inputName${vo.category_group_idx}" type="text" value="${vo.category_group_name}" name="category_group_name" style="display:none" class="w3-input">
 									</td>
@@ -341,28 +353,55 @@
 									</td>
 									<td class="w3-center">
 										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="추가" onclick="categoryAdd(${vo.category_group_idx})">
+									</td>
+									<td>
+										<c:if test="${vo.categoryList[0] != null}">
+											<button onclick="hideCategory(${vo.category_group_idx}); return false;" id="hideCategoryBtn${vo.category_group_idx}" style="display:none"><i class="fa-solid fa-angle-up"></i></button>
+											<button onclick="showCategory(${vo.category_group_idx}); return false;" id="showCategoryBtn${vo.category_group_idx}"><i class="fa-solid fa-chevron-down"></i></button>
+										</c:if>
 									</td>	
 								</tr>
 								<tr id="subCategoryInput${vo.category_group_idx}" style="display: none" class="w3-white">
 									<td class="text-center">중분류<br>추가</td>
 									<td colspan="2">
-										<input type="text" id="category_name" name="category_name" placeholder="중분류명을 입력하세요.(10자 이내)" class="w3-input w3-border w3-light-grey" onKeypress="javascript:if(event.keyCode==13) {category_input()}">
+										<input type="text" id="category_name${vo.category_group_idx}" name="category_name" placeholder="중분류명을 입력하세요.(10자 이내)" class="w3-input w3-border w3-light-grey" onKeypress="javascript:if(event.keyCode==13) {category_input()}">
 									</td>
-									<td>
+									<td class="text-center">
 										<input type="button" class="w3-btn w3-2020-amberglow w3-small" value="등록" onclick="category_input(${vo.category_group_idx})">
 									</td>
 									<td></td>
 									<td class="text-center">
 										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="취소" onclick="categoryAddNo(${vo.category_group_idx})">
 									</td>
+									<td></td>
 								</tr>
-								<%-- 
-								<c:if test="${vo.category_idx != 0}">
-									<tr>
+								<!-- 중분류 -->
+								<c:set var="i" value="0"/>
+								<c:forEach var="cVO" items="${vo.categoryList}">
+									<tr class="w3-light-gray subCategory${vo.category_group_idx}" style="display:none">
+										<td class="text-right">&nbsp; ${i+1}</td>
+										<td>${cVO.category_name}</td>
+										<td>-</td>
+										<td class="text-center">
+											<c:if test="${vo.categoryList[i].category_use_yn == 'y'}">
+												<input type="button" class="w3-btn w3-2020-amberglow w3-tiny" value="사용 중지" onclick="category_useNot(${vo.categoryList[i].category_idx})">
+											</c:if>
+											<c:if test="${vo.categoryList[i].category_use_yn == 'n'}">
+												<input type="button" class="w3-btn w3-2020-amberglow w3-tiny" value="사용" onclick="category_group_use(${vo.category_group_idx})">
+											</c:if>
+										</td>
+										<td class="text-center">
+											<c:if test="${vo.categoryList[i].category_use_yn == 'y'}">
+												<input type="button" id="updateBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정" onclick="category_group_update(${vo.category_group_idx})">
+												<input type="button" id="updateOkBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정완료" onclick="category_group_updateOk(${vo.category_group_idx}, ${vo.category_group_level})" style="display: none; margin-left: 30px;">
+											</c:if>
+											<input type="button" id="deleteBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="삭제" onclick="category_group_delete(${vo.category_group_idx}, ${vo.category_group_level})">
+										</td>
 										<td></td>
+										<td></td>
+										<c:set var="i" value="${i + 1}"/>
 									</tr>
-								</c:if>
-								 --%>
+								 </c:forEach>
 							</c:forEach>
 							<tr id = "inputTr" class="w3-2020-faded-denim">
 								<td class="text-center" id="groupLevel">
