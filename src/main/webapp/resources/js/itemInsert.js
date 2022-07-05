@@ -2,6 +2,11 @@
 let categoryFlag = 0;
 let seller_discount_flag = 0;
 let seller_point_flag = 0;
+let item_option_flag = 0;
+let detail_content_flag = 1;
+let optionCnt = 1;
+let optionStockCnt = 0;
+let shipment_type_flag = 0;
 
 function itemInsert() {
 	let categoryGroup = basicForm.categoryGroup.value;
@@ -14,6 +19,42 @@ function itemInsert() {
 	let stock_quantity = basicForm.stock_quantity.value;
 	let order_min_quantity = basicForm.order_min_quantity.value;
 	let order_max_quantity = basicForm.order_max_quantity.value;
+	
+	let titlephoto = imageForm.myphoto.value;
+	let file1 = imageForm.file1.value;
+	
+	let detail_content_image = contentForm.detail_content_image.value;
+	let detail_content = contentForm.content.value;
+	
+	let origin_country = inforForm.origin_country.value;
+	let item_model_name = inforForm.item_model_name.value;
+	let after_service = inforForm.after_service.value;
+	
+	let notice_value1 = noticeForm.notice_value1.value;
+	let notice_value2 = noticeForm.notice_value2.value;
+	let notice_value3 = noticeForm.notice_value3.value;
+	let notice_value4 = noticeForm.notice_value4.value;
+	let notice_value5 = noticeForm.notice_value5.value;
+	
+	let shipping_price = shipmentForm.shipping_price.value;
+	let shipping_free_amount = shipmentForm.shipping_free_amount.value;
+	let shipping_extra_charge = shipmentForm.shipping_extra_charge.value;
+	let shipping_return_price = shipmentForm.shipping_return_price.value;
+	
+	//전송 전에 주소를 하나로 묶어서 전송처리 준비한다.
+	//출고지
+	let shipment_postcode = shipmentForm.shipment_postcode.value;
+	let shipment_roadAddress = shipmentForm.shipment_roadAddress.value;
+	let shipment_detailAddress = shipmentForm.shipment_detailAddress.value;
+	let shipment_extraAddress = shipmentForm.shipment_extraAddress.value;
+	let shipment_address = shipment_postcode + "/" + shipment_roadAddress + "/" + shipment_detailAddress + "/" + shipment_extraAddress + "/";
+	
+	//반송지
+	let shipment_return_postcode = shipmentForm.shipment_return_postcode.value;
+	let shipment_return_roadAddress = shipmentForm.shipment_return_roadAddress.value;
+	let shipment_return_detailAddress = shipmentForm.shipment_return_detailAddress.value;
+	let shipment_return_extraAddress = shipmentForm.shipment_return_extraAddress.value;
+	let shipment_return_address = shipment_return_postcode + "/" + shipment_return_roadAddress + "/" + shipment_return_detailAddress + "/" + shipment_return_extraAddress + "/";
 	
 	if(categoryGroup == "") {
 		alert("대분류를 선택하세요.");
@@ -58,9 +99,19 @@ function itemInsert() {
 		basicForm.seller_point.focus();
 		return false;
 	}
-	else if(stock_quantity == "") {
+	else if(stock_quantity == "" && item_option_flag == 0) {
 		alert("재고 수량을 입력하세요.");
 		basicForm.stock_quantity.focus();
+		return false;
+	}
+	else if(order_min_quantity == "") {
+		alert("최소 주문 수량을 입력하세요.");
+		basicForm.order_min_quantity.focus();
+		return false;
+	}
+	else if(order_max_quantity == "") {
+		alert("최대 주문 수량을 입력하세요.");
+		basicForm.order_max_quantity.focus();
 		return false;
 	}
 	else if(order_min_quantity > order_max_quantity) {
@@ -68,8 +119,155 @@ function itemInsert() {
 		basicForm.order_max_quantity.focus();
 		return false;
 	}
+	else if(titlephoto == "") {
+		alert("대표 이미지 등록은 필수 사항입니다.");
+		return false;
+	}
+	else if(file1 == "") {
+		alert("추가 이미지는 최소 1장 이상 등록해야합니다.");
+		return false;
+	}
+	else if(detail_content_image == "" && detail_content_flag == 1) {
+		alert("상품상세설명 이미지를 등록하세요.");
+		return false;
+	}
+	else if(detail_content == "" && detail_content_flag == 0) {
+		alert("상품상세설명 내용을 입력하세요.");
+		return false;
+	}
+	else if(notice_value1 == "" || notice_value2 == "" || notice_value3 == "" || notice_value4 == "" || notice_value5 == "") {
+		alert("상품 정보 고시 내용은 모두 필수 입력사항입니다.");
+		return false;
+	}
+	else if(origin_country == "") {
+		alert("원산지를 입력하세요.");
+		inforForm.origin_country.focus();
+		return false;
+	}
+	else if(item_model_name == "") {
+		alert("모델명을 입력하세요.");
+		inforForm.item_model_name.focus();
+		return false;
+	}
+	else if(after_service == "") {
+		alert("A/S안내 내용을 입력하세요.");
+		inforForm.after_service.focus();
+		return false;
+	}
+	else if(shipping_price == "" && shipment_type_flag != 1) {
+		alert("배송비를 입력하세요.");
+		shipmentForm.shipping_price.focus();
+		return false;
+	}
+	else if(shipping_free_amount == "" && shipment_type_flag != 1) {
+		alert("조건부 무료배송 금액을 입력하세요.");
+		shipmentForm.shipping_free_amount.focus();
+		return false;
+	}
+	else if(shipping_extra_charge == "" && shipment_type_flag != 1) {
+		alert("제주도 추가 배송비를 입력하세요.");
+		shipmentForm.shipping_extra_charge.focus();
+		return false;
+	}
+	else if(shipping_price <= 0 && shipment_type_flag != 1) {
+		alert("배송비를 0원 이상의 금액으로 입력하세요.");
+		shipmentForm.shipping_price.focus();
+		return false;
+	}
+	else if(shipping_free_amount <= 0 && shipment_type_flag != 1) {
+		alert("조건부 무료배송 금액을 0원 이상의 금액으로 입력하세요.");
+		shipmentForm.shipping_free_amount.focus();
+		return false;
+	}
+	else if(shipping_extra_charge < 0 && shipment_type_flag != 1) {
+		alert("제주도 추가 배송비 금액에 음수값을 입력할 수 없습니다.");
+		shipmentForm.shipping_extra_charge.focus();
+		return false;
+	}
+	else if(shipping_return_price == "") {
+		alert("교환/반품 배송비를 입력하세요.");
+		shipmentForm.shipping_return_price.focus();
+		return false;
+	}
+	else if(shipment_postcode == "" || shipment_roadAddress == "" || shipment_detailAddress == "") {
+		alert("출고지 주소를 입력하세요.");
+		shipmentForm.shipment_postcode.focus();
+		return false;
+	}
+	else if(shipment_return_postcode == "" || shipment_return_roadAddress == "" || shipment_return_detailAddress == "") {
+		alert("반송지 주소를 입력하세요.");
+		shipmentForm.shipment_return_postcode.focus();
+		return false;
+	}
 	
 }
+
+//상품정보고시 일괄 정보 입력
+$(document).ready(function() {
+$("input:checkbox[id='noticeAllInput']").on('click', function() {
+      if ( $(this).prop('checked') ) {
+        noticeForm.notice_value1.value = "상품상세 참조";
+		noticeForm.notice_value2.value = "상품상세 참조";
+		noticeForm.notice_value3.value = "상품상세 참조";
+		noticeForm.notice_value4.value = "상품상세 참조";
+		noticeForm.notice_value5.value = "상품상세 참조";
+      }
+    });
+});
+
+
+//옵션여부 설정
+$(document).ready(function(){
+	$("input[name='item_option_flag']").change(function(){
+		let item_option_flag_value = $("input[name='item_option_flag']:checked").val();
+		if(item_option_flag_value == 'y') {
+			document.getElementById("item_option_flagForm").style.display = "block";
+			$("#stock_quantity").attr("disabled", true);
+			item_option_flag = 1;
+		}
+		else {
+			document.getElementById("item_option_flagForm").style.display = "none";
+			$("#stock_quantity").attr("disabled", false);
+			item_option_flag = 0;
+		}
+	});
+
+});
+
+//배송비 여부 설정
+$(document).ready(function(){
+	$("input[name='shipment_type']").change(function(){
+		let shipment_type_value = $("input[name='shipment_type']:checked").val();
+		if(shipment_type_value == 1) {
+			document.getElementById("shipmentPriceFrom").style.display = "none";
+			shipment_type_flag = 1;
+		}
+		else {
+			document.getElementById("shipmentPriceFrom").style.display = "block";
+			shipment_type_flag = 0;
+		}
+	});
+
+});
+
+//상품상세 설명 유형 선택
+$(document).ready(function(){
+	$("input[name='detail_content_flag']").change(function(){
+		let detail_content_flag_value = $("input[name='detail_content_flag']:checked").val();
+		if(detail_content_flag_value == 0) {
+			document.getElementById("detail_contentForm").style.display = "block";
+			document.getElementById("detail_content_imageForm").style.display = "none";
+			detail_content_flag = 0;
+		}
+		else {
+			document.getElementById("detail_contentForm").style.display = "none";
+			document.getElementById("detail_content_imageForm").style.display = "block";
+			detail_content_flag = 1;
+		}
+	});
+
+});
+
 
 //할인여부 설정
 $(document).ready(function(){
@@ -188,6 +386,63 @@ function minValueCheck4() {
 	}
 }
 
+//옵션 추가 
+function addOptions() {
+	optionCnt++;
+	let str = '';
+	str += '<tr id="addoptionTr'+optionCnt+'">';	
+	str += '<td width="5.5%"></td>';	
+	str += '<td>';	
+	str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+optionCnt+'" name="option_name'+optionCnt+'" type="text" placeholder="옵션 이름">';	
+	str += '</td>';	
+	str += '<td>';	
+	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck('+optionCnt+')"  min="0" id="option_price'+optionCnt+'" name="option_price'+optionCnt+'" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">';	
+	str += '</td>';	
+	str += '<td>';	
+	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck('+optionCnt+')" min="0" id="option_stock_quantity'+optionCnt+'" name="option_stock_quantity'+optionCnt+'" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">';	
+	str += '</td>';	
+	str += '<td>';	
+	str += '<a href="javascript:deleteOptions('+optionCnt+')"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>';	
+	str += '</td>';	
+	str += '</tr>';	
+	$("#addOption").append(str);
+}
+
+//옵션삭제
+function deleteOptions(num) {
+	$('tr').remove("#addoptionTr"+num);
+}
+
+//옵션 가격 체크
+function optionPriceCheck(num) {
+	let optionPrice = $("#option_price"+num).val();
+	
+	if(optionPrice < 0) {
+		alert("음수값을 입력하셨습니다.");
+		document.getElementById("option_price"+num).value = 0;
+		return false;
+	}
+}
+
+//옵션 재고수량 체크 
+function optionStockCheck(num) {
+	let optionStock = $("#option_stock_quantity"+num).val();
+	
+	if(optionStock < 0) {
+		alert("음수값을 입력하셨습니다.");
+		document.getElementById("option_stock_quantity"+num).value = 0;
+		return false;
+	}
+	
+	/*
+	let NumberOptionStockCnt = Number(optionStockCnt);
+	let NumberOptionStock = Number(optionStock);
+	let NumberOptionCal = NumberOptionStockCnt + NumberOptionStock;
+	optionStockCnt = NumberOptionCal;
+	basicForm.stock_quantity.value = NumberOptionCal;
+	$("#itemCnt").html(NumberOptionCal);*/
+}
+
 
 $(function(){
 	$("#categoryGroup").change(function(){
@@ -241,9 +496,11 @@ $(function(){
 
 
 $(function() {
+	/*datepicker 세팅*/
 	let today = new Date();
 	$("#stock_schedule_date").datepicker();
 	$('#stock_schedule_date').datepicker("option", "minDate", today);
+	
 }); 
 
 
@@ -383,5 +640,4 @@ function fileBoxAppend() {
 function deleteBox(cnt) {
 	$("#fBox"+cnt).remove();
 }
-
 

@@ -111,7 +111,7 @@
 						    	<div class="form-group">
 							      <label for="sale_price">판매가 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" id="sale_price" name="sale_price" type="number" onchange="minValueCheck1()" placeholder="숫자만 입력" min="0" required>
+						    			<input class="input w3-padding-16 w3-border form-control" id="sale_price" name="sale_price" type="number" onchange="minValueCheck1()" placeholder="숫자만 입력" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -136,7 +136,7 @@
 							    	<div class="form-group">
 								      <label for="seller_discount_amount">할인금액 <span style="color:red;">🔸&nbsp;</span></label>
 								      <div class="input-group mb-3" style="margin-bottom:0px">
-							    			<input class="input w3-padding-16 w3-border form-control" id="seller_discount_amount" min="0" name="seller_discount_amount" type="number" onchange="calPrice()" placeholder="숫자만 입력" required>
+							    			<input class="input w3-padding-16 w3-border form-control" id="seller_discount_amount" min="0" name="seller_discount_amount" type="number" onchange="calPrice()" placeholder="숫자만 입력" onkeydown="javascript: return event.keyCode == 69 ? false : true" required>
 							    			<div class="input-group-append">
 										      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 										    </div>
@@ -167,7 +167,7 @@
 					    	<div class="form-group">
 						      <label for="seller_point">지급 포인트 <span style="color:red;">🔸&nbsp;</span></label>
 						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="seller_point" min="0" name="seller_point" onchange="minValueCheck2()" type="number" placeholder="숫자만 입력" required>
+					    			<input class="input w3-padding-16 w3-border form-control" id="seller_point" min="0" name="seller_point" onchange="minValueCheck2()" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 					    			<div class="input-group-append">
 								      	<input type="button" value="Point" size="2" class="btn w3-black" disabled='disabled' />
 								    </div>
@@ -180,9 +180,9 @@
 					    <div class="w3-row">
 					  		<div class="w3-third">
 					    	<div class="form-group">
-						      <label for="stock_quantity">재고수량 <span style="color:red;">🔸&nbsp;</span></label>
+						      <label for="stock_quantity">재고수량 <span style="color:red;">🔸&nbsp;</span><br>(옵션재고수량 입력시, 자동계산되어 등록됩니다.)</label>
 						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="stock_quantity" min="0" name="stock_quantity" type="number" onchange="stock_quantityForm()" placeholder="숫자만 입력" required>
+					    			<input class="input w3-padding-16 w3-border form-control" id="stock_quantity" min="0" name="stock_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" onchange="stock_quantityForm()" placeholder="숫자만 입력" required>
 					    			<div class="input-group-append">
 								      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 								    </div>
@@ -204,7 +204,7 @@
 					    		<div class="form-group">
 							      <label for="order_min_quantity">최소 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_min_quantity" onchange="minValueCheck3()" name="order_min_quantity" type="number" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_min_quantity" onchange="minValueCheck3()" name="order_min_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -215,7 +215,7 @@
 					        	<div class="form-group">
 							      <label for="order_max_quantity">최대 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -242,44 +242,50 @@
 									</div>
 								  </div>
 							 </div>
-						  	<div class="w3-row">
-						    	<div class="form-group">
-							      <table class="w3-table w3-striped w3-bordered">
-							      	<tr>
-							      		<th><i class="fa-solid fa-square-plus" style="font-size: 20px;" title="옵션 추가하기"></i></th>
-							      		<th>옵션명</th>
-							      		<th>추가금액</th>
-							      		<th>재고수량</th>
-							      		<th></th>
-							      	</tr>
-							      	<tr>
-							      		<td></td>
-							      		<td>
-							      			<input class="input w3-padding-16 w3-border form-control" id="option_price" name="seller_point" type="text" placeholder="옵션 이름">
-							      		</td>
-							      		<td>
-							      			<input class="input w3-padding-16 w3-border form-control" id="option_price" name="seller_point" type="number" placeholder="옵션 추가금액">
-							      		</td>
-							      		<td>
-							      			<input class="input w3-padding-16 w3-border form-control" id="option_price" name="seller_point" type="number" placeholder="재고수량">
-							      		</td>
-							      		<td>
-							      			<i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i>
-							      		</td>
-							      	</tr>
-							      </table>
+							<div id="item_option_flagForm" style="display:none">
+							  	<div class="w3-row">
+							    	<div class="form-group">
+								      <table class="w3-table w3-striped w3-bordered">
+								      	<tr>
+								      		<th><a onclick="javascript:addOptions()"><i class="fa-solid fa-square-plus" style="font-size: 20px;" title="옵션 추가하기"></i></a></th>
+								      		<th>옵션명</th>
+								      		<th>추가금액</th>
+								      		<th>재고수량</th>
+								      		<th></th>
+								      	</tr>
+								      	<tr>
+								      		<td></td>
+								      		<td>
+								      			<input class="input w3-padding-16 w3-border form-control" id="option_name1" name="option_name1" type="text" placeholder="옵션 이름">
+								      		</td>
+								      		<td>
+								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck(1)" min="0" id="option_price1" name="option_price1" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">
+								      		</td>
+								      		<td>
+								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck(1)" min="0" id="option_stock_quantity1" name="option_stock_quantity1" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">
+								      		</td>
+								      		<td width="5%">
+								      		</td>
+								      	</tr>
+								      </table>
+								      <table class="w3-table w3-striped w3-bordered" id="addOption">
+								      	
+								      </table>
+							        </div>
 						        </div>
-					        </div>
-					        <div>
-					        	<span style="font-size:20xpx; font-weight:bold;">총 재고수량</span>
-					        	<span id="itemCnt" style="font-size:20xpx; font-weight:bold;"></span>
-					        	<span style="font-size:20xpx; font-weight:bold;">개</span>
+						        <!-- 
+						        <div>
+						        	<span style="font-size:20xpx; font-weight:bold;">총 재고수량</span>
+						        	<span id="itemCnt" style="font-size:20xpx; font-weight:bold;"></span>
+						        	<span style="font-size:20xpx; font-weight:bold;">개</span>
+						        </div>
+						         -->
 					        </div>
 					    </div><hr>
 			     </form>
 			     <form name="imageForm" method="post" enctype="multipart/form-data">
 				  		<div class="form-group" style="margin-bottom: 15px;">
-						  	<label for="item_option_flag" style="font-size:20px;">상품 이미지 <span style="color:red;">🔸&nbsp;</span></label>
+						  	<label for="item_image" style="font-size:20px;">상품 이미지 <span style="color:red;">🔸&nbsp;</span></label>
 						 </div>
 					  	<div class="w3-row">
 					    	<div class="w3-third">
@@ -318,17 +324,17 @@
 					      <label for="detail_content_falg" style="font-size:20px;">상품상세설명 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
-							    <input type="radio" class="detail_content_falg" name="seller_point_flag" value="1" checked>&nbsp;&nbsp;이미지 등록&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="detail_content_falg" name="seller_point_flag" value="0">&nbsp;&nbsp;직접입력
+							    <input type="radio" class="detail_content_falg" name="detail_content_flag" value="1" checked>&nbsp;&nbsp;이미지 등록&nbsp;&nbsp;&nbsp;
+							    <input type="radio" class="detail_content_falg" name="detail_content_flag" value="0">&nbsp;&nbsp;직접입력
 							</div>
 						  </div>
 					  	</div>
 					    <div>
-				  			<div class="detail_content_image">
+				  			<div class="detail_content_image" id="detail_content_imageForm">
 				    			<span>- 상품상세설명 이미지 등록<span style="color:red;">🔸&nbsp;</span></span>
 								<input type="file" name="detail_content_image" id="detail_content_image" class="w3-input" accept=".png, .jpg, .jpeg, .jfif, .pdf"/>
 							</div>
-							<div class="detail_content mt-5">
+							<div class="detail_content mt-5" id="detail_contentForm" style="display: none">
 								<div style="margin-bottom: 10px;">- 상품상세설명 직접입력 <span style="color:red;">🔸&nbsp;</span></div>
 								<textarea rows="10" name="content" id="CKEDITOR" class="form-control" required></textarea>
 							</div>
@@ -400,9 +406,10 @@
 				        </div><hr>
 				    </form>
 				    <form name="noticeForm" method="post" class="was-validated mt-3">
-						<div style="font-size:20px;">상품 정보 고시</div> - 기타 재화 -<br><br>
 					  	<div class="w3-row">
 					  		<div class="w3-third">
+							<div><span  style="font-size:20px;">상품 정보 고시</span></div>
+							 - 기타 재화 -<br><br>
 					    	<div class="form-group">
 						      <div class="mb-3">
 					    			<label for="notice_title1" style="margin-left:5px;">품명/모델명<span style="color:red;">🔸&nbsp;</span> : </label>
@@ -410,7 +417,9 @@
 				    		  </div>
 					        </div>
 					        </div>
-					        <div class="w3-third"></div>
+					        <div class="w3-third">
+					        	<input type="checkbox" id="noticeAllInput" name="noticeAllInput"> 상품상세 참조로 전체 입력
+					        </div>
 					        <div class="w3-third"></div>
 				        </div>
 					  	<div class="w3-row">
@@ -468,56 +477,59 @@
 					      <label for="shipment_type">배송비 구분 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
-							    <input type="radio" class="shipment_type" name="shipment_type" value="1" checked>&nbsp;&nbsp;무료배송&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="shipment_type" name="shipment_type" value="2">&nbsp;&nbsp;판매자 조건부
+							    <input type="radio" class="shipment_type" name="shipment_type" value="2" checked>&nbsp;&nbsp;판매자 조건부&nbsp;&nbsp;&nbsp;
+							    <input type="radio" class="shipment_type" name="shipment_type" value="1">&nbsp;&nbsp;무료배송
 							</div>
 						  </div>
 					  	</div>
-					  	<div class="w3-row">
-					  		<div class="w3-third">
-					    	<div class="form-group">
-						      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
-						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="shipping_price" name="shipping_price" type="number" placeholder="숫자만 입력" required>
-					    			<div class="input-group-append">
-								      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
-								    </div>
-				    		  </div>
+					  	<div id="shipmentPriceFrom">
+						  	<div class="w3-row">
+						  		<div class="w3-third">
+						    	<div class="form-group">
+							      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
+							      <div class="input-group mb-3" style="margin-bottom:0px">
+						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<div class="input-group-append">
+									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
+									    </div>
+					    		  </div>
+						        </div>
+						        </div>
+						        <div class="w3-third"></div>
+						        <div class="w3-third"></div>
 					        </div>
+						  	<div class="w3-row">
+						  		<div class="w3-third">
+						    	<div class="form-group">
+							      <label for="shipping_free_amount">조건부 무료배송 금액 <span style="color:red;">🔸&nbsp;</span></label>
+							      <div class="input-group mb-3" style="margin-bottom:0px">
+						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<div class="input-group-append">
+									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
+									    </div>
+					    		  </div>
+						        </div>
+						        </div>
+						        <div class="w3-third"></div>
+						        <div class="w3-third"></div>
 					        </div>
-					        <div class="w3-third"></div>
-					        <div class="w3-third"></div>
+					        <div class="w3-row">
+						  		<div class="w3-third">
+						    	<div class="form-group">
+							      <label for="shipping_extra_charge">제주도 추가 배송비 <span style="color:red;">🔸&nbsp;</span></label>
+							      <div class="input-group mb-3" style="margin-bottom:0px">
+						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<div class="input-group-append">
+									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
+									    </div>
+					    		  </div>
+						        </div>
+						        </div>
+						        <div class="w3-third"></div>
+						        <div class="w3-third"></div>
+					        </div>
 				        </div>
-					  	<div class="w3-row">
-					  		<div class="w3-third">
-					    	<div class="form-group">
-						      <label for="shipping_free_amount">조건부 무료배송 금액 <span style="color:red;">🔸&nbsp;</span></label>
-						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="shipping_free_amount" name="shipping_free_amount" type="number" placeholder="숫자만 입력" required>
-					    			<div class="input-group-append">
-								      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
-								    </div>
-				    		  </div>
-					        </div>
-					        </div>
-					        <div class="w3-third"></div>
-					        <div class="w3-third"></div>
-				        </div>
-				        <div class="w3-row">
-					  		<div class="w3-third">
-					    	<div class="form-group">
-						      <label for="shipping_extra_charge">제주도 추가 배송비 <span style="color:red;">🔸&nbsp;</span></label>
-						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="shipping_extra_charge" name="shipping_extra_charge" type="number" placeholder="숫자만 입력" required>
-					    			<div class="input-group-append">
-								      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
-								    </div>
-				    		  </div>
-					        </div>
-					        </div>
-					        <div class="w3-third"></div>
-					        <div class="w3-third"></div>
-				        </div><hr>
+				        <hr>
 				        <div class="form-group">
 					      <label for="item_return_flag">반품 가능여부 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
@@ -532,7 +544,7 @@
 					    	<div class="form-group">
 						      <label for="shipping_return_price">교환/반품 배송비(편도기준) <span style="color:red;">🔸&nbsp;</span></label>
 						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="shipping_return_price" name="shipping_return_price" type="number" placeholder="숫자만 입력" required>
+					    			<input class="input w3-padding-16 w3-border form-control" id="shipping_return_price" name="shipping_return_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 					    			<div class="input-group-append">
 								      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 								    </div>
