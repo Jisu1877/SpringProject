@@ -25,14 +25,15 @@ public class ItemVO {
 	private String item_option_flag;
 	private String detail_content_flag;
 	private String detail_content;
-	private String detail_content_image;
+//	private String detail_content_image;
+	
 	private String brand;
 	private String form;
 	private String item_model_name;
 	private String origin_country;
 	private String after_service;
 	private int item_notice_idx;
-	private String item_image;
+	private String item_image; 
 	private String shipment_address;
 	private String shipment_return_address;
 	private String shipment_type;
@@ -45,8 +46,29 @@ public class ItemVO {
 	private String created_admin_id;
 	private String created_date;
 	
+	private int category_idx;
+	private int category_group_idx;
+	
 	private ItemOptionVO itemOptionVO;
 	private ItemImageVO itemImageVO;
 	private ArrayList<ItemImageVO> itemImageList;
 	private ItemNoticeVO itemNoticeVO;
+	
+	private String option_use_flag;
+	private String option_name;
+	private int option_price;
+	private int option_stock_quantity;
+	private String option_sold_out;
+	private String option_display_flag;
+	
+	private String str_option_price;
+	private String str_option_stock_quantity;
+	
+	private String notice_value1;
+	private String notice_value2;
+	private String notice_value3;
+	private String notice_value4;
+	private String notice_value5;
+	
+	private String image_name;
 }

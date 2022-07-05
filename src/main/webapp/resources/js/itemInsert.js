@@ -7,54 +7,148 @@ let detail_content_flag = 1;
 let optionCnt = 1;
 let optionStockCnt = 0;
 let shipment_type_flag = 0;
+let cnt = 1;
 
 function itemInsert() {
-	let categoryGroup = basicForm.categoryGroup.value;
-	let category = basicForm.category.value;
-	let item_name = basicForm.item_name.value;
-	let item_summary = basicForm.item_summary.value;
-	let sale_price = basicForm.sale_price.value;
-	let seller_discount_amount = basicForm.seller_discount_amount.value;
-	let seller_point = basicForm.seller_point.value;
-	let stock_quantity = basicForm.stock_quantity.value;
-	let order_min_quantity = basicForm.order_min_quantity.value;
-	let order_max_quantity = basicForm.order_max_quantity.value;
+	//설정 여부에 따른 null 값 채워주기
+	if(seller_discount_flag == 0) {
+		document.getElementById("seller_discount_amount").value = "0";
+	}
+	if(seller_point_flag == 0) {
+		document.getElementById("seller_point").value = "0";
+	}
+	if(categoryFlag == 0) {
+		$("#category").val("0").prop("selected", true);
+	}
+	myForm.stock_schedule_date.value = document.getElementById("stock_schedule_date").value;
 	
-	let titlephoto = imageForm.myphoto.value;
-	let file1 = imageForm.file1.value;
+	let optionLength = $("input[name=option_names]").length;
+	let optionName = '';
+	let optionPrice = '';
+	let optionStock = '';
+	for(let i=0; i<optionLength; i++) {
+		optionName += $("input[name=option_names]").eq(i).val() + "/";
+		optionPrice += $("input[name=option_prices]").eq(i).val() + "/";
+		optionStock += $("input[name=option_stock_quantities]").eq(i).val() + "/";
+	}
+	myForm.option_name.value = optionName;
+	myForm.str_option_price.value = optionPrice;
+	myForm.str_option_stock_quantity.value = optionStock;
 	
-	let detail_content_image = contentForm.detail_content_image.value;
-	let detail_content = contentForm.content.value;
+	let categoryGroup = myForm.categoryGroup.value;
+	let category = myForm.category.value;
+	let item_name = myForm.item_name.value;
+	let item_summary = myForm.item_summary.value;
+	let sale_price = myForm.sale_price.value;
+	let seller_discount_amount = myForm.seller_discount_amount.value;
+	let seller_point = myForm.seller_point.value;
+	let stock_quantity = myForm.stock_quantity.value;
+	let order_min_quantity = myForm.order_min_quantity.value;
+	let order_max_quantity = myForm.order_max_quantity.value;
 	
-	let origin_country = inforForm.origin_country.value;
-	let item_model_name = inforForm.item_model_name.value;
-	let after_service = inforForm.after_service.value;
+//	let detail_content_image = myForm.detail_content_image.value;
+	let detail_content = myForm.detail_content.value;
 	
-	let notice_value1 = noticeForm.notice_value1.value;
-	let notice_value2 = noticeForm.notice_value2.value;
-	let notice_value3 = noticeForm.notice_value3.value;
-	let notice_value4 = noticeForm.notice_value4.value;
-	let notice_value5 = noticeForm.notice_value5.value;
+//	if(detail_content_flag == 1) {
+//		myForm.detail_content.value = "";
+//	}else if(detail_content_flag == 0) {
+//		myForm.detail_content.value = myForm.content.value;
+//	}
 	
-	let shipping_price = shipmentForm.shipping_price.value;
-	let shipping_free_amount = shipmentForm.shipping_free_amount.value;
-	let shipping_extra_charge = shipmentForm.shipping_extra_charge.value;
-	let shipping_return_price = shipmentForm.shipping_return_price.value;
+	let titlephoto = myForm.file.value;
+	let file1 = document.getElementById("file1").value;
+	
+	let maxSize = 1024 * 1024 * 20;
+	let fileSize = 0;
+	if (titlephoto.indexOf(" ") != -1) { // 혹시 파일명에 공백이 있으면~~~
+		alert("업로드 파일명에 공백을 포함할 수 없습니다.");
+		return false;
+	}
+	else if (titlephoto != "") {
+		let ext = titlephoto.substring(titlephoto.lastIndexOf(".") + 1);
+		let uExt = ext.toUpperCase();
+		fileSize += document.getElementById("myphoto").files[0].size; //파일 선택이 1개밖에 안되기 때문에 0번 배열에만 파일이 있는 상태이다.
+
+		if (uExt != "JPG" && uExt != "GIF" && uExt != "PNG" && uExt != "JPEG" && uExt != "JFIF") {
+			alert("업로드 가능한 파일은 'JPG/GIF/PNG/JPEG/JFIF' 입니다.");
+			return false;
+		}
+	}
+
+	for (let i = 1; i <= cnt; i++) {
+		let imsiName = "file" + i;
+
+		if (document.getElementById(imsiName) != null) {
+			let fName = document.getElementById(imsiName).value;
+
+			if (fName.indexOf(" ") != -1) { // 혹시 파일명에 공백이 있으면~~~
+				alert("업로드 파일명에 공백을 포함할 수 없습니다.");
+				return false;
+			}
+			else if (fName != "") {
+				let ext = fName.substring(fName.lastIndexOf(".") + 1);
+				let uExt = ext.toUpperCase();
+				fileSize += document.getElementById(imsiName).files[0].size; //파일 선택이 1개밖에 안되기 때문에 0번 배열에만 파일이 있는 상태이다.
+
+				if (uExt != "JPG" && uExt != "GIF" && uExt != "PNG" && uExt != "JPEG" && uExt != "JFIF") {
+					alert("업로드 가능한 파일은 'JPG/GIF/PNG/JPEG/JFIF' 입니다.");
+					return false;
+				}
+			}
+		}
+	}
+
+	if (fileSize > maxSize) {
+		alert("업로드할 파일의 총 최대 용량은 20MByte 입니다.");
+		return false;
+	}
+   				
+	/*
+	
+	let origin_country = myForm.origin_country.value;
+	let item_model_name = myForm.item_model_name.value;
+	let after_service = myForm.after_service.value;
+	
+	let notice_value1 = myForm.notice_value1.value;
+	let notice_value2 = myForm.notice_value2.value;
+	let notice_value3 = myForm.notice_value3.value;
+	let notice_value4 = myForm.notice_value4.value;
+	let notice_value5 = myForm.notice_value5.value;
+	
+	let shipping_price = myForm.shipping_price.value;
+	let shipping_free_amount = myForm.shipping_free_amount.value;
+	let shipping_extra_charge = myForm.shipping_extra_charge.value;
+	let shipping_return_price = myForm.shipping_return_price.value;
 	
 	//전송 전에 주소를 하나로 묶어서 전송처리 준비한다.
 	//출고지
-	let shipment_postcode = shipmentForm.shipment_postcode.value;
-	let shipment_roadAddress = shipmentForm.shipment_roadAddress.value;
-	let shipment_detailAddress = shipmentForm.shipment_detailAddress.value;
-	let shipment_extraAddress = shipmentForm.shipment_extraAddress.value;
+	let shipment_postcode = myForm.shipment_postcode.value;
+	let shipment_roadAddress = myForm.shipment_roadAddress.value;
+	let shipment_detailAddress = myForm.shipment_detailAddress.value;
+	let shipment_extraAddress = myForm.shipment_extraAddress.value;
 	let shipment_address = shipment_postcode + "/" + shipment_roadAddress + "/" + shipment_detailAddress + "/" + shipment_extraAddress + "/";
 	
 	//반송지
-	let shipment_return_postcode = shipmentForm.shipment_return_postcode.value;
-	let shipment_return_roadAddress = shipmentForm.shipment_return_roadAddress.value;
-	let shipment_return_detailAddress = shipmentForm.shipment_return_detailAddress.value;
-	let shipment_return_extraAddress = shipmentForm.shipment_return_extraAddress.value;
+	let shipment_return_postcode = myForm.shipment_return_postcode.value;
+	let shipment_return_roadAddress = myForm.shipment_return_roadAddress.value;
+	let shipment_return_detailAddress = myForm.shipment_return_detailAddress.value;
+	let shipment_return_extraAddress = myForm.shipment_return_extraAddress.value;
 	let shipment_return_address = shipment_return_postcode + "/" + shipment_return_roadAddress + "/" + shipment_return_detailAddress + "/" + shipment_return_extraAddress + "/";
+	
+	//대표 키워드 하나로 묶어서 전송
+	let item_keyword = "";
+	var keywordLength = $("input[name=keyword]").length;
+	for(let i=1; i<=keywordLength; i++) {
+		if(document.getElementById("keyword"+i).value != "") {
+			item_keyword += document.getElementById("keyword"+i).value + "/"
+		}
+	}
+	
+	//hidden값으로 저장
+	myForm.shipment_address.value = shipment_address;
+	myForm.shipment_return_address.value = shipment_return_address;
+	myForm.item_keyword.value = item_keyword;
+	
 	
 	if(categoryGroup == "") {
 		alert("대분류를 선택하세요.");
@@ -66,57 +160,57 @@ function itemInsert() {
 	}
 	else if(item_name == "") {
 		alert("상품명을 입력하세요.");
-		basicForm.item_name.focus();
+		myForm.item_name.focus();
 		return false;
 	}
 	else if(item_name.length > 100) {
 		alert("상품명은 100자 이내로 입력하세요.");
-		basicForm.item_name.focus();
+		myForm.item_name.focus();
 		return false;
 	}
 	else if(item_summary == "") {
 		alert("상품 간단설명을 입력하세요.");
-		basicForm.item_summary.focus();
+		myForm.item_summary.focus();
 		return false;
 	}
 	else if(item_summary.length > 200) {
 		alert("상품 간단설명은 200자 이내로 입력하세요.");
-		basicForm.item_summary.focus();
+		myForm.item_summary.focus();
 		return false;
 	}
 	else if(sale_price == "") {
 		alert("판매가를 입력하세요.");
-		basicForm.sale_price.focus();
+		myForm.sale_price.focus();
 		return false;
 	}
 	else if(seller_discount_amount == "" && seller_discount_flag == 1) {
 		alert("할인금액을 입력하세요.");
-		basicForm.seller_discount_amount.focus();
+		myForm.seller_discount_amount.focus();
 		return false;
 	}
 	else if(seller_point == "" && seller_point_flag == 1) {
 		alert("지급 포인트를 입력하세요.");
-		basicForm.seller_point.focus();
+		myForm.seller_point.focus();
 		return false;
 	}
 	else if(stock_quantity == "" && item_option_flag == 0) {
 		alert("재고 수량을 입력하세요.");
-		basicForm.stock_quantity.focus();
+		myForm.stock_quantity.focus();
 		return false;
 	}
 	else if(order_min_quantity == "") {
 		alert("최소 주문 수량을 입력하세요.");
-		basicForm.order_min_quantity.focus();
+		myForm.order_min_quantity.focus();
 		return false;
 	}
 	else if(order_max_quantity == "") {
 		alert("최대 주문 수량을 입력하세요.");
-		basicForm.order_max_quantity.focus();
+		myForm.order_max_quantity.focus();
 		return false;
 	}
 	else if(order_min_quantity > order_max_quantity) {
-		alert("최대 주문 수량을 최소 주문 수량보다 적을 수 없습니다.");
-		basicForm.order_max_quantity.focus();
+		alert("최대 주문 수량은 최소 주문 수량보다 적을 수 없습니다.");
+		myForm.order_max_quantity.focus();
 		return false;
 	}
 	else if(titlephoto == "") {
@@ -141,76 +235,103 @@ function itemInsert() {
 	}
 	else if(origin_country == "") {
 		alert("원산지를 입력하세요.");
-		inforForm.origin_country.focus();
+		myForm.origin_country.focus();
 		return false;
 	}
 	else if(item_model_name == "") {
 		alert("모델명을 입력하세요.");
-		inforForm.item_model_name.focus();
+		myForm.item_model_name.focus();
 		return false;
 	}
 	else if(after_service == "") {
 		alert("A/S안내 내용을 입력하세요.");
-		inforForm.after_service.focus();
+		myForm.after_service.focus();
 		return false;
 	}
 	else if(shipping_price == "" && shipment_type_flag != 1) {
 		alert("배송비를 입력하세요.");
-		shipmentForm.shipping_price.focus();
+		myForm.shipping_price.focus();
 		return false;
 	}
 	else if(shipping_free_amount == "" && shipment_type_flag != 1) {
 		alert("조건부 무료배송 금액을 입력하세요.");
-		shipmentForm.shipping_free_amount.focus();
+		myForm.shipping_free_amount.focus();
 		return false;
 	}
 	else if(shipping_extra_charge == "" && shipment_type_flag != 1) {
 		alert("제주도 추가 배송비를 입력하세요.");
-		shipmentForm.shipping_extra_charge.focus();
+		myForm.shipping_extra_charge.focus();
 		return false;
 	}
 	else if(shipping_price <= 0 && shipment_type_flag != 1) {
 		alert("배송비를 0원 이상의 금액으로 입력하세요.");
-		shipmentForm.shipping_price.focus();
+		myForm.shipping_price.focus();
 		return false;
 	}
 	else if(shipping_free_amount <= 0 && shipment_type_flag != 1) {
 		alert("조건부 무료배송 금액을 0원 이상의 금액으로 입력하세요.");
-		shipmentForm.shipping_free_amount.focus();
+		myForm.shipping_free_amount.focus();
 		return false;
 	}
 	else if(shipping_extra_charge < 0 && shipment_type_flag != 1) {
 		alert("제주도 추가 배송비 금액에 음수값을 입력할 수 없습니다.");
-		shipmentForm.shipping_extra_charge.focus();
+		myForm.shipping_extra_charge.focus();
 		return false;
 	}
 	else if(shipping_return_price == "") {
 		alert("교환/반품 배송비를 입력하세요.");
-		shipmentForm.shipping_return_price.focus();
+		myForm.shipping_return_price.focus();
 		return false;
 	}
 	else if(shipment_postcode == "" || shipment_roadAddress == "" || shipment_detailAddress == "") {
 		alert("출고지 주소를 입력하세요.");
-		shipmentForm.shipment_postcode.focus();
+		myForm.shipment_postcode.focus();
 		return false;
 	}
 	else if(shipment_return_postcode == "" || shipment_return_roadAddress == "" || shipment_return_detailAddress == "") {
 		alert("반송지 주소를 입력하세요.");
-		shipmentForm.shipment_return_postcode.focus();
+		myForm.shipment_return_postcode.focus();
 		return false;
 	}
+	else {
+		let optionLength = $("input[name=option_name]").length;
+		let optionNameArr = new Array(optionLength);
+		let optionPriceArr = new Array(optionLength);
+		let optionStockArr = new Array(optionLength);
+		for(let i=0; i<optionLength; i++) {
+			optionNameArr[i] = $("input[name=option_name]").eq(i).val();
+			if(optionNameArr[i] == "" && item_option_flag == 1) {
+				alert("옵션명을 모두 작성해주세요.");
+				return false;
+			}
+			optionPriceArr[i] = $("input[name=option_price]").eq(i).val();
+			if(optionPriceArr[i] == "" && item_option_flag == 1) {
+				alert("옵션 추가금액을 모두 작성해주세요.");
+				return false;
+			}
+			optionStockArr[i] = $("input[name=option_stock_quantity]").eq(i).val();
+			if(optionStockArr[i] == "" && item_option_flag == 1) {
+				alert("옵션 재고수량을 모두 작성해주세요.");
+				return false;
+			}
+		}
+		*/
+	/*}*/
 	
+	CKEDITOR.instances.detail_content.getData();
+	
+	return true;
 }
 
 //상품정보고시 일괄 정보 입력
 $(document).ready(function() {
 $("input:checkbox[id='noticeAllInput']").on('click', function() {
       if ( $(this).prop('checked') ) {
-        noticeForm.notice_value1.value = "상품상세 참조";
-		noticeForm.notice_value2.value = "상품상세 참조";
-		noticeForm.notice_value3.value = "상품상세 참조";
-		noticeForm.notice_value4.value = "상품상세 참조";
-		noticeForm.notice_value5.value = "상품상세 참조";
+        myForm.notice_value1.value = "상품상세 참조";
+		myForm.notice_value2.value = "상품상세 참조";
+		myForm.notice_value3.value = "상품상세 참조";
+		myForm.notice_value4.value = "상품상세 참조";
+		myForm.notice_value5.value = "상품상세 참조";
       }
     });
 });
@@ -302,19 +423,19 @@ $(document).ready(function(){
 });
 
 function calPrice() {
-	let sale_price = basicForm.sale_price.value;
-	let discount_price = basicForm.seller_discount_amount.value;
+	let sale_price = Number($("#sale_price").val());
+	let discount_price = Number($("#seller_discount_amount").val());
 	
 	if(sale_price <= discount_price) {
 		alert("할인금액은 판매가보다 적은 금액을 입력해야합니다.");
-		basicForm.seller_discount_amount.value = "";
-		basicForm.seller_discount_amount.focus();
+		myForm.seller_discount_amount.value = "";
+		myForm.seller_discount_amount.focus();
 		return false;
 	}
 	else if(discount_price < 1) {
 		alert("할인금액은 최소 1원 이상이어야 합니다.");
-		basicForm.seller_discount_amount.value = "";
-		basicForm.seller_discount_amount.focus();
+		myForm.seller_discount_amount.value = "";
+		myForm.seller_discount_amount.focus();
 		return false;
 	}
 	
@@ -324,12 +445,12 @@ function calPrice() {
 }
 
 function stock_quantityForm() {
-	let stock_quantity = basicForm.stock_quantity.value;
+	let stock_quantity = myForm.stock_quantity.value;
 	
 	if(stock_quantity < 0 && stock_quantity != "") {
 		alert("재고 수량은 음수값을 입력할 수 없습니다.");
-		basicForm.stock_quantity.value = "";
-		basicForm.stock_quantity.focus();
+		myForm.stock_quantity.value = "";
+		myForm.stock_quantity.focus();
 		return false;
 	}
 	
@@ -342,46 +463,46 @@ function stock_quantityForm() {
 }
 
 function minValueCheck1() {
-	let sale_price = basicForm.sale_price.value;
+	let sale_price = myForm.sale_price.value;
 	
 	if(sale_price <= 0) {
 		alert("판매가를 0원 이상 입력하세요.");
-		basicForm.sale_price.value = "";
-		basicForm.sale_price.focus();
+		myForm.sale_price.value = "";
+		myForm.sale_price.focus();
 		return false;
 	}
 	
 }
 
 function minValueCheck2() {
-	let seller_point = basicForm.seller_point.value;
+	let seller_point = myForm.seller_point.value;
 	
 	if(seller_point <= 0) {
 		alert("지급 포인트를 0원 이상 입력하세요.");
-		basicForm.seller_point.value = "";
-		basicForm.seller_point.focus();
+		myForm.seller_point.value = "";
+		myForm.seller_point.focus();
 		return false;
 	}
 }
 
 function minValueCheck3() {
-	let order_min_quantity = basicForm.order_min_quantity.value;
+	let order_min_quantity = myForm.order_min_quantity.value;
 	
 	if(order_min_quantity < 1 && order_min_quantity != "") {
 		alert("최소 구매 수량은 1개 이상이어야 합니다.");
-		basicForm.order_min_quantity.value = "";
-		basicForm.order_min_quantity.focus();
+		myForm.order_min_quantity.value = "";
+		myForm.order_min_quantity.focus();
 		return false;
 	}
 }
 
 function minValueCheck4() {
-	let order_max_quantity = basicForm.order_max_quantity.value;
+	let order_max_quantity = myForm.order_max_quantity.value;
 	
 	if(order_max_quantity < 1 && order_max_quantity != "") {
 		alert("최대 구매 수량은 1개 이상이어야 합니다.");
-		basicForm.order_max_quantity.value = "";
-		basicForm.order_max_quantity.focus();
+		myForm.order_max_quantity.value = "";
+		myForm.order_max_quantity.focus();
 		return false;
 	}
 }
@@ -393,13 +514,13 @@ function addOptions() {
 	str += '<tr id="addoptionTr'+optionCnt+'">';	
 	str += '<td width="5.5%"></td>';	
 	str += '<td>';	
-	str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+optionCnt+'" name="option_name'+optionCnt+'" type="text" placeholder="옵션 이름">';	
+	str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+optionCnt+'" name="option_names" type="text" placeholder="옵션 이름" required>';	
 	str += '</td>';	
 	str += '<td>';	
-	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck('+optionCnt+')"  min="0" id="option_price'+optionCnt+'" name="option_price'+optionCnt+'" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">';	
+	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck('+optionCnt+')"  min="0" id="option_price'+optionCnt+'" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액" required>';	
 	str += '</td>';	
 	str += '<td>';	
-	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck('+optionCnt+')" min="0" id="option_stock_quantity'+optionCnt+'" name="option_stock_quantity'+optionCnt+'" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">';	
+	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck('+optionCnt+')" min="0" id="option_stock_quantity'+optionCnt+'" name="option_stock_quantities" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량" required>';	
 	str += '</td>';	
 	str += '<td>';	
 	str += '<a href="javascript:deleteOptions('+optionCnt+')"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>';	
@@ -433,14 +554,6 @@ function optionStockCheck(num) {
 		document.getElementById("option_stock_quantity"+num).value = 0;
 		return false;
 	}
-	
-	/*
-	let NumberOptionStockCnt = Number(optionStockCnt);
-	let NumberOptionStock = Number(optionStock);
-	let NumberOptionCal = NumberOptionStockCnt + NumberOptionStock;
-	optionStockCnt = NumberOptionCal;
-	basicForm.stock_quantity.value = NumberOptionCal;
-	$("#itemCnt").html(NumberOptionCal);*/
 }
 
 
@@ -507,7 +620,7 @@ $(function() {
 
 // 대표이미지 미리보기
 function previewImage(targetObj, previewId) { 
-	let fName = imageForm.myphoto.value;
+	let fName = myForm.myphoto.value;
 	let ext = fName.substring(fName.lastIndexOf(".")+1); //파일 확장자 발췌
 	let uExt = ext.toUpperCase(); //확장자를 대문자로 변환
 	let maxSize = 1024 * 1024 * 10 //업로드할 회원사진의 용량은 10MByte까지로 제한한다.
@@ -618,7 +731,6 @@ function previewDelete() {
 }
 
 
-let cnt = 1;
 function fileBoxAppend() {
 	cnt++;
 	
@@ -631,7 +743,7 @@ function fileBoxAppend() {
 	fileBox += '<div id="fBox'+cnt+'" class="mb-3">';
 	fileBox += '- image ';
 	fileBox += '<input type="button" value="삭제" onclick="deleteBox('+cnt+')" class="w3-btn w3-2020-orange-peel w3-padding-small w3-small ml-2"/>';
-	fileBox += '<input type="file" name="file'+cnt+'" id="file'+cnt+'" class="w3-input"/>';
+	fileBox += '<input type="file" name="file" id="file'+cnt+'" class="w3-input"/>';
 	fileBox += '<div>';
 	$("#fileBoxInsert").append(fileBox);
 }

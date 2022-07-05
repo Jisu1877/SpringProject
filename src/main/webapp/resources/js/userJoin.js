@@ -73,7 +73,7 @@ $(function(){
 	
 		$.ajax({
 			type : "post",
-			url : "userIdCheck",
+			url : "/javagreenS_ljs/user/userIdCheck",
 			data : {user_id : user_id},
 			success : function(data) {
 				if(data == "idOk") {

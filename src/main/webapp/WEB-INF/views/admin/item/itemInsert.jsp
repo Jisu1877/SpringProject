@@ -45,10 +45,10 @@
  	
  	<!-- content  -->
  	<div class="w3-row-padding w3-margin-bottom">
+		<form name="myForm" method="post" class="was-validated mt-3" enctype="multipart/form-data" onsubmit="return itemInsert();">
  		<div class="w3-col s11">
  			<div class="box w3-border">
 				<div class="w3-white w3-padding">
-	 			<form name="basicForm" method="post" class="was-validated mt-3">
 				    	<div class="form-group">
 				    		<label for="user_id" style="font-size:18px;">복사 등록</label>
 				      		<div class="input-group-append mb-3">
@@ -66,7 +66,7 @@
 					    			<div class="w3-quarter">
 					    			</div>
 					    			<div class="w3-quarter">
-						      			<select name="categoryGroup" id="categoryGroup" class="w3-select w3-border">
+						      			<select name="category_group_idx" id="categoryGroup" class="w3-select w3-border">
 											    <option value="" selected>대분류</option>
 											    <c:forEach var="vo" items="${categoryVOS}">
 													<option value="${vo.category_group_idx}">${vo.category_group_name}</option>
@@ -76,8 +76,8 @@
 					    			<div class="w3-quarter">
 					    			</div>
 					    			<div class="w3-quarter" style="padding-left: 20px;">
-						      			<select name="category" id="category" class="w3-select w3-border">
-											    <option value="" selected>중분류</option>
+						      			<select name="category_idx" id="category" class="w3-select w3-border">
+											    <option value="0" selected>중분류</option>
 										</select>
 					    			</div>
 				    			</div>
@@ -104,7 +104,7 @@
 							</div>
 						  </div>
 					  	</div>
-					  	<div class="w3-light-gray p-4">
+					  	 <div class="w3-light-gray p-4">
 						  	<div style="font-size:20px;">판매가</div><br>
 						  	<div class="w3-row">
 						  		<div class="w3-third">
@@ -121,7 +121,7 @@
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
 					        </div>
-					        <div class="form-group">
+					       <div class="form-group">
 						      <label for="seller_discount_flag">할인 <span style="color:red;">🔸&nbsp;</span></label>
 						      <div class="form-check-inline">
 					        	<div class="form-check">
@@ -136,7 +136,7 @@
 							    	<div class="form-group">
 								      <label for="seller_discount_amount">할인금액 <span style="color:red;">🔸&nbsp;</span></label>
 								      <div class="input-group mb-3" style="margin-bottom:0px">
-							    			<input class="input w3-padding-16 w3-border form-control" id="seller_discount_amount" min="0" name="seller_discount_amount" type="number" onchange="calPrice()" placeholder="숫자만 입력" onkeydown="javascript: return event.keyCode == 69 ? false : true" required>
+							    			<input class="input w3-padding-16 w3-border form-control" id="seller_discount_amount" min="0" name="seller_discount_amount" type="number" onchange="calPrice()" placeholder="숫자만 입력" onkeydown="javascript: return event.keyCode == 69 ? false : true">
 							    			<div class="input-group-append">
 										      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 										    </div>
@@ -146,7 +146,7 @@
 							        <div class="w3-third"></div>
 							        <div class="w3-third"></div>
 						        </div>
-						        <div style="font-weight:bold;">
+						         <div style="font-weight:bold;">
 						        	<span>최종 판매가&nbsp;:&nbsp;</span>
 						        	<span id="calPrice"></span>
 						        	<span>원</span>
@@ -167,7 +167,7 @@
 					    	<div class="form-group">
 						      <label for="seller_point">지급 포인트 <span style="color:red;">🔸&nbsp;</span></label>
 						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="seller_point" min="0" name="seller_point" onchange="minValueCheck2()" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+					    			<input class="input w3-padding-16 w3-border form-control" id="seller_point" min="0" name="seller_point" onchange="minValueCheck2()" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력">
 					    			<div class="input-group-append">
 								      	<input type="button" value="Point" size="2" class="btn w3-black" disabled='disabled' />
 								    </div>
@@ -199,7 +199,7 @@
 					        </div>
 					        <div class="w3-third"></div>
 				        </div><hr>
-					    <div class="w3-row">
+					   <div class="w3-row">
 					  		<div class="w3-third">
 					    		<div class="form-group">
 							      <label for="order_min_quantity">최소 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
@@ -225,13 +225,10 @@
 					        <div class="w3-third"></div>
 				        </div>
 					  <p><br></p>
-				    </form>
 				</div>
  			</div>
- 			
- 			<div class="box w3-border" style="margin-top: 20px;">
+ 		 	<div class="box w3-border" style="margin-top: 20px;">
 				<div class="w3-white w3-padding">
-	 			<form name="optionForm" method="post">
 					  	<div class="w3-light-gray p-4">
 					  		<div class="form-group" style="margin-bottom: 15px;">
 							  	<label for="item_option_flag" style="font-size:20px;">옵션</label>
@@ -256,13 +253,13 @@
 								      	<tr>
 								      		<td></td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" id="option_name1" name="option_name1" type="text" placeholder="옵션 이름">
+								      			<input class="input w3-padding-16 w3-border form-control" id="option_name1" name="option_names" type="text" placeholder="옵션 이름">
 								      		</td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck(1)" min="0" id="option_price1" name="option_price1" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">
+								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck(1)" min="0" id="option_price1" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">
 								      		</td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck(1)" min="0" id="option_stock_quantity1" name="option_stock_quantity1" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">
+								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck(1)" min="0" id="option_stock_quantity1" name="option_stock_quantities" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">
 								      		</td>
 								      		<td width="5%">
 								      		</td>
@@ -273,17 +270,8 @@
 								      </table>
 							        </div>
 						        </div>
-						        <!-- 
-						        <div>
-						        	<span style="font-size:20xpx; font-weight:bold;">총 재고수량</span>
-						        	<span id="itemCnt" style="font-size:20xpx; font-weight:bold;"></span>
-						        	<span style="font-size:20xpx; font-weight:bold;">개</span>
-						        </div>
-						         -->
 					        </div>
 					    </div><hr>
-			     </form>
-			     <form name="imageForm" method="post" enctype="multipart/form-data">
 				  		<div class="form-group" style="margin-bottom: 15px;">
 						  	<label for="item_image" style="font-size:20px;">상품 이미지 <span style="color:red;">🔸&nbsp;</span></label>
 						 </div>
@@ -297,7 +285,7 @@
 						    		<div id='previewId'></div>
 					    		</button>
 				    			<input type="button" id="photoDelete" value="삭제" class="w3-btn w3-2020-orange-peel w3-padding-small w3-small" style="display:none; margin-top:5px; margin-left:6px;" onclick="previewDelete()"/>
-				    			<input type="file" name="myphoto" id="myphoto" onchange="previewImage(this,'previewId')" class="form-control input" accept=".png, .jpg, .jpeg, .jfif, .gif" hidden="true">
+				    			<input type="file" name="file" id="myphoto" onchange="previewImage(this,'previewId')" class="form-control input" accept=".png, .jpg, .jpeg, .jfif, .gif" hidden="true">
 					        </div>
 					        <div class="w3-third"></div>
 					        <div class="w3-third"></div>
@@ -310,7 +298,7 @@
 				        		<div class="mb-3">
 					    			<div id="fBox1">
 					    				- image
-										<input type="file" name="file1" id="file1" class="w3-input" accept=".png, .jpg, .jpeg, .jfif, .gif"/>
+										<input type="file" name="file" id="file1" class="w3-input" accept=".png, .jpg, .jpeg, .jfif, .gif"/>
 								    </div>
 				    		 	 </div>
 								<div id="fileBoxInsert"></div>
@@ -318,41 +306,37 @@
 				        	<div class="w3-half"></div>
 			        	</div>
 					    <hr>
-					</form>
-					<form name="contentForm" method="post" class="was-validated" enctype="multipart/form-data">
-					    <div class="form-group">
-					      <label for="detail_content_falg" style="font-size:20px;">상품상세설명 <span style="color:red;">🔸&nbsp;</span></label>
+					   <div class="form-group">
+					      <label for="detail_content_flag" style="font-size:20px;">상품상세설명 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
-							    <input type="radio" class="detail_content_falg" name="detail_content_flag" value="1" checked>&nbsp;&nbsp;이미지 등록&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="detail_content_falg" name="detail_content_flag" value="0">&nbsp;&nbsp;직접입력
+							    <input type="radio" class="detail_content_flag" name="detail_content_flag" value="1" checked>&nbsp;&nbsp;이미지 등록&nbsp;&nbsp;&nbsp;
+							    <input type="radio" class="detail_content_flag" name="detail_content_flag" value="0">&nbsp;&nbsp;직접입력
 							</div>
 						  </div>
 					  	</div>
 					    <div>
 				  			<div class="detail_content_image" id="detail_content_imageForm">
 				    			<span>- 상품상세설명 이미지 등록<span style="color:red;">🔸&nbsp;</span></span>
-								<input type="file" name="detail_content_image" id="detail_content_image" class="w3-input" accept=".png, .jpg, .jpeg, .jfif, .pdf"/>
+								<input type="file" name="detail_content_image" id="detail_content_image" class="w3-input" accept="image/*"/>
 							</div>
 							<div class="detail_content mt-5" id="detail_contentForm" style="display: none">
 								<div style="margin-bottom: 10px;">- 상품상세설명 직접입력 <span style="color:red;">🔸&nbsp;</span></div>
-								<textarea rows="10" name="content" id="CKEDITOR" class="form-control" required></textarea>
+								<textarea rows="10" name="detail_content" id="CKEDITOR" class="form-control"></textarea>
 							</div>
 							<script>
-					      	  CKEDITOR.replace("content",{
+					      	  CKEDITOR.replace("detail_content",{
 					      		  height:500,
 					      		  filebrowserUploadUrl : "${ctp}/imageUpload",
 					      		  uploadUrl : "${ctp}/imageUpload"
 					      	  });
-					       </script>
+					      	  </script>
 				        </div>
 			        </div>
-		    	</form>
 			</div>
-			
+			<%--
 			<div class="box w3-border" style="margin-top: 20px;">
 				<div class="w3-white w3-padding">
-	 			<form name="inforForm" method="post" class="was-validated mt-3">
 					  	<div style="font-size:20px;">상품 주요 정보</div><br>
 					  	<div class="w3-row">
 					  		<div class="w3-third">
@@ -404,8 +388,6 @@
 					        </div>
 					        <div class="w3-third"></div>
 				        </div><hr>
-				    </form>
-				    <form name="noticeForm" method="post" class="was-validated mt-3">
 					  	<div class="w3-row">
 					  		<div class="w3-third">
 							<div><span  style="font-size:20px;">상품 정보 고시</span></div>
@@ -464,13 +446,11 @@
 					        <div class="w3-third"></div>
 					        <div class="w3-third"></div>
 				        </div>
-				    </form>
 				</div>
  			</div>
 			
 			<div class="box w3-border" style="margin-top: 20px;">
 				<div class="w3-white w3-padding">
-	 			<form name="shipmentForm" method="post" class="was-validated mt-3">
 	 				<div class="w3-light-gray p-4">
 				    	<div style="font-size:20px;">배송</div>
 				    	<div class="form-group">
@@ -597,15 +577,13 @@
 						   <div class="w3-half"></div>
 						</div>
 			        </div><hr>
-				    </form>
-				    <form name="keywordForm" method="post" class="was-validated mt-3">
 					  	<div style="font-size:20px;">상품 대표 키워드</div><br>
 					  	<div class="w3-row">
 					  		<div class="w3-third">
 					    	<div class="form-group">
 						      <div class="mb-3">
 					    			<label for="keyword1" style="margin-left:5px;">키워드1 : </label>
-					    			<input class="w3-input w3-2020-sunlight" id="keyword1" name="keyword1" type="text">
+					    			<input class="w3-input w3-2020-sunlight" id="keyword1" name="keyword" type="text">
 				    		  </div>
 					        </div>
 					        </div>
@@ -617,7 +595,7 @@
 						    	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword2" style="margin-left:5px;">키워드2 : </label>
-						    			<input class="w3-input w3-2020-sunlight" id="keyword2" name="keyword2" type="text">
+						    			<input class="w3-input w3-2020-sunlight" id="keyword2" name="keyword" type="text">
 					    		  </div>
 						        </div>
 					        </div>
@@ -625,7 +603,7 @@
 					        	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword4" style="margin-left:5px;">키워드4 : </label>
-						    			<input class="w3-input w3-2020-sunlight" id="keyword4" name="keyword4" type="text">
+						    			<input class="w3-input w3-2020-sunlight" id="keyword4" name="keyword" type="text">
 					    		  </div>
 					        	</div>
 					        </div>
@@ -636,7 +614,7 @@
 						    	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword3" style="margin-left:5px;">키워드3 : </label>
-						    			<input class="w3-input w3-2020-sunlight" id="keyword3" name="keyword3" type="text">
+						    			<input class="w3-input w3-2020-sunlight" id="keyword3" name="keyword" type="text">
 					    		  </div>
 						        </div>
 					        </div>
@@ -644,22 +622,33 @@
 					        	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword5" style="margin-left:5px;">키워드5 : </label>
-						    			<input class="w3-input w3-2020-sunlight" id="keyword5" name="keyword5" type="text">
+						    			<input class="w3-input w3-2020-sunlight" id="keyword5" name="keyword" type="text">
 					    		  </div>
 					        	</div>
 					        </div>
 					        <div class="w3-third"></div>
 				        </div><hr>
-				    </form>
-				    <div>
-				    	<p style="text-align: center;"><button class="w3-btn w3-2019-brown-granite w3-padding-large" type="button" onclick="itemInsert()">상품등록</button></p>
-				    </div>
-				</div>
- 			</div>
-			
-		</div>
+				        --%>
+				        
+				        
+				        <input type="hidden" name="shipment_address">
+				        <input type="hidden" name="shipment_return_address">
+				        <input type="hidden" name="item_keyword">
+				        <input type="hidden" name="option_name">
+				        <input type="hidden" name="str_option_price">
+				        <input type="hidden" name="str_option_stock_quantity">
+<!-- 				        <input type="hidden" name="detail_content" disabled> -->
+					    <div>
+					    	<p style="text-align: center;">
+					    		<input class="w3-btn w3-2019-brown-granite w3-padding-large" type="submit" value="상품등록">
+					    	</p>
+					    </div>
+					</div>
+	 			</div>
+			</div>
  		<div class="w3-col s1"></div>
- 	</div>
+    </form>
+	</div>
 </div>
 </body>
 </html>
