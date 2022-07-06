@@ -52,14 +52,25 @@
 				    	<div class="form-group">
 				    		<label for="user_id" style="font-size:18px;">복사 등록</label>
 				      		<div class="input-group-append mb-3">
-				    			<input class="w3-input" id="copy_name" name="copy_name" type="text" placeholder="복사할 상품명을 입력하세요.">
+				    			<input class="w3-input" id="copy_name" name="copy_name" type="text" placeholder="복사할 상품명을 검색." onsubmit="return false" onkeypress="if(window.event.keyCode==13){copyInsert()}">
 				    			<div class="input-group-append" id="copy_search">
-					    			<button class="btn w3-white" onclick="()" id="copy_searchBtn">
+					    			<a class="btn w3-white" onclick="copyInsert()" id="copy_searchBtn">
 					    				<i class="fa-solid fa-magnifying-glass"></i>
-					    			</button>
+					    			</a>
 				    			</div>
 				    		</div>
-				    	</div><br>
+				    	</div>
+				    	<div class="w3-row">
+			    			<div class="w3-half">
+						    	<div id="copyListForm" style="display:none">
+						    	<label for="user_id">복사할 상품을 선택하세요</label>
+									<select name="copyList" id="copyList" class="w3-select w3-border">
+									</select>
+						    	</div>
+						    </div>
+						    <div class="w3-half"></div>
+						</div>
+				    	<hr>
 				    	<div class="form-group">
 				    		<label for="user_id">카테고리 <span style="color:red;">🔸&nbsp;</span></label>
 				    			<div class="w3-row">
@@ -278,12 +289,12 @@
 					  	<div class="w3-row">
 					    	<div class="w3-third">
 					    		<div style="margin-bottom:10px;">대표 이미지 <span style="color:red;">🔸&nbsp;</span></div>
-					    		<button onclick="javascript:$('#myphoto').click(); return false;" style="background-color: white">
+					    		<a onclick="javascript:$('#myphoto').click(); return false;" style="background-color: white">
 						    		<div id="addImageBtn">
 						    			<div><img src="${ctp}/images/plusImage.png" width="300px;"></div>
 						    		</div>
 						    		<div id='previewId'></div>
-					    		</button>
+					    		</a>
 				    			<input type="button" id="photoDelete" value="삭제" class="w3-btn w3-2020-orange-peel w3-padding-small w3-small" style="display:none; margin-top:5px; margin-left:6px;" onclick="previewDelete()"/>
 				    			<input type="file" name="file" id="myphoto" onchange="previewImage(this,'previewId')" class="form-control input" accept=".png, .jpg, .jpeg, .jfif, .gif" hidden="true">
 					        </div>
@@ -306,35 +317,22 @@
 				        	<div class="w3-half"></div>
 			        	</div>
 					    <hr>
-					   <div class="form-group">
-					      <label for="detail_content_flag" style="font-size:20px;">상품상세설명 <span style="color:red;">🔸&nbsp;</span></label>
-					      <div class="form-check-inline">
-				        	<div class="form-check">
-							    <input type="radio" class="detail_content_flag" name="detail_content_flag" value="1" checked>&nbsp;&nbsp;이미지 등록&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="detail_content_flag" name="detail_content_flag" value="0">&nbsp;&nbsp;직접입력
-							</div>
-						  </div>
+					    <div class="form-group">
+					      <label for="detail_content" style="font-size:20px;">상품상세설명 <span style="color:red;">🔸&nbsp;</span></label>
 					  	</div>
-					    <div>
-				  			<div class="detail_content_image" id="detail_content_imageForm">
-				    			<span>- 상품상세설명 이미지 등록<span style="color:red;">🔸&nbsp;</span></span>
-								<input type="file" name="detail_content_image" id="detail_content_image" class="w3-input" accept="image/*"/>
-							</div>
-							<div class="detail_content mt-5" id="detail_contentForm" style="display: none">
-								<div style="margin-bottom: 10px;">- 상품상세설명 직접입력 <span style="color:red;">🔸&nbsp;</span></div>
-								<textarea rows="10" name="detail_content" id="CKEDITOR" class="form-control"></textarea>
-							</div>
-							<script>
-					      	  CKEDITOR.replace("detail_content",{
-					      		  height:500,
-					      		  filebrowserUploadUrl : "${ctp}/imageUpload",
-					      		  uploadUrl : "${ctp}/imageUpload"
-					      	  });
-					      	  </script>
-				        </div>
+						<div class="detail_content" id="detail_contentForm">
+							<div style="margin-bottom: 10px;">- 상품상세설명 직접입력 <span style="color:red;">🔸&nbsp;</span></div>
+							<textarea rows="10" name="detail_content" id="CKEDITOR" class="form-control"></textarea>
+						</div>
+						<script>
+				      	  CKEDITOR.replace("detail_content",{
+				      		  height:500,
+				      		  filebrowserUploadUrl : "${ctp}/imageUpload",
+				      		  uploadUrl : "${ctp}/imageUpload"
+				      	  });
+			      	    </script>
 			        </div>
 			</div>
-			<%--
 			<div class="box w3-border" style="margin-top: 20px;">
 				<div class="w3-white w3-padding">
 					  	<div style="font-size:20px;">상품 주요 정보</div><br>
@@ -454,7 +452,7 @@
 	 				<div class="w3-light-gray p-4">
 				    	<div style="font-size:20px;">배송</div>
 				    	<div class="form-group">
-					      <label for="shipment_type">배송비 구분 <span style="color:red;">🔸&nbsp;</span></label>
+					      <label for="shipment_type_flag">배송비 구분 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
 							    <input type="radio" class="shipment_type" name="shipment_type" value="2" checked>&nbsp;&nbsp;판매자 조건부&nbsp;&nbsp;&nbsp;
@@ -468,7 +466,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="2500" id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -483,7 +481,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_free_amount">조건부 무료배송 금액 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="50000" id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -498,7 +496,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_extra_charge">제주도 추가 배송비 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="5000" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -628,8 +626,6 @@
 					        </div>
 					        <div class="w3-third"></div>
 				        </div><hr>
-				        --%>
-				        
 				        
 				        <input type="hidden" name="shipment_address">
 				        <input type="hidden" name="shipment_return_address">
@@ -637,7 +633,6 @@
 				        <input type="hidden" name="option_name">
 				        <input type="hidden" name="str_option_price">
 				        <input type="hidden" name="str_option_stock_quantity">
-<!-- 				        <input type="hidden" name="detail_content" disabled> -->
 					    <div>
 					    	<p style="text-align: center;">
 					    		<input class="w3-btn w3-2019-brown-granite w3-padding-large" type="submit" value="상품등록">

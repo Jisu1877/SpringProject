@@ -25,3 +25,5 @@ create table ga_category(
 );
 
 desc ga_category;
+
+select * from ga_category_group where category_group_use_yn = 'y'order by category_group_level;

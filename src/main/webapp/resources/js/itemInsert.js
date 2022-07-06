@@ -3,11 +3,11 @@ let categoryFlag = 0;
 let seller_discount_flag = 0;
 let seller_point_flag = 0;
 let item_option_flag = 0;
-let detail_content_flag = 1;
 let optionCnt = 1;
 let optionStockCnt = 0;
 let shipment_type_flag = 0;
 let cnt = 1;
+let data = "";
 
 function itemInsert() {
 	//설정 여부에 따른 null 값 채워주기
@@ -46,16 +46,7 @@ function itemInsert() {
 	let order_min_quantity = myForm.order_min_quantity.value;
 	let order_max_quantity = myForm.order_max_quantity.value;
 	
-//	let detail_content_image = myForm.detail_content_image.value;
-	let detail_content = myForm.detail_content.value;
-	
-//	if(detail_content_flag == 1) {
-//		myForm.detail_content.value = "";
-//	}else if(detail_content_flag == 0) {
-//		myForm.detail_content.value = myForm.content.value;
-//	}
-	
-	let titlephoto = myForm.file.value;
+	let titlephoto = document.getElementById("myphoto").value;
 	let file1 = document.getElementById("file1").value;
 	
 	let maxSize = 1024 * 1024 * 20;
@@ -97,14 +88,13 @@ function itemInsert() {
 			}
 		}
 	}
-
+	
 	if (fileSize > maxSize) {
 		alert("업로드할 파일의 총 최대 용량은 20MByte 입니다.");
 		return false;
 	}
-   				
-	/*
 	
+	let text = CKEDITOR.instances['CKEDITOR'].getData();
 	let origin_country = myForm.origin_country.value;
 	let item_model_name = myForm.item_model_name.value;
 	let after_service = myForm.after_service.value;
@@ -221,11 +211,7 @@ function itemInsert() {
 		alert("추가 이미지는 최소 1장 이상 등록해야합니다.");
 		return false;
 	}
-	else if(detail_content_image == "" && detail_content_flag == 1) {
-		alert("상품상세설명 이미지를 등록하세요.");
-		return false;
-	}
-	else if(detail_content == "" && detail_content_flag == 0) {
+	else if(text == "") {
 		alert("상품상세설명 내용을 입력하세요.");
 		return false;
 	}
@@ -315,12 +301,10 @@ function itemInsert() {
 				return false;
 			}
 		}
-		*/
-	/*}*/
-	
-	CKEDITOR.instances.detail_content.getData();
-	
-	return true;
+		CKEDITOR.instances.detail_content.getData();
+		
+		return true;
+	}
 }
 
 //상품정보고시 일괄 정보 입력
@@ -370,25 +354,6 @@ $(document).ready(function(){
 	});
 
 });
-
-//상품상세 설명 유형 선택
-$(document).ready(function(){
-	$("input[name='detail_content_flag']").change(function(){
-		let detail_content_flag_value = $("input[name='detail_content_flag']:checked").val();
-		if(detail_content_flag_value == 0) {
-			document.getElementById("detail_contentForm").style.display = "block";
-			document.getElementById("detail_content_imageForm").style.display = "none";
-			detail_content_flag = 0;
-		}
-		else {
-			document.getElementById("detail_contentForm").style.display = "none";
-			document.getElementById("detail_content_imageForm").style.display = "block";
-			detail_content_flag = 1;
-		}
-	});
-
-});
-
 
 //할인여부 설정
 $(document).ready(function(){
@@ -753,3 +718,56 @@ function deleteBox(cnt) {
 	$("#fBox"+cnt).remove();
 }
 
+function copyInsert() {
+	let copy_name = document.getElementById("copy_name").value;
+	if(copy_name == "") {
+		alert("상품명을 입력하세요.");
+		return false;
+	}
+	$.ajax({
+		type : "post",
+		url : "getItemInforCopy",
+		dataType:'json',
+		data : {item_name : copy_name},
+		success : function(vos) {
+			let str = '';
+			str += '<option value="">복사 상품 선택</option>';
+			for(let i=0; i<vos.length; i++) {
+				cnt++;
+				str += '<option value="'+i+'">'+vos[i].item_name+'</option>'
+			}
+			$("#copyList").html(str);
+			$("#copyListForm").show();
+			data = vos;
+		},
+		error : function() {
+			alert("전송오류");
+		}
+	});
+}
+
+$(function(){
+	$("#copyList").change(function(){
+		let i = $(this).val();
+		$("#item_name").val(data[i].item_name);
+		$("#item_summary").val(data[i].item_summary);
+		$("input:radio[name='display_flag']:radio[value='"+ data[i].display_flag +"']").prop('checked', true);
+		$("#sale_price").val(data[i].sale_price);
+		$("input:radio[name='seller_discount_flag']:radio[value='"+ data[i].seller_discount_flag +"']").prop('checked', true);
+		$("#seller_discount_amount").val(data[i].seller_discount_amount);
+		if(data[i].seller_discount_flag == 'y') {
+			document.getElementById("seller_discount_flagForm").style.display = "block";
+			seller_discount_flag = 1;
+			calPrice();
+		}
+		$("input:radio[name='seller_point_flag']:radio[value='"+ data[i].seller_point_flag +"']").prop('checked', true);
+		$("#seller_point").val(data[i].seller_point);
+		if(data[i].seller_point_flag == 'y') {
+			document.getElementById("seller_pointForm").style.display = "block";
+			seller_point_flag = 1;
+		}
+		$("#stock_quantity").val(data[i].stock_quantity);
+		$("#order_min_quantity").val(data[i].order_min_quantity);
+		$("#order_max_quantity").val(data[i].order_max_quantity);
+	});
+});

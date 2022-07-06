@@ -6,6 +6,6 @@ import lombok.Data;
 public class ItemImageVO {
 	private int item_image_idx;
 	private int item_idx;
-	private String image_path;
+	private String image_name;
 	private String created_date;
 }

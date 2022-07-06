@@ -69,8 +69,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 	}
 
 	@Override
-	public void setCategoryDelete(int category_group_idx) {
-		categoryDAO.setCategoryDelete(category_group_idx);
+	public void setCategoryGroupDelete(int category_group_idx) {
+		categoryDAO.setCategoryGroupDelete(category_group_idx);
 	}
 
 	@Override
@@ -86,6 +86,24 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 	@Override
 	public ArrayList<CategoryVO> getCategoryInfor(int category_group_idx) {
 		return categoryDAO.getCategoryInfor(category_group_idx);
+	}
+
+	@Override
+	public ArrayList<CategoryGroupVO> getCategoryOnlyUseInfor() {
+		ArrayList<CategoryGroupVO> categoryGroupList = categoryDAO.getCategoryGroupInforOnlyUse();
+		for (CategoryGroupVO vo : categoryGroupList) {
+			int idx = vo.getCategory_group_idx();
+			
+			// idx에 딸린 중분류 리스트 가져오기
+			ArrayList<CategoryVO> categoryList = categoryDAO.getCategoryOnlyUseInfor(idx);
+			vo.setCategoryList(categoryList);
+		}
+		return categoryGroupList;
+	}
+
+	@Override
+	public void setCategoryDelete(int category_idx) {
+		categoryDAO.setCategoryDelete(category_idx);
 	}
 
 }

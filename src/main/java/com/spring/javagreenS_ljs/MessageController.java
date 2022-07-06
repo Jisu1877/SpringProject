@@ -44,6 +44,10 @@ public class MessageController {
 			model.addAttribute("msg", user_id+"님 로그아웃 되었습니다.");
 			model.addAttribute("url", "user/userLogin");
 		}
+		else if(msgFlag.equals("itemInsertOk")) {
+			model.addAttribute("msg", "상품등록이 완료되었습니다.");
+			model.addAttribute("url", "admin/mainHome");
+		}
 		
 		return "include/message";
 	}

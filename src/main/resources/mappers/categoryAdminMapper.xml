@@ -17,15 +17,23 @@
 	</select>
 	
 	<select id="getCategoryGroupInfor3" resultType="com.spring.javagreenS_ljs.vo.CategoryGroupVO">
-		select * from ga_category_group where category_group_level = #{category_group_level};
+		select * from ga_category_group where category_group_level = #{category_group_level}
 	</select>
 	
 	<select id="getCategoryInfor" resultType="com.spring.javagreenS_ljs.vo.CategoryVO">
 		select * from ga_category where category_group_idx = #{idx}
 	</select>
 	
+	<select id="getCategoryOnlyUseInfor" resultType="com.spring.javagreenS_ljs.vo.CategoryVO">
+		select * from ga_category where category_group_idx = #{idx} and category_use_yn = 'y'
+	</select>
+	
 	<select id="getCategoryGroupInforOnlyUse" resultType="com.spring.javagreenS_ljs.vo.CategoryGroupVO">
-		select * from ga_category_group where category_group_use_yn = 'y';
+		select * from ga_category_group where category_group_use_yn = 'y'order by category_group_level
+	</select>
+	
+	<select id="getCategoryGroupCode" resultType="String">
+		select category_group_code from ga_category_group where category_group_idx = #{category_group_idx}
 	</select>
 	
 	<insert id="setCategoryGroup">
@@ -33,7 +41,7 @@
 	</insert>
 	
 	<insert id="setCategory">
-		insert into ga_category values(DEFAULT, #{vo.category_group_idx}, #{vo.category_name}, DEFAULT);
+		insert into ga_category values(DEFAULT, #{vo.category_group_idx}, #{vo.category_name}, DEFAULT)
 	</insert>
 	
 	<update id="setCategoryUseNot">
@@ -41,18 +49,22 @@
 	</update>
 	
 	<update id="setCategoryLevelSort">
-		update ga_category_group set category_group_level = #{changeValue} where category_group_level = #{changeLevel};
+		update ga_category_group set category_group_level = #{changeValue} where category_group_level = #{changeLevel}
 	</update>
 	
 	<update id="setCategoryUse">
-		update ga_category_group set category_group_use_yn = 'y', category_group_level = #{vo.category_group_level} where category_group_idx = #{vo.category_group_idx};
+		update ga_category_group set category_group_use_yn = 'y', category_group_level = #{vo.category_group_level} where category_group_idx = #{vo.category_group_idx}
 	</update>
 	
 	<update id="setCategoryUpate">
-		update ga_category_group set category_group_name = #{vo.category_group_name}, category_group_level = #{vo.category_group_level} where category_group_idx = #{vo.category_group_idx};
+		update ga_category_group set category_group_name = #{vo.category_group_name}, category_group_level = #{vo.category_group_level} where category_group_idx = #{vo.category_group_idx}
 	</update>
 	
-	<delete id="setCategoryDelete">
+	<delete id="setCategoryGroupDelete">
 		delete from ga_category_group where category_group_idx = #{category_group_idx}
+	</delete>
+	
+	<delete id="setCategoryDelete">
+		delete from ga_category where category_idx = #{category_idx}
 	</delete>
 </mapper>

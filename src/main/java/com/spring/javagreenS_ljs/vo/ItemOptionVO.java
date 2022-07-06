@@ -12,6 +12,5 @@ public class ItemOptionVO {
 	private int option_stock_quantity;
 	private String option_sold_out;
 	private String option_display_flag;
-	private String created_admin_id;
 	private String created_date;
 }

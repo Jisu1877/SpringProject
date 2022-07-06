@@ -160,7 +160,7 @@ public class CategoryAdminController {
 	@RequestMapping(value =  "/category_group_delete", method = RequestMethod.POST)
 	public String category_group_delete(int category_group_idx, int category_group_level) {
 		//삭제처리
-		categoryAdminService.setCategoryDelete(category_group_idx);
+		categoryAdminService.setCategoryGroupDelete(category_group_idx);
 		
 		if(category_group_level != 0) {
 			//노출 순서 조정 알고리즘
@@ -191,4 +191,14 @@ public class CategoryAdminController {
 		categoryAdminService.setCategory(vo);
 		return "1";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/category_delete", method = RequestMethod.POST)
+	public String category_deletePost(int category_idx) {
+		//중분류 삭제처리
+		categoryAdminService.setCategoryDelete(category_idx);
+		return "1";
+	}
+	
+	
 }

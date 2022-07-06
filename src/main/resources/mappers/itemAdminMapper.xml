@@ -3,4 +3,32 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javagreenS_ljs.dao.ItemDAO">
+	<select id="getItemMaxIdx" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select Max(item_idx) as item_idx from ga_item
+	</select>
+	
+	<select id="getItemSearch" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item where ${searchString} like concat('%', #{item_name},'%'); 
+	</select>
+	
+	<insert id="setItemOption">
+		insert into ga_item_option values (DEFAULT, #{maxIdx}, DEFAULT, #{option_name}, #{option_price}, #{option_stock}, #{option_sold_out}, DEFAULT, DEFAULT)
+	</insert>
+	
+	<insert id="setItemImage">
+		insert into ga_item_image values (DEFAULT, #{maxIdx}, #{sFileName}, DEFAULT);
+	</insert>
+	
+	<insert id="setItemInsert">
+		insert into ga_item values (#{itemVO.item_idx}, #{itemVO.item_code}, #{itemVO.item_name}, #{itemVO.item_summary}, #{itemVO.display_flag}, #{itemVO.sale_price}, #{itemVO.seller_discount_flag}, #{itemVO.seller_discount_amount}, #{itemVO.seller_point_flag}, #{itemVO.seller_point}, #{itemVO.sold_out}, #{itemVO.stock_quantity}, #{itemVO.stock_schedule_date}, #{itemVO.order_min_quantity}, #{itemVO.order_max_quantity}, DEFAULT, #{itemVO.item_option_flag}, #{itemVO.detail_content}, #{itemVO.brand}, #{itemVO.form}, #{itemVO.item_model_name}, #{itemVO.origin_country}, #{itemVO.after_service}, DEFAULT, #{itemVO.shipment_address}, #{itemVO.shipment_return_address}, #{itemVO.shipment_type}, #{itemVO.shipping_price}, #{itemVO.shipping_free_amount}, #{itemVO.shipping_extra_charge}, #{itemVO.item_return_flag}, #{itemVO.shipping_return_price}, #{itemVO.item_keyword}, #{itemVO.created_admin_id}, DEFAULT);
+	</insert>
+	
+	<insert id="setItemNotice">
+		insert into ga_item_notice values (DEFAULT, #{maxIdx}, DEFAULT, #{itemVO.notice_value1}, DEFAULT, #{itemVO.notice_value2}, DEFAULT, #{itemVO.notice_value3}, DEFAULT, #{itemVO.notice_value4}, DEFAULT, #{itemVO.notice_value5});
+	</insert>
+	
+	<update id="setItemImageChange">
+		update ga_item set item_image = #{itemImage} where item_idx = #{maxIdx}
+	</update>
+	
 </mapper>

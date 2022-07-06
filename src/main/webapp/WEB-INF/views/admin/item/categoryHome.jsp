@@ -277,6 +277,29 @@
 		
 	}
 	
+	/* 중분류 삭제 */
+	function category_delete(idx) {
+		let ans = confirm("해당 중분류 카테고리를 삭제하시겠습니까?");
+		if(ans) {
+			$.ajax({
+				type : "post",
+				url : "${ctp}/admin/category/category_delete",
+				data : {category_idx : idx},
+				success : function(data) {
+					if(data == 1) {
+						location.reload();
+					}
+					else {
+						alert("삭제 처리 실패. 다시 시도해주세요.");
+					}
+				},
+				error : function() {
+					alert("전송오류.");
+				}
+			});
+		}
+	}
+	
 </script>
 </head>
 <body class="w3-light-grey">
@@ -395,7 +418,7 @@
 												<input type="button" id="updateBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정" onclick="category_group_update(${vo.category_group_idx})">
 												<input type="button" id="updateOkBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정완료" onclick="category_group_updateOk(${vo.category_group_idx}, ${vo.category_group_level})" style="display: none; margin-left: 30px;">
 											</c:if>
-											<input type="button" id="deleteBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="삭제" onclick="category_group_delete(${vo.category_group_idx}, ${vo.category_group_level})">
+											<input type="button" id="deleteBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="삭제" onclick="category_delete(${cVO.category_idx})">
 										</td>
 										<td></td>
 										<td></td>
@@ -412,6 +435,7 @@
 								<td>
 									<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="등록" onclick="category_group_input()">
 								</td>
+								<td></td>
 								<td></td>
 								<td></td>
 							</tr>

@@ -27,13 +27,19 @@ public interface CategoryDAO {
 
 	public void setCategoryUpate(@Param("vo") CategoryGroupVO vo);
 
-	public void setCategoryDelete(@Param("category_group_idx") int category_group_idx);
+	public void setCategoryGroupDelete(@Param("category_group_idx") int category_group_idx);
 
 	public void setCategory(@Param("vo") CategoryVO vo);
 
 	public ArrayList<CategoryVO> getCategoryInfor(@Param("idx") int idx);
 
 	public ArrayList<CategoryGroupVO> getCategoryGroupInforOnlyUse();
+
+	public String getCategoryGroupCode(@Param("category_group_idx") int category_group_idx);
+
+	public ArrayList<CategoryVO> getCategoryOnlyUseInfor(@Param("idx") int idx);
+
+	public void setCategoryDelete(@Param("category_idx") int category_idx);
 
 
 }

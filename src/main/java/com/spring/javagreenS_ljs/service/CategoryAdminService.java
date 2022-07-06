@@ -27,13 +27,17 @@ public interface CategoryAdminService {
 
 	public void setCategoryUpate(CategoryGroupVO vo);
 
-	public void setCategoryDelete(int category_group_idx);
+	public void setCategoryGroupDelete(int category_idx);
 
 	public void setCategory(CategoryVO vo);
 
 	public ArrayList<CategoryGroupVO> getCategoryGroupInforOnlyUse();
 
 	public ArrayList<CategoryVO> getCategoryInfor(int category_group_idx);
+
+	public ArrayList<CategoryGroupVO> getCategoryOnlyUseInfor();
+
+	public void setCategoryDelete(int category_idx);
 
 
 }

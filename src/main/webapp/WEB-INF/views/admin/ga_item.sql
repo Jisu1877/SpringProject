@@ -42,3 +42,6 @@ create table ga_item(
 );
 
 desc ga_item;
+
+
+select Max(item_idx) as item_idx from ga_item

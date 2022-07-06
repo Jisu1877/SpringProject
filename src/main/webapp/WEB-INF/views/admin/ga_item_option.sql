@@ -9,7 +9,6 @@ create table ga_item_option(
 	option_stock_quantity	INT NOT NULL,
 	option_sold_out			VARCHAR(1) NOT NULL DEFAULT '0',
 	option_display_flag		VARCHAR(1) NOT NULL DEFAULT 'y',
-	created_admin_id		VARCHAR(20) NOT NULL,
 	created_date 			DATETIME NOT NULL DEFAULT now(),
     foreign key(item_idx) references ga_item(item_idx)
 );
