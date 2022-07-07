@@ -52,6 +52,10 @@ public class MessageController {
 			model.addAttribute("msg", "상품조회 오류. 다시 시도해주세요.");
 			model.addAttribute("url", "/admin/item/itemList");
 		}
+		else if(msgFlag.equals("itemUpdateNo")) {
+			model.addAttribute("msg", "상품수정 오류. 다시 시도해주세요.");
+			model.addAttribute("url", "/admin/item/itemList");
+		}
 		
 		return "include/message";
 	}

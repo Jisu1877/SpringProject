@@ -40,7 +40,7 @@
 				        		<c:set var="calPriceFmt" value="${itemVO.sale_price - itemVO.seller_discount_amount}"/>
 				        		<fmt:formatNumber value="${calPriceFmt}"/>원
 			        		</span>
-			        		<span style="font-size: 19px; margin-left: 10px;">
+			        		<span style="font-size: 19px; margin-left: 10px; color:brown">
 			        			<!-- (할인율) = (할인액) / (정가) X 100 -->
 			        			<c:set var="calDiscountFmt" value="${(itemVO.seller_discount_amount / itemVO.sale_price) * 100}"/>
 			        			<fmt:formatNumber type="number" maxFractionDigits="0"  value="${calDiscountFmt}" />

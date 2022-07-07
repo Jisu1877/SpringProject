@@ -17,7 +17,7 @@
 	}
 </style>
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-2019-brown-granite" style="z-index:3;width:250px;" id="mySidebar"><br>
+<nav class="w3-sidebar w3-collapse w3-2019-brown-granite" style="z-index:3; width:250px; overflow:scroll" id="mySidebar"><br>
   <div class="w3-container w3-row">
     <div class="w3-col s12 w3-bar w3-center">
       <p class="w3-center" style="margin-top: 20px;">
@@ -49,12 +49,26 @@
 	  <button onclick="slideDown(2)" class="w3-2019-brown-granite menu"><strong>일반판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo2" class="w3-bar-block w3-2020-ash" style="display: none">
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">주문통합검색</a></button>
+	    <!-- <button class="w3-bar-item w3-2019-brown-granite"><a href="">주문통합검색</a></button> -->
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">배송현황 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">취소 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">교환 관리</a></button>
+	  </div>
+	</div>
+  	<div class="w3-dropdown-click">
+	  <button onclick="slideDown(3)" class="w3-2019-brown-granite menu"><strong>경매판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  <i class="fa-solid fa-sort-down"></i></button>
+	  <div id="Demo3" class="w3-bar-block w3-2020-ash" style="display: none">
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">경매상품 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">판매자 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">낙찰(주문) 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">배송현황 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">취소 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">판매방해 관리</a></button>
 	  </div>
 	</div>
   	<div class="w3-dropdown-click">

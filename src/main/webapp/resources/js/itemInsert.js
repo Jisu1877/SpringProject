@@ -739,6 +739,7 @@ function copyInsert() {
 			$("#copyList").html(str);
 			$("#copyListForm").show();
 			data = vos;
+			showToast("하단 드롭다운 메뉴에서 복사할 상품을 선택하세요.");
 		},
 		error : function() {
 			alert("전송오류");
@@ -821,4 +822,16 @@ $(function(){
 			$("#keyword"+(j+1)).val(item_keyword[j]);
 		}
 	});
+});
+
+function showToast(msg) {
+	iqwerty.toast.toast(msg);
+}
+
+$(function() {
+	$('body').on("keypress", function(e) {
+		if (e.keyCode === 13) {
+			e.preventDefault();
+		}
+	})
 });

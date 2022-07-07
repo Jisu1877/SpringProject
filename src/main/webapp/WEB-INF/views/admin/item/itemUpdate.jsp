@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -15,7 +17,6 @@
     <script src="${ctp}/js/woo.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="${ctp}/js/itemInsert.js"></script>
-    <script src="${ctp}/js/toast.min.js"></script>
     <style>
 		body,h1 {font-family: "Montserrat", sans-serif}
 		a {
@@ -27,6 +28,9 @@
 		}
 		.box {
 	   		box-shadow: 0 16px 18px -20px rgba(0, 0, 0, 0.7);
+		}
+		#schedule_date {
+			padding-left:20px;
 		}
 	</style>
 </head>
@@ -40,7 +44,7 @@
 
     <!-- Header -->
 	<header class="w3-container" style="padding-top:22px;">
-		<p style="margin-top:20px; font-size:23px;">상품 등록</p>
+		<p style="margin-top:20px; font-size:23px;">상품 수정</p>
 		<p><span style="color:red;">🔸&nbsp;</span> 표시가 있는 사항은 필수입력입니다.</p>
 	</header>
  	
@@ -50,69 +54,36 @@
  		<div class="w3-col s11">
  			<div class="box w3-border">
 				<div class="w3-white w3-padding">
-				    	<div class="form-group">
-				    		<label for="user_id" style="font-size:18px;">복사 등록</label>
-				      		<div class="input-group-append mb-3">
-				    			<input class="w3-input" id="copy_name" name="copy_name" type="text" placeholder="복사할 상품명을 검색." onsubmit="return false" onkeypress="if(window.event.keyCode==13){copyInsert()}">
-				    			<div class="input-group-append" id="copy_search">
-					    			<a class="btn w3-white" onclick="copyInsert()" id="copy_searchBtn">
-					    				<i class="fa-solid fa-magnifying-glass"></i>
-					    			</a>
-				    			</div>
-				    		</div>
-				    	</div>
-				    	<div class="w3-row">
-			    			<div class="w3-half">
-						    	<div id="copyListForm" style="display:none">
-						    	<label for="user_id">복사할 상품을 선택하세요</label>
-									<select name="copyList" id="copyList" class="w3-select w3-border">
-									</select>
-						    	</div>
-						    </div>
-						    <div class="w3-half"></div>
-						</div>
-				    	<hr>
-				    	<div class="form-group">
-				    		<label for="user_id">카테고리 <span style="color:red;">🔸&nbsp;</span> <font color="red">(추후 수정 불가)</font></label>
-				    			<div class="w3-row">
-					    			<div class="w3-quarter">
-					    			</div>
-					    			<div class="w3-quarter">
-						      			<select name="category_group_idx" id="categoryGroup" class="w3-select w3-border">
-											    <option value="" selected>대분류</option>
-											    <c:forEach var="vo" items="${categoryVOS}">
-													<option value="${vo.category_group_idx}">${vo.category_group_name}</option>
-												</c:forEach>
-										</select>
-					    			</div>
-					    			<div class="w3-quarter">
-					    			</div>
-					    			<div class="w3-quarter" style="padding-left: 20px;">
-						      			<select name="category_idx" id="category" class="w3-select w3-border">
-											    <option value="0" selected>중분류</option>
-										</select>
-					    			</div>
-				    			</div>
-				    	</div>
+			    		<label for="user_id">카테고리 <span style="color:red;">🔸&nbsp;</span> <font color="red">(수정 불가)</font></label>
+		    			<div>
+		    				<b>대분류</b> | ${itemVO.category_group_name}&nbsp;&nbsp; 
+		    				<c:if test="${itemVO.category_name == 'NO'}">
+		    					<b>중분류</b> | 없음	
+		    				</c:if>
+		    				<c:if test="${itemVO.category_name != 'NO'}">
+		    					<b>중분류</b> | ${itemVO.category_name} 
+		    				</c:if>
+		    			</div>
+		    			<hr>
 				    	<div class="form-group">
 				    		<label for="item_name">상품명 <span style="color:red;">🔸&nbsp;</span></label>
 				      		<div class="input-group mb-3">
-				    			<input class="input w3-padding-16 w3-border form-control" id="item_name" name="item_name" type="text" placeholder="상품명을 입력하세요.(100자 이내)" required>
+				    			<input class="input w3-padding-16 w3-border form-control" id="item_name" name="item_name" type="text" placeholder="상품명을 입력하세요.(100자 이내)" value="${itemVO.item_name}" required>
 				    		</div>
 						    <div id="pwdDemo"></div>
 				    	</div>
 				    	<div class="form-group">
 				    		<label for="item_summary">상품 간단 설명 <span style="color:red;">🔸&nbsp;</span></label>
 				      		<div class="input-group mb-3">
-				    			<input class="input w3-padding-16 w3-border form-control" id="item_summary" name="item_summary" type="text" placeholder="상품 간단 설명을 입력하세요.(200자 이내)" required>
+				    			<input class="input w3-padding-16 w3-border form-control" id="item_summary" name="item_summary" type="text" placeholder="상품 간단 설명을 입력하세요.(200자 이내)" value="${itemVO.item_summary}" required>
 				    		</div>
 				    	</div><hr>
 				    	<div class="form-group">
 					      <label for="display_flag">전시상태 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
-							    <input type="radio" class="display_flag" name="display_flag" value="y" checked>&nbsp;&nbsp;전시&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="display_flag" name="display_flag" value="n">&nbsp;&nbsp;전시중지
+							    <input type="radio" class="display_flag" name="display_flag" value="y" ${itemVO.display_flag == 'y' ? 'checked' : ''}>&nbsp;&nbsp;전시&nbsp;&nbsp;&nbsp;
+							    <input type="radio" class="display_flag" name="display_flag" value="n" ${itemVO.display_flag == 'n' ? 'checked' : ''}>&nbsp;&nbsp;전시중지 
 							</div>
 						  </div>
 					  	</div>
@@ -123,7 +94,7 @@
 						    	<div class="form-group">
 							      <label for="sale_price">판매가 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" id="sale_price" name="sale_price" type="number" onchange="minValueCheck1()" placeholder="숫자만 입력" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.sale_price}" id="sale_price" name="sale_price" type="number" onchange="minValueCheck1()" placeholder="숫자만 입력" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -137,18 +108,18 @@
 						      <label for="seller_discount_flag">할인 <span style="color:red;">🔸&nbsp;</span></label>
 						      <div class="form-check-inline">
 					        	<div class="form-check">
-								    <input type="radio" class="seller_discount_flag" name="seller_discount_flag" value="y" onkeypress="seller_discount_flag()">&nbsp;&nbsp;설정&nbsp;&nbsp;&nbsp;
-								    <input type="radio" class="seller_discount_flag" name="seller_discount_flag" value="n" checked>&nbsp;&nbsp;설정안함
+								    <input type="radio" class="seller_discount_flag" name="seller_discount_flag" value="y" ${itemVO.seller_discount_flag == 'y' ? 'checked' : ''} onkeypress="seller_discount_flag()">&nbsp;&nbsp;설정&nbsp;&nbsp;&nbsp;
+								    <input type="radio" class="seller_discount_flag" name="seller_discount_flag" value="n" ${itemVO.seller_discount_flag == 'n' ? 'checked' : ''}>&nbsp;&nbsp;설정안함
 								</div>
 							  </div>
 						  	</div>
-						  	<div id="seller_discount_flagForm" style="display:none">
+						  	<div id="seller_discount_flagForm" ${itemVO.seller_discount_flag == 'n' ? 'style="display:none"' : ''}>
 							  	<div class="w3-row">
 							  		<div class="w3-third">
 							    	<div class="form-group">
 								      <label for="seller_discount_amount">할인금액 <span style="color:red;">🔸&nbsp;</span></label>
 								      <div class="input-group mb-3" style="margin-bottom:0px">
-							    			<input class="input w3-padding-16 w3-border form-control" id="seller_discount_amount" min="0" name="seller_discount_amount" type="number" onchange="calPrice()" placeholder="숫자만 입력" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+							    			<input class="input w3-padding-16 w3-border form-control" id="seller_discount_amount" min="0" name="seller_discount_amount" type="number" onchange="calPrice()" value="${itemVO.seller_discount_amount}" placeholder="숫자만 입력" onkeydown="javascript: return event.keyCode == 69 ? false : true">
 							    			<div class="input-group-append">
 										      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 										    </div>
@@ -158,7 +129,12 @@
 							        <div class="w3-third"></div>
 							        <div class="w3-third"></div>
 						        </div>
-						         <div style="font-weight:bold;">
+						        <div style="font-weight:bold;" id="calPrice">
+						        	<span>최종 판매가&nbsp;:&nbsp;</span>
+						        	<c:set var="calPriceFmt" value="${itemVO.sale_price - itemVO.seller_discount_amount}"/>
+						        	<span><fmt:formatNumber value="${calPriceFmt}"/>원</span>
+						        </div>
+						         <div style="font-weight:bold; display:none">
 						        	<span>최종 판매가&nbsp;:&nbsp;</span>
 						        	<span id="calPrice"></span>
 						        	<span>원</span>
@@ -169,17 +145,17 @@
 					      <label for="seller_point_flag">포인트 지급 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
-							    <input type="radio" class="seller_point_flag" name="seller_point_flag" value="y">&nbsp;&nbsp;지급&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="seller_point_flag" name="seller_point_flag" value="n" checked>&nbsp;&nbsp;미지급
+							    <input type="radio" class="seller_point_flag" name="seller_point_flag" value="y" ${itemVO.seller_point_flag == 'y' ? 'checked' : ''}>&nbsp;&nbsp;지급&nbsp;&nbsp;&nbsp;
+							    <input type="radio" class="seller_point_flag" name="seller_point_flag" value="n" ${itemVO.seller_point_flag == 'n' ? 'checked' : ''}>&nbsp;&nbsp;미지급
 							</div>
 						  </div>
 					  	</div>
-					    <div id="seller_pointForm" class="w3-row" style="display:none">
+					    <div id="seller_pointForm" class="w3-row" ${itemVO.seller_point_flag == 'n' ? 'style="display:none"' : ''}>
 					  		<div class="w3-third">
 					    	<div class="form-group">
 						      <label for="seller_point">지급 포인트 <span style="color:red;">🔸&nbsp;</span></label>
 						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="seller_point" min="0" name="seller_point" onchange="minValueCheck2()" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력">
+					    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.seller_point}" id="seller_point" min="0" name="seller_point" onchange="minValueCheck2()" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력">
 					    			<div class="input-group-append">
 								      	<input type="button" value="Point" size="2" class="btn w3-black" disabled='disabled' />
 								    </div>
@@ -194,18 +170,18 @@
 						    	<div class="form-group">
 							      <label for="stock_quantity">재고수량 <span style="color:red;">🔸&nbsp;</span><br>(옵션재고수량 입력시, 자동계산되어 등록됩니다.)</label>
 							      <div class="input-group mb-3">
-						    			<input class="input w3-padding-16 w3-border form-control" id="stock_quantity" min="0" name="stock_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" onchange="stock_quantityForm()" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.stock_quantity}" id="stock_quantity" min="0" name="stock_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" onchange="stock_quantityForm()" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
 					    		  </div>
 						        </div>
 					        </div>
-					        <div class="w3-third" id="schedule_date" style="padding-left:20px; display:none">
+					        <div class="w3-third" id="schedule_date" ${itemVO.sold_out == 0 ? 'style="display:none"' : ''}>
 					        	<div class="form-group">
 							      <label for="stock_schedule_date">재입고 예정일자 <br>&nbsp;</label>
 							      <div class="input-group mb-3">
-						    			<input class="w3-input" id="stock_schedule_date" name="stock_schedule_date" type="text" placeholder="YYYY-DD-MM" autocomplete="off">
+						    			<input class="w3-input" id="stock_schedule_date" value="${itemVO.stock_schedule_date}" name="stock_schedule_date" type="text" placeholder="YYYY-DD-MM" autocomplete="off">
 					    		  </div>
 					        	</div>
 					        </div>
@@ -216,7 +192,7 @@
 					    		<div class="form-group">
 							      <label for="order_min_quantity">최소 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_min_quantity" onchange="minValueCheck3()" name="order_min_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.order_min_quantity}" min="1" id="order_min_quantity" onchange="minValueCheck3()" name="order_min_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -227,7 +203,7 @@
 					        	<div class="form-group">
 							      <label for="order_max_quantity">최대 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.order_max_quantity}" min="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -246,36 +222,44 @@
 							  	<label for="item_option_flag" style="font-size:20px;">옵션</label>
 							  	<div class="form-check-inline">
 						        	<div class="form-check">
-									    <input type="radio" class="item_option_flag" name="item_option_flag" value="y">&nbsp;&nbsp;사용&nbsp;&nbsp;&nbsp;
-									    <input type="radio" class="item_option_flag" name="item_option_flag" value="n" checked>&nbsp;&nbsp;사용안함
+									    <input type="radio" class="item_option_flag" name="item_option_flag" value="y" ${itemVO.item_option_flag == 'y' ? 'checked' : ''}>&nbsp;&nbsp;사용&nbsp;&nbsp;&nbsp;
+									    <input type="radio" class="item_option_flag" name="item_option_flag" value="n" ${itemVO.item_option_flag == 'n' ? 'checked' : ''}>&nbsp;&nbsp;사용안함
 									</div>
 								  </div>
 							 </div>
-							<div id="item_option_flagForm" style="display:none">
+							<div id="item_option_flagForm" ${itemVO.item_option_flag == 'n' ? 'style="display:none"' : ''}>
 							  	<div class="w3-row">
 							    	<div class="form-group">
 								      <table class="w3-table w3-striped w3-bordered">
+								      	<c:set var="i" value="1"/>
 								      	<tr>
-								      		<th><a onclick="javascript:addOptions()"><i class="fa-solid fa-square-plus" style="font-size: 20px;" title="옵션 추가하기"></i></a></th>
+								      		<th><a onclick="javascript:addOptions(${i})"><i class="fa-solid fa-square-plus" style="font-size: 20px;" title="옵션 추가하기"></i></a></th>
 								      		<th>옵션명</th>
 								      		<th>추가금액</th>
 								      		<th>재고수량</th>
 								      		<th></th>
 								      	</tr>
+								      	<c:forEach var="vo" items="${itemVO.itemOptionList}" varStatus="st">
 								      	<tr>
-								      		<td></td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" id="option_name1" name="option_names" type="text" placeholder="옵션 이름">
 								      		</td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck(1)" min="0" id="option_price1" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">
+								      			<input class="input w3-padding-16 w3-border form-control" id="option_name${i}" value="${vo.option_name}" name="option_names" type="text" placeholder="옵션 이름">
 								      		</td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck(1)" min="0" id="option_stock_quantity1" name="option_stock_quantities" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">
+								      			<input class="input w3-padding-16 w3-border form-control" value="${vo.option_price}" onchange="optionPriceCheck(1)" min="0" id="option_price${i}" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">
 								      		</td>
-								      		<td width="5%">
+								      		<td>
+								      			<input class="input w3-padding-16 w3-border form-control" value="${vo.option_stock_quantity}" onchange="optionStockCheck(1)" min="0" id="option_stock_quantity${i}" name="option_stock_quantities" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량">
 								      		</td>
+								      		 <td width="5%">
+								      		 	<c:if test="${i != 1}">
+								      		 		<a href="javascript:deleteOptions(${i})"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>
+								      		 	</c:if>
+								      		</td>
+								      		<c:set var="i" value="${i + 1}"/>
 								      	</tr>
+								      	</c:forEach>
 								      </table>
 								      <table class="w3-table w3-striped w3-bordered" id="addOption">
 								      	
@@ -292,7 +276,7 @@
 					    		<div style="margin-bottom:10px;">대표 이미지 <span style="color:red;">🔸&nbsp;</span></div>
 					    		<a onclick="javascript:$('#myphoto').click(); return false;" style="background-color: white">
 						    		<div id="addImageBtn">
-						    			<div><img src="${ctp}/images/plusImage.png" width="300px;"></div>
+						    			<div><img src="${ctp}/data/item/${itemVO.item_image}" width="300px;"></div>
 						    		</div>
 						    		<div id='previewId'></div>
 					    		</a>
@@ -306,7 +290,22 @@
 				        	<div class="w3-half">
 			        			<label for="seller_point_flag" style="margin-left:5px; margin-right: 10px;">추가 이미지</label>
 						        <input type="button" value="이미지 추가" onclick="fileBoxAppend()" class="btn w3-lime btn-sm mb-2"/>
-				        		<span style="color:red;">🔸&nbsp;</span> 추가 이미지 최소 1장 등록 필수
+				        		<span style="color:red;">🔸&nbsp;</span> 추가 이미지 최소 1장 등록 필수<br>
+				        		 [등록된 사진]<br>
+									<c:set var="thumbFile_save_file_name" value=""/>
+									<div style="font-size:13px; color:gray; margin-top:0px"><i class="fa-solid fa-circle-exclamation"></i> <font color="red">사진 삭제시 새로 입력한 모든 값이 리셋됩니다.</font></div>
+									<c:forEach var="vo" items="${itemVO.itemImageList}" varStatus="st">
+										<div class="file_item" id="file_${vo.item_image_idx}">
+											${st.count}. ${vo.image_name}
+											<c:if test="${st.count != 1}">
+												<a href="javascript:photoDel('${vo.item_image_idx}');" style="font-size: 13px; color:red;" data-index="${vo.item_image_idx}">삭제</a>
+											</c:if>
+										<c:if test="${st.count == 1 }">
+											<c:set var="thumbFile_file_name" value="${vo.image_name}"/>
+											<span style="color:bule; font-size: 13px;">(썸네일)</span>
+										</c:if><br>
+										</div>
+									</c:forEach>
 				        		<div class="mb-3">
 					    			<div id="fBox1">
 					    				- image
@@ -467,7 +466,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control"id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="2500" id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -482,7 +481,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_free_amount">조건부 무료배송 금액 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control"id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="50000" id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -497,7 +496,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_extra_charge">제주도 추가 배송비 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="5000" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>

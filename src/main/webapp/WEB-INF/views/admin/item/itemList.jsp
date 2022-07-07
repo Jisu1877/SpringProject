@@ -21,6 +21,7 @@
 		}
 		.box {
 	   		box-shadow: 0 16px 18px -20px rgba(0, 0, 0, 0.7);
+	   		margin-right: 50px;
 		}
 		.tableStyle {
 	  		width:100%;
@@ -31,6 +32,7 @@
 	<script>
 		let itemCode = "";
 		function checkOnlyOne(element, code) {
+			/*
 		  itemCode = code;
 		  const checkboxes 
 		      = document.getElementsByName("itemCheck");
@@ -40,14 +42,28 @@
 		  });
 		  
 		  element.checked = true;
+		  */
+		  
+		  $("input[name=itemCheck]").prop("checked", false);
+		  $(element).prop("checked", true);
 		}
 		
 		function itemInquire() {
+			itemCode = $("input[name=itemCheck]:checked").data("code");
 			if(itemCode == "") {
 				alert("조회를 원하는 상품을 선택하세요.");
 				return false;
 			}
 			location.href = "${ctp}/admin/item/itemInquire?item_code="+itemCode;
+		}
+		
+		function itemUpdate() {
+			let item
+			if(itemCode == "") {
+				alert("수정을 원하는 상품을 선택하세요.");
+				return false;
+			}
+			location.href = "${ctp}/admin/item/itemUpdate?item_code="+itemCode;
 		}
 	</script>
 </head>
@@ -69,7 +85,7 @@
  	<div class="w3-row-padding w3-margin-bottom">
 		<div style="margin-bottom:10px;">
 			<a href="javascript:itemInquire()" class="w3-btn w3-small w3-2021-buttercream">상품조회</a>&nbsp;&nbsp;
-			<a href="#" class="w3-btn w3-small w3-2020-sunlight">상품수정</a>&nbsp;&nbsp;
+			<a href="javascript:itemUpdate()" class="w3-btn w3-small w3-2020-sunlight">상품수정</a>&nbsp;&nbsp;
 			<a href="#" class="w3-btn w3-small w3-2021-desert-mist">상품삭제</a>&nbsp;&nbsp;
 		</div>
  		<div class="box w3-border w3-white">
@@ -92,7 +108,7 @@
 		        	<c:forEach var="vo" items="${vos}">
 		        		<tr>
 		        			<td class="text-center">
-		        				<input type="checkbox" name="itemCheck" onclick="checkOnlyOne(this, '${vo.item_code}')">
+		        				<input type="checkbox" name="itemCheck" data-code="${vo.item_code}" onclick="checkOnlyOne(this, '${vo.item_code}')">
 		        			</td>
 		        			<td class="text-center">${vo.item_code}</td>
 		        			<td>${vo.item_name}</td>
