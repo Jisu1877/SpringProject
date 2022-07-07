@@ -30,7 +30,7 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	
 	<!-- Shop -->
-	<p style="margin-left: 20px;"><span class="w3-white w3-hover-white w3-xxlarge mt-2">SHOP</span></p>
+	<p style="margin-left: 20px;"><span class="w3-white w3-xxlarge mt-2">SHOP</span></p>
 	<jsp:include page="/WEB-INF/views/include/mainContent.jsp" />
  	
 <!-- footer  -->

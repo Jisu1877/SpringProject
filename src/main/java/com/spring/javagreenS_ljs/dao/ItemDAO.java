@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javagreenS_ljs.vo.ItemImageVO;
+import com.spring.javagreenS_ljs.vo.ItemOptionVO;
 import com.spring.javagreenS_ljs.vo.ItemVO;
 
 public interface ItemDAO {
@@ -22,6 +24,14 @@ public interface ItemDAO {
 
 	public ArrayList<ItemVO> getItemSearch(@Param("searchString") String searchString,@Param("item_name") String item_name);
 
-	public ArrayList<ItemVO> getItemAllInfor();
+	public ArrayList<ItemVO> getItemAllInforOnlyDisplay();
+
+	public ArrayList<ItemVO> getItemList();
+
+	public ItemVO getItemSameSearch(@Param("searchString") String searchString, @Param("searchValue") String searchValue);
+
+	public ArrayList<ItemOptionVO> getItemOptionInfor(@Param("item_idx") int item_idx);
+
+	public ArrayList<ItemImageVO> getItemImageInfor(@Param("item_idx") int item_idx);
 
 }

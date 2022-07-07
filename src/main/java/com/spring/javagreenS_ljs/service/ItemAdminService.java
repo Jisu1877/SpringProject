@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
+import com.spring.javagreenS_ljs.vo.ItemOptionVO;
 import com.spring.javagreenS_ljs.vo.ItemVO;
 
 public interface ItemAdminService {
@@ -15,6 +16,15 @@ public interface ItemAdminService {
 
 	public ArrayList<ItemVO> getItemSearch(String string, String item_name);
 
-	public ArrayList<ItemVO> getItemAllInfor();
+	public ArrayList<ItemVO> getItemAllInforOnlyDisplay();
+
+	public ArrayList<ItemVO> getItemList();
+
+	public ItemVO getItemSameSearch(String searchString, String searchValue);
+
+	public ArrayList<ItemOptionVO> getItemOptionInfor(int item_idx);
+
+	public ArrayList<ItemImageVO> getItemImageInfor(int item_idx);
+
 
 }

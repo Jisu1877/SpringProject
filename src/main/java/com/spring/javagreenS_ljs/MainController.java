@@ -30,7 +30,7 @@ public class MainController {
 		model.addAttribute("categoryVOS", categoryVOS);
 		
 		//상품 가져오기
-		ArrayList<ItemVO> itemVOS =  itemAdminService.getItemAllInfor();
+		ArrayList<ItemVO> itemVOS =  itemAdminService.getItemAllInforOnlyDisplay();
 		model.addAttribute("itemVOS", itemVOS);
 		return "main/home";
 	}

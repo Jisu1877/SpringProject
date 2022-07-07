@@ -25,6 +25,7 @@ import com.spring.javagreenS_ljs.dao.CategoryDAO;
 import com.spring.javagreenS_ljs.dao.ItemDAO;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
+import com.spring.javagreenS_ljs.vo.ItemOptionVO;
 import com.spring.javagreenS_ljs.vo.ItemVO;
 
 @Service
@@ -260,7 +261,31 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 
 
 	@Override
-	public ArrayList<ItemVO> getItemAllInfor() {
-		return itemDAO.getItemAllInfor();
+	public ArrayList<ItemVO> getItemAllInforOnlyDisplay() {
+		return itemDAO.getItemAllInforOnlyDisplay();
+	}
+
+
+	@Override
+	public ArrayList<ItemVO> getItemList() {
+		return itemDAO.getItemList();
+	}
+
+
+	@Override
+	public ItemVO getItemSameSearch(String searchString, String searchValue) {
+		return itemDAO.getItemSameSearch(searchString,searchValue);
+	}
+
+
+	@Override
+	public ArrayList<ItemOptionVO> getItemOptionInfor(int item_idx) {
+		return itemDAO.getItemOptionInfor(item_idx);
+	}
+
+
+	@Override
+	public ArrayList<ItemImageVO> getItemImageInfor(int item_idx) {
+		return itemDAO.getItemImageInfor(item_idx);
 	}
 }

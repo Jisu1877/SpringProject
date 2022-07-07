@@ -773,7 +773,7 @@ $(function(){
 		}
 		$("#order_min_quantity").val(data[i].order_min_quantity);
 		$("#order_max_quantity").val(data[i].order_max_quantity);
-		
+
 		$("input:radio[name='item_option_flag']:radio[value='"+ data[i].item_option_flag +"']").prop('checked', true);
 		if(data[i].item_option_flag == 'y') {
 			document.getElementById("item_option_flagForm").style.display = "block";

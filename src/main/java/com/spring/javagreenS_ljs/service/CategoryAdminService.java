@@ -39,5 +39,7 @@ public interface CategoryAdminService {
 
 	public void setCategoryDelete(int category_idx);
 
+	public CategoryVO getCategoryInfor2(int category_idx);
+
 
 }

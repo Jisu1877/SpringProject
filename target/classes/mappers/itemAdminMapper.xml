@@ -11,8 +11,24 @@
 		select * from ga_item as item JOIN ga_item_notice as notice ON item.item_idx = notice.item_idx where ${searchString} like concat('%', #{item_name},'%'); 
 	</select>
 	
-	<select id="getItemAllInfor" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
-		select * from ga_item where display_flag = 'y'
+	<select id="getItemAllInforOnlyDisplay" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item where display_flag = 'y' and item_delete_flag = 'n'
+	</select>
+	
+	<select id="getItemList" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item where item_delete_flag = 'n' order by display_flag desc
+	</select>
+	
+	<select id="getItemSameSearch" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item as item JOIN ga_item_notice as notice ON item.item_idx = notice.item_idx where ${searchString} = #{searchValue};
+	</select>
+	
+	<select id="getItemOptionInfor" resultType="com.spring.javagreenS_ljs.vo.ItemOptionVO">
+		select * from ga_item_option where item_idx = #{item_idx} order by item_option_idx
+	</select>
+	
+	<select id="getItemImageInfor" resultType="com.spring.javagreenS_ljs.vo.ItemImageVO">
+		select * from ga_item_image where item_idx = #{item_idx} order by item_image_idx
 	</select>
 	
 	<insert id="setItemOption">
@@ -24,7 +40,7 @@
 	</insert>
 	
 	<insert id="setItemInsert">
-		insert into ga_item values (#{itemVO.item_idx}, #{itemVO.item_code}, #{itemVO.item_name}, #{itemVO.item_summary}, #{itemVO.display_flag}, #{itemVO.sale_price}, #{itemVO.seller_discount_flag}, #{itemVO.seller_discount_amount}, #{itemVO.seller_point_flag}, #{itemVO.seller_point}, #{itemVO.sold_out}, #{itemVO.stock_quantity}, #{itemVO.stock_schedule_date}, #{itemVO.order_min_quantity}, #{itemVO.order_max_quantity}, DEFAULT, #{itemVO.item_option_flag}, #{itemVO.detail_content}, #{itemVO.brand}, #{itemVO.form}, #{itemVO.item_model_name}, #{itemVO.origin_country}, #{itemVO.after_service}, DEFAULT, #{itemVO.shipment_address}, #{itemVO.shipment_return_address}, #{itemVO.shipment_type}, #{itemVO.shipping_price}, #{itemVO.shipping_free_amount}, #{itemVO.shipping_extra_charge}, #{itemVO.item_return_flag}, #{itemVO.shipping_return_price}, #{itemVO.item_keyword}, #{itemVO.created_admin_id}, DEFAULT);
+		insert into ga_item values (#{itemVO.item_idx}, #{itemVO.item_code}, #{itemVO.item_name}, #{itemVO.item_summary}, #{itemVO.display_flag}, #{itemVO.sale_price}, #{itemVO.seller_discount_flag}, #{itemVO.seller_discount_amount}, #{itemVO.seller_point_flag}, #{itemVO.seller_point}, #{itemVO.sold_out}, #{itemVO.stock_quantity}, #{itemVO.stock_schedule_date}, #{itemVO.order_min_quantity}, #{itemVO.order_max_quantity}, DEFAULT, #{itemVO.item_option_flag}, #{itemVO.detail_content}, #{itemVO.brand}, #{itemVO.form}, #{itemVO.item_model_name}, #{itemVO.origin_country}, #{itemVO.after_service}, DEFAULT, #{itemVO.shipment_address}, #{itemVO.shipment_return_address}, #{itemVO.shipment_type}, #{itemVO.shipping_price}, #{itemVO.shipping_free_amount}, #{itemVO.shipping_extra_charge}, #{itemVO.item_return_flag}, #{itemVO.shipping_return_price}, #{itemVO.item_keyword}, #{itemVO.created_admin_id}, DEFAULT, DEFAULT);
 	</insert>
 	
 	<insert id="setItemNotice">

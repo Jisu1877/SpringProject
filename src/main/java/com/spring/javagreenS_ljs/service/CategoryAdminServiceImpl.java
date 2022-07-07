@@ -106,4 +106,9 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 		categoryDAO.setCategoryDelete(category_idx);
 	}
 
+	@Override
+	public CategoryVO getCategoryInfor2(int category_idx) {
+		return categoryDAO.getCategoryInfor2(category_idx);
+	}
+
 }

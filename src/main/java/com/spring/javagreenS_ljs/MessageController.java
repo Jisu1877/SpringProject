@@ -48,6 +48,10 @@ public class MessageController {
 			model.addAttribute("msg", "상품등록이 완료되었습니다.");
 			model.addAttribute("url", "admin/mainHome");
 		}
+		else if(msgFlag.equals("itemInquireNo")) {
+			model.addAttribute("msg", "상품조회 오류. 다시 시도해주세요.");
+			model.addAttribute("url", "/admin/item/itemList");
+		}
 		
 		return "include/message";
 	}

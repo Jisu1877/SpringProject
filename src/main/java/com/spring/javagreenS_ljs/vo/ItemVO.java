@@ -40,14 +40,17 @@ public class ItemVO {
 	private int shipping_return_price;
 	private String item_keyword;
 	private String created_admin_id;
+	private String item_delete_flag;
 	private String created_date;
 	
-	private int category_idx;
 	private int category_group_idx;
+	private String category_group_name;
+	private int category_idx;
+	private String category_name;
 	
-	private ItemOptionVO itemOptionVO;
-	private ItemImageVO itemImageVO;
+	private ArrayList<ItemOptionVO> itemOptionList;
 	private ArrayList<ItemImageVO> itemImageList;
+	private ItemImageVO itemImageVO;
 	private ItemNoticeVO itemNoticeVO;
 	
 	private String option_use_flag;

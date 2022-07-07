@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!-- 현재 판매 중인 전체상품 List-->
+ <p style="text-align:center;"><span class="w3-white w3-xlarge mt-2">전체 상품</span></p>
   <div class="w3-row-padding w3-padding-16 w3-center">
   	<c:forEach var="itemVO" items="${itemVOS}">
   		<div class="w3-quarter">
@@ -15,14 +16,15 @@
 				<div>
 					<h5 class="text-left w3-white">
 						<strong>
-		  					${itemVO.item_summary}
+							 ${fn:substring(itemVO.item_summary, 0, 21)}
+						    <c:if test="${fn:length(itemVO.item_summary) > 20}">
+						    ...
+						    </c:if>
+		  					<%-- ${itemVO.item_summary} --%>
 		  				</strong>
 					</h5>
 				</div>
 				<div class="text-left">
-					<c:if test="${fn:length(itemVO.item_summary) < 20}">
-						<br>
-				    </c:if>
 					<c:if test="${itemVO.seller_discount_flag == 'n'}">
 						<c:set var="priceFmt" value="${itemVO.sale_price}"/>
 			        	<div class="mt-2"><b><fmt:formatNumber value="${priceFmt}"/>원</b></div>
@@ -47,39 +49,14 @@
 			        	</b></div>
 					</c:if>
 				</div>
-				<div class="text-left">
-					<c:set var="keyword" value="${fn:split(itemVO.item_keyword,'/')}" />
-					<c:forEach var="telNum" items="${keyword}" varStatus="g">     
-						<%-- <c:if test="${g.count == 2}">${telNum}</c:if>       
-						<c:if test="${g.last}">-${telNum}</c:if> --%>
-					</c:forEach> 
-				</div>
 	  		</a>
+			<div class="text-left mb-4">
+				<c:set var="keywords" value="${fn:split(itemVO.item_keyword,'/')}" />
+				<c:forEach var="keyword" items="${keywords}" varStatus="g">
+					<a href="#" style="font-size:12px;" class="w3-2021-buttercream">#${keyword}</a>
+				</c:forEach> 
+			</div>
   		</div>
   	</c:forEach>
   </div>
   
-   
-  <!-- Second Photo Grid-->
-  <div class="w3-row-padding w3-padding-16 w3-center">
-    <div class="w3-quarter">
-      <img src="${ctp}/images/sandwich.jpg" alt="Popsicle" style="width:100%">
-      <h3>All I Need Is a Popsicle</h3>
-      <p>Lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="${ctp}/images/sandwich.jpg" alt="Salmon" style="width:100%">
-      <h3>Salmon For Your Skin</h3>
-      <p>Once again, some random text to lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="${ctp}/images/sandwich.jpg" alt="Sandwich" style="width:100%">
-      <h3>The Perfect Sandwich, A Real Classic</h3>
-      <p>Just some random text, lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-    <div class="w3-quarter">
-      <img src="${ctp}/images/sandwich.jpg" alt="Croissant" style="width:100%">
-      <h3>Le French</h3>
-      <p>Lorem lorem lorem lorem ipsum text praesent tincidunt ipsum lipsum.</p>
-    </div>
-  </div>

@@ -40,7 +40,7 @@
 	  <div id="Demo1" class="w3-bar-block w3-2020-ash" style="display: none">
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/category/categoryHome">카테고리 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/item/itemInsert">상품 등록</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">상품 조회/수정</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/item/itemList">상품 조회/수정</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">사진 보관함</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">배송정보 관리</a></button>
 	  </div>

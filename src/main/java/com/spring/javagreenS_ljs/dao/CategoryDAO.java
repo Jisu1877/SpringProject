@@ -41,5 +41,7 @@ public interface CategoryDAO {
 
 	public void setCategoryDelete(@Param("category_idx") int category_idx);
 
+	public CategoryVO getCategoryInfor2(@Param("category_idx") int category_idx);
+
 
 }
