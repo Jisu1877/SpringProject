@@ -22,4 +22,6 @@ public interface ItemDAO {
 
 	public ArrayList<ItemVO> getItemSearch(@Param("searchString") String searchString,@Param("item_name") String item_name);
 
+	public ArrayList<ItemVO> getItemAllInfor();
+
 }

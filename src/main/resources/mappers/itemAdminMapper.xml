@@ -8,7 +8,11 @@
 	</select>
 	
 	<select id="getItemSearch" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
-		select * from ga_item where ${searchString} like concat('%', #{item_name},'%'); 
+		select * from ga_item as item JOIN ga_item_notice as notice ON item.item_idx = notice.item_idx where ${searchString} like concat('%', #{item_name},'%'); 
+	</select>
+	
+	<select id="getItemAllInfor" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item where display_flag = 'y'
 	</select>
 	
 	<insert id="setItemOption">

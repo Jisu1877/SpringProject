@@ -767,7 +767,58 @@ $(function(){
 			seller_point_flag = 1;
 		}
 		$("#stock_quantity").val(data[i].stock_quantity);
+		if(data[i].stock_quantity == 0) { 
+			document.getElementById("schedule_date").style.display = "block";
+			$("#stock_schedule_date").val(data[i].stock_schedule_date);
+		}
 		$("#order_min_quantity").val(data[i].order_min_quantity);
 		$("#order_max_quantity").val(data[i].order_max_quantity);
+		
+		$("input:radio[name='item_option_flag']:radio[value='"+ data[i].item_option_flag +"']").prop('checked', true);
+		if(data[i].item_option_flag == 'y') {
+			document.getElementById("item_option_flagForm").style.display = "block";
+			$("#stock_quantity").attr("disabled", true);
+			item_option_flag = 1;
+		}
+		
+		$("#brand").val(data[i].brand);
+		$("#form").val(data[i].form);
+		$("#origin_country").val(data[i].origin_country);
+		$("#item_model_name").val(data[i].item_model_name);
+		$("#after_service").val(data[i].after_service);
+		
+		$("#notice_value1").val(data[i].notice_value1);
+		$("#notice_value2").val(data[i].notice_value2);
+		$("#notice_value3").val(data[i].notice_value3);
+		$("#notice_value4").val(data[i].notice_value4);
+		$("#notice_value5").val(data[i].notice_value5);
+		
+		$("input:radio[name='shipment_type']:radio[value='"+ data[i].shipment_type +"']").prop('checked', true);
+		if(data[i].shipment_type == 1) {
+			document.getElementById("shipmentPriceFrom").style.display = "none";
+			shipment_type_flag = 1;
+		}
+		$("#shipping_price").val(data[i].shipping_price);
+		$("#shipping_free_amount").val(data[i].shipping_free_amount);
+		$("#shipping_extra_charge").val(data[i].shipping_extra_charge);
+		$("input:radio[name='item_return_flag']:radio[value='"+ data[i].item_return_flag +"']").prop('checked', true);
+		$("#shipping_return_price").val(data[i].shipping_return_price);
+		
+		var shipment_address = data[i].shipment_address.split('/');
+		$("#sample6_postcode1").val(shipment_address[0]);
+		$("#sample6_address1").val(shipment_address[1]);
+		$("#sample6_detailAddress1").val(shipment_address[2]);
+		$("#sample6_extraAddress1").val(shipment_address[3]);
+		
+		var shipment_return_address = data[i].shipment_return_address.split('/');
+		$("#sample6_postcode2").val(shipment_return_address[0]);
+		$("#sample6_address2").val(shipment_return_address[1]);
+		$("#sample6_detailAddress2").val(shipment_return_address[2]);
+		$("#sample6_extraAddress2").val(shipment_return_address[3]);
+		
+		var item_keyword = data[i].item_keyword.split('/');
+		for(let j=0; j<item_keyword.length; j++) {
+			$("#keyword"+(j+1)).val(item_keyword[j]);
+		}
 	});
 });

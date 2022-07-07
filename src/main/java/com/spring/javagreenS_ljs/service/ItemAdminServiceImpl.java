@@ -257,4 +257,10 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 	public ArrayList<ItemVO> getItemSearch(String searchString, String item_name) {
 		return itemDAO.getItemSearch(searchString, item_name);
 	}
+
+
+	@Override
+	public ArrayList<ItemVO> getItemAllInfor() {
+		return itemDAO.getItemAllInfor();
+	}
 }

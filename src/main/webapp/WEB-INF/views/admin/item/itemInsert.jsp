@@ -190,23 +190,23 @@
 				        </div><hr>
 					    <div class="w3-row">
 					  		<div class="w3-third">
-					    	<div class="form-group">
-						      <label for="stock_quantity">재고수량 <span style="color:red;">🔸&nbsp;</span><br>(옵션재고수량 입력시, 자동계산되어 등록됩니다.)</label>
-						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="input w3-padding-16 w3-border form-control" id="stock_quantity" min="0" name="stock_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" onchange="stock_quantityForm()" placeholder="숫자만 입력" required>
-					    			<div class="input-group-append">
-								      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
-								    </div>
-				    		  </div>
-					        </div>
+						    	<div class="form-group">
+							      <label for="stock_quantity">재고수량 <span style="color:red;">🔸&nbsp;</span><br>(옵션재고수량 입력시, 자동계산되어 등록됩니다.)</label>
+							      <div class="input-group mb-3">
+						    			<input class="input w3-padding-16 w3-border form-control" id="stock_quantity" min="0" name="stock_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" onchange="stock_quantityForm()" placeholder="숫자만 입력" required>
+						    			<div class="input-group-append">
+									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
+									    </div>
+					    		  </div>
+						        </div>
 					        </div>
 					        <div class="w3-third" id="schedule_date" style="padding-left:20px; display:none">
 					        	<div class="form-group">
-						      <label for="stock_schedule_date">재입고 예정일자</label>
-						      <div class="input-group mb-3" style="margin-bottom:0px">
-					    			<input class="w3-input" id="stock_schedule_date" name="stock_schedule_date" type="text" placeholder="YYYY-DD-MM" autocomplete="off">
-				    		  </div>
-					        </div>
+							      <label for="stock_schedule_date">재입고 예정일자 <br>&nbsp;</label>
+							      <div class="input-group mb-3">
+						    			<input class="w3-input" id="stock_schedule_date" name="stock_schedule_date" type="text" placeholder="YYYY-DD-MM" autocomplete="off">
+					    		  </div>
+					        	</div>
 					        </div>
 					        <div class="w3-third"></div>
 				        </div><hr>

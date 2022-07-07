@@ -45,3 +45,6 @@ desc ga_item;
 
 
 select Max(item_idx) as item_idx from ga_item
+
+
+select * from ga_item as item JOIN ga_item_notice as notice ON item.item_idx = notice.item_idx where item_name like '%테스트%';

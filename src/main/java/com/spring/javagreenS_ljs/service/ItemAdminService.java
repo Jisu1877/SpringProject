@@ -15,4 +15,6 @@ public interface ItemAdminService {
 
 	public ArrayList<ItemVO> getItemSearch(String string, String item_name);
 
+	public ArrayList<ItemVO> getItemAllInfor();
+
 }
