@@ -1,6 +1,8 @@
 package com.spring.javagreenS_ljs;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.gson.Gson;
@@ -60,9 +63,11 @@ public class AdminItemController {
 		//content에 이미지가 저장되어있다면, 저장된 이미지만을 /resources/data/ckeditor/itemContent/ 폴더에 저장시켜준다.
 		itemAdminService.imgCheck(itemVO.getDetail_content());
 		
+		//이미지 복사작업이 끝나면, itemContent폴더에 실제로 저장될 파일명을 DB에 저장시켜준다.
+		itemVO.setDetail_content(itemVO.getDetail_content().replace("/data/ckeditor/", "/data/ckeditor/itemContent/"));
+		
 		//상품등록 처리를 위한 작업들
 		itemAdminService.setItemInsert(itemVO, multipart);
-		
 		
 		return "redirect:/msg/itemInsertOk";
 	}
@@ -129,31 +134,73 @@ public class AdminItemController {
 		//상품정보 + 상품정보고시 정보 가져오기
 		ItemVO itemVO = itemAdminService.getItemSameSearch("item_code", item_code);
 		
-		//상품카테고리 코드 분리
-		String[] code = item_code.split("_");
-		int category_idx = Integer.parseInt(code[1]);
-		
-		//카테고리 검색(카테고리 명을 알아오기 위함)
+		//수정창으로 들어올 때 원본파일에 그림파일이 존재한다면, 현재폴더(itemContent)의 그림파일을 ckeditor폴더로 복사시켜둔다.
+		if(itemVO.getDetail_content().indexOf("src=\"/") != -1) {
+			itemAdminService.imgCheckUpdate(itemVO.getDetail_content());
+		}
+		//상품카테고리 코드 분리 
+		String[] code = item_code.split("_"); int category_idx = Integer.parseInt(code[1]);
+		 
+	    //카테고리 검색(카테고리 명을 알아오기 위함) 
 		CategoryGroupVO categoryGroupVO = categoryAdminService.getCategoryGroupInfor(code[0]);
 		itemVO.setCategory_group_name(categoryGroupVO.getCategory_group_name());
-		//중분류가 존재하면..
-		if(category_idx != 0) {
-			CategoryVO categoryVO = categoryAdminService.getCategoryInfor2(category_idx);	
-			itemVO.setCategory_name(categoryVO.getCategory_name());
-		}
+		 
+		//중분류가 존재하면.. 
+		if(category_idx != 0) { 
+			CategoryVO categoryVO = categoryAdminService.getCategoryInfor2(category_idx);
+			itemVO.setCategory_name(categoryVO.getCategory_name()); 
+		} 
 		else {
-			itemVO.setCategory_name("NO");
+			 itemVO.setCategory_name("NO"); 
 		}
-		
-		//옵션정보 가져와서 Set
+		 
+		//옵션정보 가져와서 Set 
 		ArrayList<ItemOptionVO> optionList = itemAdminService.getItemOptionInfor(itemVO.getItem_idx());
 		itemVO.setItemOptionList(optionList);
 		
-		//이미지정보 가져와서 Set
+		//이미지정보 가져와서 Set 
 		ArrayList<ItemImageVO> imageList = itemAdminService.getItemImageInfor(itemVO.getItem_idx());
-		itemVO.setItemImageList(imageList);
-		
-		model.addAttribute("itemVO" ,itemVO);
+	    itemVO.setItemImageList(imageList);
+	    
+	    model.addAttribute("itemVO" ,itemVO);
 		return "admin/item/itemUpdate";
+	}
+	
+	//추가 이미지 삭제
+	@ResponseBody
+	@RequestMapping(value = "/itemImageDel", method = RequestMethod.POST)
+	public String itemImageDelPost(int item_image_idx, String image_name) {
+		itemAdminService.setItemImageDelete(item_image_idx, image_name);
+		
+		return "1";
+	}
+	
+	
+	//상품 수정 처리
+	@RequestMapping(value = "/itemUpdate", method = RequestMethod.POST)
+	public String itemUpdatePost(ItemVO itemVO, MultipartHttpServletRequest multipart) {
+		//수정전 content 알아오기
+		ItemVO oriVO = itemAdminService.getItemContent(itemVO.getItem_idx());
+		if(!oriVO.getDetail_content().equals(itemVO.getDetail_content())) {
+			//itemContent 폴더에 복사되어있는 이미지들 중 해당 item_idx 의 detail_content 이미지인 경우 삭제처리한다.
+			//먼저 삭제를 싹 해주고 다시 복사저장해줄 계획.
+			if(oriVO.getDetail_content().indexOf("src=\"/") != -1) { //이미지 파일이 1개라도 content에 있을 시!
+				itemAdminService.imgDelete(oriVO.getDetail_content());
+			}
+			//파일 복사 전에 원본파일의 위치가 'ckeditor/itemContent'폴더였던 것을 'ckeditor'폴더로 변경시켜두어야 한다.
+			itemVO.setDetail_content(itemVO.getDetail_content().replace("/data/ckeditor/itemContent/", "/data/ckeditor/"));
+			
+			//앞의 준비작업이 완료되면, 수정된 그림(복사된그림)을 다시 itemContent폴더에 복사처리한다.(/data/ckeditor/ -> /data/ckeditor/itemContent/)
+			//이 작업은 처음 게시글을 올릴 때의 파일복사 작업과 동일한 작업이다.
+			itemAdminService.imgCheck(itemVO.getDetail_content());
+			
+			//복사가 완료되었기에 다시 content의 경로를 바꿔준다.
+			itemVO.setDetail_content(itemVO.getDetail_content().replace("/data/ckeditor/", "/data/ckeditor/itemContent/"));
+		}
+		
+		//상품수정 처리를 위한 작업들
+		itemAdminService.setItemUpdate(itemVO, multipart, oriVO.getItem_image());
+		
+		return "redirect:/msg/itemUpdatetOk";
 	}
 }

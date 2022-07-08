@@ -21,7 +21,7 @@
 		}
 		.box {
 	   		box-shadow: 0 16px 18px -20px rgba(0, 0, 0, 0.7);
-	   		margin-right: 50px;
+	   		margin-right: 10px;
 		}
 		.tableStyle {
 	  		width:100%;
@@ -31,8 +31,9 @@
 	</style>
 	<script>
 		let itemCode = "";
-		function checkOnlyOne(element, code) {
-			/*
+		let remember = 0;
+		/*function checkOnlyOne(element, code) {
+			
 		  itemCode = code;
 		  const checkboxes 
 		      = document.getElementsByName("itemCheck");
@@ -42,29 +43,41 @@
 		  });
 		  
 		  element.checked = true;
-		  */
 		  
 		  $("input[name=itemCheck]").prop("checked", false);
 		  $(element).prop("checked", true);
+		}*/
+		
+		function itemCheck(idx) {
+			if($("#itemCheck"+idx).is(":checked") == true) {
+				$("input:checkbox[id='itemCheck"+idx+"']").prop("checked", false);
+				remember = 0;
+			}
+			else {
+				$("input[name=itemCheck]").prop("checked", false);
+				$("input:checkbox[id='itemCheck"+idx+"']").prop("checked", true);
+				remember = 1;
+			}
 		}
 		
 		function itemInquire() {
-			itemCode = $("input[name=itemCheck]:checked").data("code");
-			if(itemCode == "") {
+			if(remember == 0){
 				alert("조회를 원하는 상품을 선택하세요.");
 				return false;
 			}
+			itemCode = $("input[name=itemCheck]:checked").data("code");
 			location.href = "${ctp}/admin/item/itemInquire?item_code="+itemCode;
 		}
 		
 		function itemUpdate() {
-			let item
-			if(itemCode == "") {
+			if(remember == 0){
 				alert("수정을 원하는 상품을 선택하세요.");
 				return false;
 			}
+			itemCode = $("input[name=itemCheck]:checked").data("code");
 			location.href = "${ctp}/admin/item/itemUpdate?item_code="+itemCode;
 		}
+		
 	</script>
 </head>
 <body class="w3-light-grey">
@@ -73,7 +86,7 @@
 <jsp:include page="/WEB-INF/views/include/admin_sidebarMenu.jsp" />
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+<div class="w3-main" style="margin-left:250px;margin-top:43px;">
 
     <!-- Header -->
 	<header class="w3-container" style="padding-top:22px;">
@@ -106,9 +119,9 @@
 		        		<th class="text-center">상품등록일</th>
 		        	</tr>
 		        	<c:forEach var="vo" items="${vos}">
-		        		<tr>
+		        		<tr onclick="itemCheck(${vo.item_idx})">
 		        			<td class="text-center">
-		        				<input type="checkbox" name="itemCheck" data-code="${vo.item_code}" onclick="checkOnlyOne(this, '${vo.item_code}')">
+		        				<input type="checkbox" id="itemCheck${vo.item_idx}" name="itemCheck" data-code="${vo.item_code}" onclick="itemCheck(${vo.item_idx})">
 		        			</td>
 		        			<td class="text-center">${vo.item_code}</td>
 		        			<td>${vo.item_name}</td>

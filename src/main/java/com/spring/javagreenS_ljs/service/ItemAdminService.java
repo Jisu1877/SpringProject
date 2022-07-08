@@ -26,5 +26,15 @@ public interface ItemAdminService {
 
 	public ArrayList<ItemImageVO> getItemImageInfor(int item_idx);
 
+	public void setItemImageDelete(int item_image_idx, String image_name);
+
+	public void imgCheckUpdate(String detail_content);
+
+	public ItemVO getItemContent(int item_idx);
+
+	public void imgDelete(String detail_content);
+
+	public void setItemUpdate(ItemVO itemVO, MultipartHttpServletRequest multipart, String item_image);
+
 
 }

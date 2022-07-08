@@ -611,7 +611,7 @@
 					    	<div class="form-group">
 						      <div class="mb-3">
 					    			<label for="keyword1" style="margin-left:5px;">키워드1 : </label>
-					    			<input class="w3-input w3-2020-sunlight" value="${keywords[0]}" id="keyword1" name="keyword" type="text" readonly>
+					    			<input class="input form-control" value="${keywords[0]}" id="keyword1" name="keyword" type="text" readonly>
 				    		  </div>
 					        </div>
 					        </div>
@@ -623,7 +623,7 @@
 						    	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword2" style="margin-left:5px;">키워드2 : </label>
-						    			<input class="w3-input w3-2020-sunlight" value="${keywords[1]}" id="keyword2" name="keyword" type="text" readonly>
+						    			<input class="input form-control" value="${keywords[1]}" id="keyword2" name="keyword" type="text" readonly>
 					    		  </div>
 						        </div>
 					        </div>
@@ -631,7 +631,7 @@
 					        	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword4" style="margin-left:5px;">키워드4 : </label>
-						    			<input class="w3-input w3-2020-sunlight" value="${keywords[3]}" id="keyword4" name="keyword" type="text" readonly>
+						    			<input class="input form-control" value="${keywords[3]}" id="keyword4" name="keyword" type="text" readonly>
 					    		  </div>
 					        	</div>
 					        </div>
@@ -642,7 +642,7 @@
 						    	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword3" style="margin-left:5px;">키워드3 : </label>
-						    			<input class="w3-input w3-2020-sunlight" value="${keywords[2]}" id="keyword3" name="keyword" type="text" readonly>
+						    			<input class="input form-control" value="${keywords[2]}" id="keyword3" name="keyword" type="text" readonly>
 					    		  </div>
 						        </div>
 					        </div>
@@ -650,7 +650,7 @@
 					        	<div class="form-group">
 							      <div class="mb-3">
 						    			<label for="keyword5" style="margin-left:5px;">키워드5 : </label>
-						    			<input class="w3-input w3-2020-sunlight" value="${keywords[4]}" id="keyword5" name="keyword" type="text" readonly>
+						    			<input class="input form-control" value="${keywords[4]}" id="keyword5" name="keyword" type="text" readonly>
 					    		  </div>
 					        	</div>
 					        </div>
@@ -658,8 +658,8 @@
 				        </div><hr>
 					    <div>
 					    	<p style="text-align: center;">
-					    		<a href="${ctp}/admin/item/itemUpdate?item_code=${itemVO.item_code}" class="w3-btn w3-2020-orange-peel">수정하기</a>
 					    		<a href="${ctp}/admin/item/itemList" class="w3-btn w3-2019-brown-granite">돌아가기</a>
+					    		<a href="${ctp}/admin/item/itemUpdate?item_code=${itemVO.item_code}" class="w3-btn w3-2021-desert-mist">수정하기</a>
 					    	</p>
 					    </div>
 					</div>

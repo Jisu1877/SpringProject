@@ -46,7 +46,7 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("itemInsertOk")) {
 			model.addAttribute("msg", "상품등록이 완료되었습니다.");
-			model.addAttribute("url", "admin/mainHome");
+			model.addAttribute("url", "/admin/item/itemList");
 		}
 		else if(msgFlag.equals("itemInquireNo")) {
 			model.addAttribute("msg", "상품조회 오류. 다시 시도해주세요.");
@@ -54,6 +54,10 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("itemUpdateNo")) {
 			model.addAttribute("msg", "상품수정 오류. 다시 시도해주세요.");
+			model.addAttribute("url", "/admin/item/itemList");
+		}
+		else if(msgFlag.equals("itemUpdatetOk")) {
+			model.addAttribute("msg", "상품수정이 완료되었습니다.");
 			model.addAttribute("url", "/admin/item/itemList");
 		}
 		

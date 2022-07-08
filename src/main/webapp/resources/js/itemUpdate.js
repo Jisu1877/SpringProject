@@ -3,25 +3,14 @@ let categoryFlag = 0;
 let seller_discount_flag = 0;
 let seller_point_flag = 0;
 let item_option_flag = 0;
-let optionCnt = 1;
 let optionStockCnt = 0;
 let shipment_type_flag = 0;
-let cnt = 1;
+let cntCheck = 0;
 let data = "";
+let i = 1;
+let j = 1;
 
-function itemInsert() {
-	//설정 여부에 따른 null 값 채워주기
-	if(seller_discount_flag == 0) {
-		document.getElementById("seller_discount_amount").value = "0";
-	}
-	if(seller_point_flag == 0) {
-		document.getElementById("seller_point").value = "0";
-	}
-	if(categoryFlag == 0) {
-		$("#category").val("0").prop("selected", true);
-	}
-	myForm.stock_schedule_date.value = document.getElementById("stock_schedule_date").value;
-	
+function itemUpdate() {
 	let optionLength = $("input[name=option_names]").length;
 	let optionName = '';
 	let optionPrice = '';
@@ -35,8 +24,6 @@ function itemInsert() {
 	myForm.str_option_price.value = optionPrice;
 	myForm.str_option_stock_quantity.value = optionStock;
 	
-	let categoryGroup = myForm.categoryGroup.value;
-	let category = myForm.category.value;
 	let item_name = myForm.item_name.value;
 	let item_summary = myForm.item_summary.value;
 	let sale_price = myForm.sale_price.value;
@@ -47,7 +34,8 @@ function itemInsert() {
 	let order_max_quantity = myForm.order_max_quantity.value;
 	
 	let titlephoto = document.getElementById("myphoto").value;
-	let file1 = document.getElementById("file1").value;
+	//추가사진이 1장이라도 있는지 확인하는 코드 필요
+	//let file1 = document.getElementById("file1").value;
 	
 	let maxSize = 1024 * 1024 * 20;
 	let fileSize = 0;
@@ -66,7 +54,7 @@ function itemInsert() {
 		}
 	}
 
-	for (let i = 1; i <= cnt; i++) {
+	for (let i = 1; i <= cntCheck; i++) {
 		let imsiName = "file" + i;
 
 		if (document.getElementById(imsiName) != null) {
@@ -139,16 +127,7 @@ function itemInsert() {
 	myForm.shipment_return_address.value = shipment_return_address;
 	myForm.item_keyword.value = item_keyword;
 	
-	
-	if(categoryGroup == "") {
-		alert("대분류를 선택하세요.");
-		return false;
-	}
-	else if(categoryFlag == 1 && category == "") {
-		alert("중분류를 선택하세요.");
-		return false;
-	}
-	else if(item_name == "") {
+	if(item_name == "") {
 		alert("상품명을 입력하세요.");
 		myForm.item_name.focus();
 		return false;
@@ -207,10 +186,10 @@ function itemInsert() {
 		alert("대표 이미지 등록은 필수 사항입니다.");
 		return false;
 	}
-	else if(file1 == "") {
+	/*else if(file1 == "") {
 		alert("추가 이미지는 최소 1장 이상 등록해야합니다.");
 		return false;
-	}
+	}*/
 	else if(text == "") {
 		alert("상품상세설명 내용을 입력하세요.");
 		return false;
@@ -301,6 +280,16 @@ function itemInsert() {
 				return false;
 			}
 		}
+		
+		//설정 여부에 따른 null 값 채워주기
+		if(seller_discount_flag == 0) {
+			document.getElementById("seller_discount_amount").value = "0";
+		}
+		if(seller_point_flag == 0) {
+			document.getElementById("seller_point").value = "0";
+		}
+		myForm.stock_schedule_date.value = document.getElementById("stock_schedule_date").value;
+		
 		CKEDITOR.instances.detail_content.getData();
 		
 		return true;
@@ -388,6 +377,8 @@ $(document).ready(function(){
 });
 
 function calPrice() {
+	$("#calPriceForm").hide();
+	$("#afterCalPrice").show();
 	let sale_price = Number($("#sale_price").val());
 	let discount_price = Number($("#seller_discount_amount").val());
 	
@@ -403,6 +394,17 @@ function calPrice() {
 		myForm.seller_discount_amount.focus();
 		return false;
 	}
+	
+	let calPrice = sale_price - discount_price;
+	
+	$("#calPrice").html(calPrice);
+}
+
+function calPrice2() {
+	$("#calPriceForm").hide();
+	$("#afterCalPrice").show();
+	let sale_price = Number($("#sale_price").val());
+	let discount_price = Number($("#seller_discount_amount").val());
 	
 	let calPrice = sale_price - discount_price;
 	
@@ -473,24 +475,25 @@ function minValueCheck4() {
 }
 
 //옵션 추가 
-function addOptions() {
-	optionCnt++;
+function addOptions(optionCnt) {
+	let count = optionCnt + i;
 	let str = '';
-	str += '<tr id="addoptionTr'+optionCnt+'">';	
-	str += '<td width="5.5%"></td>';	
-	str += '<td>';	
-	str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+optionCnt+'" name="option_names" type="text" placeholder="옵션 이름" required>';	
+	str += '<tr id="addoptionTr'+count+'">';	
+	str += '<td width="5.1%"></td>';	
+	str += '<td width="30%">';	
+	str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+count+'" name="option_names" type="text" placeholder="옵션 이름" required>';	
 	str += '</td>';	
 	str += '<td>';	
-	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck('+optionCnt+')"  min="0" id="option_price'+optionCnt+'" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액" required>';	
+	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck('+count+')"  min="0" id="option_price'+count+'" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액" required>';	
 	str += '</td>';	
 	str += '<td>';	
-	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck('+optionCnt+')" min="0" id="option_stock_quantity'+optionCnt+'" name="option_stock_quantities" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량" required>';	
+	str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionStockCheck('+count+')" min="0" id="option_stock_quantity'+count+'" name="option_stock_quantities" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="재고수량" required>';	
 	str += '</td>';	
-	str += '<td>';	
-	str += '<a href="javascript:deleteOptions('+optionCnt+')"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>';	
+	str += '<td width="5.1%">';	
+	str += '<a href="javascript:deleteOptions('+count+')"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>';	
 	str += '</td>';	
 	str += '</tr>';	
+	i++;
 	$("#addOption").append(str);
 }
 
@@ -606,7 +609,6 @@ function previewImage(targetObj, previewId) {
 	}
 	
 	document.getElementById("addImageBtn").style.display = "none";
-	document.getElementById("photoDelete").style.display = "block";
 	document.getElementById("previewId").style.display = "block";
 	
 	var preview = document.getElementById(previewId);  
@@ -696,135 +698,10 @@ function previewDelete() {
 }
 
 
-function fileBoxAppend() {
-	cnt++;
-	
-	if(cnt == 10) {
-		alert("추가 이미지는 최대 9장까지 등록가능합니다.");
-		return false;
-	}
-	
-	let fileBox = "";
-	fileBox += '<div id="fBox'+cnt+'" class="mb-3">';
-	fileBox += '- image ';
-	fileBox += '<input type="button" value="삭제" onclick="deleteBox('+cnt+')" class="w3-btn w3-2020-orange-peel w3-padding-small w3-small ml-2"/>';
-	fileBox += '<input type="file" name="file" id="file'+cnt+'" class="w3-input"/>';
-	fileBox += '<div>';
-	$("#fileBoxInsert").append(fileBox);
-}
-
-
 function deleteBox(cnt) {
 	$("#fBox"+cnt).remove();
+	j--;
 }
-
-function copyInsert() {
-	let copy_name = document.getElementById("copy_name").value;
-	if(copy_name == "") {
-		alert("상품명을 입력하세요.");
-		return false;
-	}
-	$.ajax({
-		type : "post",
-		url : "getItemInforCopy",
-		dataType:'json',
-		data : {item_name : copy_name},
-		success : function(vos) {
-			let str = '';
-			str += '<option value="">복사 상품 선택</option>';
-			for(let i=0; i<vos.length; i++) {
-				cnt++;
-				str += '<option value="'+i+'">'+vos[i].item_name+'</option>'
-			}
-			$("#copyList").html(str);
-			$("#copyListForm").show();
-			data = vos;
-			showToast("하단 드롭다운 메뉴에서 복사할 상품을 선택하세요.");
-		},
-		error : function() {
-			alert("전송오류");
-		}
-	});
-}
-
-$(function(){
-	$("#copyList").change(function(){
-		let i = $(this).val();
-		$("#item_name").val(data[i].item_name);
-		$("#item_summary").val(data[i].item_summary);
-		$("input:radio[name='display_flag']:radio[value='"+ data[i].display_flag +"']").prop('checked', true);
-		$("#sale_price").val(data[i].sale_price);
-		$("input:radio[name='seller_discount_flag']:radio[value='"+ data[i].seller_discount_flag +"']").prop('checked', true);
-		$("#seller_discount_amount").val(data[i].seller_discount_amount);
-		if(data[i].seller_discount_flag == 'y') {
-			document.getElementById("seller_discount_flagForm").style.display = "block";
-			seller_discount_flag = 1;
-			calPrice();
-		}
-		$("input:radio[name='seller_point_flag']:radio[value='"+ data[i].seller_point_flag +"']").prop('checked', true);
-		$("#seller_point").val(data[i].seller_point);
-		if(data[i].seller_point_flag == 'y') {
-			document.getElementById("seller_pointForm").style.display = "block";
-			seller_point_flag = 1;
-		}
-		$("#stock_quantity").val(data[i].stock_quantity);
-		if(data[i].stock_quantity == 0) { 
-			document.getElementById("schedule_date").style.display = "block";
-			$("#stock_schedule_date").val(data[i].stock_schedule_date);
-		}
-		$("#order_min_quantity").val(data[i].order_min_quantity);
-		$("#order_max_quantity").val(data[i].order_max_quantity);
-
-		$("input:radio[name='item_option_flag']:radio[value='"+ data[i].item_option_flag +"']").prop('checked', true);
-		if(data[i].item_option_flag == 'y') {
-			document.getElementById("item_option_flagForm").style.display = "block";
-			$("#stock_quantity").attr("disabled", true);
-			item_option_flag = 1;
-		}
-		
-		$("#brand").val(data[i].brand);
-		$("#form").val(data[i].form);
-		$("#origin_country").val(data[i].origin_country);
-		$("#item_model_name").val(data[i].item_model_name);
-		$("#after_service").val(data[i].after_service);
-		
-		$("#notice_value1").val(data[i].notice_value1);
-		$("#notice_value2").val(data[i].notice_value2);
-		$("#notice_value3").val(data[i].notice_value3);
-		$("#notice_value4").val(data[i].notice_value4);
-		$("#notice_value5").val(data[i].notice_value5);
-		
-		$("input:radio[name='shipment_type']:radio[value='"+ data[i].shipment_type +"']").prop('checked', true);
-		if(data[i].shipment_type == 1) {
-			document.getElementById("shipmentPriceFrom").style.display = "none";
-			shipment_type_flag = 1;
-		}
-		$("#shipping_price").val(data[i].shipping_price);
-		$("#shipping_free_amount").val(data[i].shipping_free_amount);
-		$("#shipping_extra_charge").val(data[i].shipping_extra_charge);
-		$("input:radio[name='item_return_flag']:radio[value='"+ data[i].item_return_flag +"']").prop('checked', true);
-		$("#shipping_return_price").val(data[i].shipping_return_price);
-		
-		var shipment_address = data[i].shipment_address.split('/');
-		$("#sample6_postcode1").val(shipment_address[0]);
-		$("#sample6_address1").val(shipment_address[1]);
-		$("#sample6_detailAddress1").val(shipment_address[2]);
-		$("#sample6_extraAddress1").val(shipment_address[3]);
-		
-		var shipment_return_address = data[i].shipment_return_address.split('/');
-		$("#sample6_postcode2").val(shipment_return_address[0]);
-		$("#sample6_address2").val(shipment_return_address[1]);
-		$("#sample6_detailAddress2").val(shipment_return_address[2]);
-		$("#sample6_extraAddress2").val(shipment_return_address[3]);
-		
-		var item_keyword = data[i].item_keyword.split('/');
-		for(let j=0; j<item_keyword.length; j++) {
-			$("#keyword"+(j+1)).val(item_keyword[j]);
-		}
-		
-		//CKEDITOR.instances.CKEDITOR.setData(data[i].detail_content);
-	});
-});
 
 function showToast(msg) {
 	iqwerty.toast.toast(msg);
@@ -837,3 +714,56 @@ $(function() {
 		}
 	})
 });
+
+function imageShow() {
+	$("#hiddenImage").slideDown(400);
+	$("#imageShowBtn").hide();
+	$("#imageHiddenBtn").show();
+}
+
+function imageHidden() {
+	$("#hiddenImage").slideUp(400);
+	$("#imageShowBtn").show();
+	$("#imageHiddenBtn").hide();
+}
+
+function fileBoxAppend() {
+	let imageCount = $('.imageDiv').length;
+	let imageCnt = imageCount + j;
+	cntCheck = imageCnt;
+	if(imageCnt >= 10) {
+		alert("추가 이미지는 최대 9장까지 등록가능합니다.");
+		return false;
+	}
+	let fileBox = "";
+	fileBox += '<div id="fBox'+imageCnt+'" class="mb-3">';
+	fileBox += '- image ';
+	fileBox += '<input type="button" value="삭제" onclick="deleteBox('+imageCnt+')" class="w3-btn w3-2020-orange-peel w3-padding-small w3-small ml-2"/>';
+	fileBox += '<input type="file" name="file" id="file'+imageCnt+'" class="w3-input"/>';
+	fileBox += '<div>';
+	$("#fileBoxInsert").append(fileBox);
+	j++;
+}
+
+function photoDel(item_image_idx, image_name) {
+	let ans = confirm("'"+image_name + "' 이미지를 삭제하시겠습니까?");
+	if(!ans) return false;
+	
+	$.ajax({
+		type : "post",
+		url : "itemImageDel",
+		data : {item_image_idx : item_image_idx},
+		success : function(data) {
+			if(data == "1") {
+				alert("이미지가 삭제되었습니다.");
+				$('div').remove("#imageDiv"+item_image_idx);
+			}
+			else {
+				alert("이미지 삭제 실패. 다시 시도해주세요.");
+			}
+		},
+		error : function() {
+			alert("전송오류.");
+		}
+	});
+}

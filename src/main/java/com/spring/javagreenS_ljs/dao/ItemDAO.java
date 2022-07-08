@@ -34,4 +34,14 @@ public interface ItemDAO {
 
 	public ArrayList<ItemImageVO> getItemImageInfor(@Param("item_idx") int item_idx);
 
+	public void setItemImageDelete(@Param("item_image_idx") int item_image_idx);
+
+	public ItemVO getItemContent(@Param("item_idx") int item_idx);
+
+	public void setItemUpdate(@Param("itemVO") ItemVO itemVO);
+
+	public void setItemOptionDelete(@Param("item_idx") int item_idx);
+
+	public void setItemImageDeleteName(@Param("item_image") String item_image);
+
 }

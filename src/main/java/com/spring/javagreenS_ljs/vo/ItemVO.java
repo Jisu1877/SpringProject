@@ -68,4 +68,6 @@ public class ItemVO {
 	private String notice_value3;
 	private String notice_value4;
 	private String notice_value5;
+	
+	private String titlephoto;
 }

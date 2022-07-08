@@ -100,7 +100,7 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		//itemVO DB 저장
 		itemDAO.setItemInsert(itemVO);
 		
-		//사진 자료 서버에 올리기(저장한 ga_item idx알아와서 DB도 저장)
+		//사진 자료 서버에 올리기(저장한 ga_item idx알아와서 DB도 저장) + ckeditor itemContent폴더로 복사처리
 		ItemImageVO itemImageVO = new ItemImageVO();
 		String ItemImage = setItemImage(multipart, itemImageVO, maxIdx);
 		
@@ -196,7 +196,6 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		//                1         2         3         4         5             
 		//      012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
 		// <img src="/javagreenS_ljs/data/ckeditor/220706101701_Geoff2.jpg" style="height:1217px; width:972px" />
-		// <img src="/javagreenS/data/ckeditor/220622152317_na3.png" style="height:1217px; width:972px" />
 		
 		//이 작업은 content안에 그림파일(img src="/)가 있을때만 수행한다.
 		if(content.indexOf("src=\"/") == -1) return;
@@ -216,7 +215,7 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 			//복사한 사진 저장할 경로
 			String copyFilePath = uploadPath + "itemContent/" + imgFileName;
 			
-			fileCopy(oFilePath,copyFilePath); //board폴더에 파일을 복사처리한다.
+			fileCopy(oFilePath,copyFilePath); //복사할 폴더에 파일을 복사처리한다.
 			
 			if(nextImg.indexOf("src=\"/") == -1) {
 				sw = false;
@@ -288,4 +287,193 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 	public ArrayList<ItemImageVO> getItemImageInfor(int item_idx) {
 		return itemDAO.getItemImageInfor(item_idx);
 	}
+
+
+	@Override
+	public void setItemImageDelete(int item_image_idx, String image_name) {
+		//서버에서도 해당사진을 삭제시킨다.
+		ItemimgDelete(image_name);
+		//DB에서 해당사진을 삭제시킨다.
+		itemDAO.setItemImageDelete(item_image_idx);
+	}
+
+	public void ItemimgDelete(String image_name) {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/item/");
+		
+		//원본 사진 경로
+		String oFilePath = uploadPath + image_name;
+		fileDelete(oFilePath); //itemContent폴더에 존재하는 파일을 삭제처리한다.
+		
+		File delFile = new File(oFilePath);
+		if(delFile.exists() && delFile != null) { //이 객체가 정말 존재한다면
+			delFile.delete(); //삭제해라.
+		}
+	}
+	
+
+	@Override
+	public void imgCheckUpdate(String content) {
+		//                1         2         3         4         5             
+		//      012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+		// <img src="/javagreenS_ljs/data/ckeditor/itemContent/220706101701_Geoff2.jpg" style="height:1217px; width:972px" />
+		// <img src="/javagreenS_ljs/data/ckeditor/220706101701_Geoff2.jpg" style="height:1217px; width:972px" />
+		
+		if(content.indexOf("src=\"/") == -1) return;
+				
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/itemContent/");
+		
+		int position = 47;  
+		String nextImg = content.substring(content.indexOf("src=\"/") + position);
+		
+		boolean sw = true;
+		while(sw) {
+			String imgFileName = nextImg.substring(0,nextImg.indexOf("\""));
+			
+			//원본 사진 경로
+			String oFilePath = uploadPath + imgFileName;
+			//복사한 사진 저장할 경로
+			String copyFilePath = request.getRealPath("/resources/data/ckeditor/" + imgFileName);
+			
+			fileCopy(oFilePath,copyFilePath); //itemContent폴더에 파일을 복사처리한다.
+			
+			if(nextImg.indexOf("src=\"/") == -1) {
+				sw = false;
+			}
+			else {
+				nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);
+			}
+		}
+	}
+
+	@Override
+	public ItemVO getItemContent(int item_idx) {
+		return itemDAO.getItemContent(item_idx);
+	}
+
+
+	@Override //상품 수정시 itemContent 폴더에 있는 해당 item_idx의 이미지 삭제처리
+	public void imgDelete(String content) {
+		//                1         2         3         4         5             
+		//      012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+		// <img src="/javagreenS_ljs/data/ckeditor/itemContent/220706101701_Geoff2.jpg" style="height:1217px; width:972px" />
+		// <img src="/javagreenS_ljs/data/ckeditor/220706101701_Geoff2.jpg" style="height:1217px; width:972px" />
+	
+		//이 작업은 content안에 그림파일(img src="/)가 있을때만 수행한다.
+		if(content.indexOf("src=\"/") == -1) return;
+		
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/itemContent/");
+		
+		int position = 47; 
+		String nextImg = content.substring(content.indexOf("src=\"/") + position);
+		
+		boolean sw = true;
+		while(sw) {
+			String imgFileName = nextImg.substring(0,nextImg.indexOf("\""));
+			
+			//원본 사진 경로
+			String oFilePath = uploadPath + imgFileName;
+			fileDelete(oFilePath); //itemContent폴더에 존재하는 파일을 삭제처리한다.
+			
+			if(nextImg.indexOf("src=\"/") == -1) {
+				sw = false;
+			}
+			else {
+				nextImg = nextImg.substring(nextImg.indexOf("src=\"/") + position);
+			}
+		}
+	}
+	
+	//원본 이미지를 삭제처리한다.(itemContent폴더에서 삭제처리)
+	private void fileDelete(String oFilePath) {
+		File delFile = new File(oFilePath);
+		if(delFile.exists() && delFile != null) { //이 객체가 정말 존재한다면
+			delFile.delete(); //삭제해라.
+		}
+	}
+
+
+	@Override
+	public void setItemUpdate(ItemVO itemVO, MultipartHttpServletRequest multipart, String item_image) {
+		int cnt = 0;
+		//변수선언
+		String[] Option_names = null;
+		String[] Option_prices = null;
+		String[] Option_stocks = null;
+		String[] Option_sold_out = null;
+		
+		//옵션을 사용할 경우 처리작업들..
+		if(itemVO.getItem_option_flag().equals("y")) {
+			//option재고수량 체크
+			Option_names = itemVO.getOption_name().split("/");
+			Option_prices = itemVO.getStr_option_price().split("/");
+			Option_stocks = itemVO.getStr_option_stock_quantity().split("/");
+			Option_sold_out = new String[Option_stocks.length];
+			int OptionStock = 0;
+			
+			for(String option_stock : Option_stocks) {
+				if(option_stock.equals("0")) {
+					Option_sold_out[cnt] = "1";
+				}
+				else {
+					Option_sold_out[cnt] = "0";
+				}
+				OptionStock += Integer.parseInt(option_stock);
+				cnt++;
+			}
+			itemVO.setStock_quantity(OptionStock);
+			
+		}
+		
+		//품절여부 체크
+		if(itemVO.getStock_quantity() == 0) {
+			itemVO.setSold_out("1");
+		}
+		else if(itemVO.getStock_quantity() > 0){
+			itemVO.setSold_out("0");
+			itemVO.setStock_schedule_date("");
+		}
+		else { //만약 음수값이 들어온다면..
+			itemVO.setSold_out("1");
+		}
+		
+		//사진 자료 서버에 올리기(image DB저장)
+		ItemImageVO itemImageVO = new ItemImageVO();
+		String ItemImage = setItemImage(multipart, itemImageVO, itemVO.getItem_idx());
+		
+		//itemVO DB 수정 저장(트랜잭션 처리)
+		itemDAO.setItemUpdate(itemVO);
+		
+		//대표이미지가 변경된 경우에만..
+		if(!itemVO.getTitlephoto().equals("NO")) {
+			//대표사진이었던 사진을 서버에서 삭제시키기
+			ItemimgDelete(item_image);
+			
+			//대표사진 imageDB에서 삭제시키기
+			itemDAO.setItemImageDeleteName(item_image);
+			
+			//대표사진 이미지 경로 set 시키기
+			itemDAO.setItemImageChange(ItemImage, itemVO.getItem_idx()); 
+		}
+		
+		//해당 item_idx로 등록된 옵션이 있었는지 확인하고,
+		ArrayList<ItemOptionVO> itemOptionVOS = itemDAO.getItemOptionInfor(itemVO.getItem_idx());
+		if(itemOptionVOS != null || itemOptionVOS.isEmpty()) {
+			//등록된 옵션이 있다면 모두 삭제처리
+			itemDAO.setItemOptionDelete(itemVO.getItem_idx());
+		}
+		
+		//옵션 사용으로 설정했다면 itemOption DB에 새롭게 저장
+		if(itemVO.getItem_option_flag().equals("y")) {
+			for(int i = 0; i<cnt; i++) {
+				itemDAO.setItemOption(itemVO.getItem_idx(),Option_names[i],Option_prices[i],Option_stocks[i],Option_sold_out[i]);
+			}
+		}
+		
+		//itemNotice DB 수정 저장
+		//itemDAO.setItemNoticeUpdate(itemVO.getItem_idx(), itemVO);
+	}
+	
 }
