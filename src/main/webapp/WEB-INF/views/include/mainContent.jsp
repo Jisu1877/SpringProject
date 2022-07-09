@@ -6,7 +6,7 @@
 	<div class="w3-bar" style="font-size: 13px;">
 	   <c:forEach var="vo" items="${categoryVOS}" varStatus="st">
 			<div class="w3-dropdown-hover">
-				<button class="btn w3-white w3-hover-white" style="font-size: 18px;">${vo.category_group_name}</button>
+				<button class="btn w3-white w3-hover-white" style="font-size: 18px; border-radius : 0">${vo.category_group_name}</button>
 				<div class="w3-dropdown-content w3-bar-block w3-hover-white">
 					<c:set var="i" value="0"/>
 					<c:forEach var="cVO" items="${vo.categoryList}">

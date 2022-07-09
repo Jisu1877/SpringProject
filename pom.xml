@@ -184,7 +184,7 @@
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-tx</artifactId>
-		    <version>4.3.14.RELEASE</version>
+		    <version>${org.springframework-version}</version>
 		</dependency>
 		
 		<!-- BCryptPasswordEncoder 를 이용한 암호화 라이브러리(3개) -->

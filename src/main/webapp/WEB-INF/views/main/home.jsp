@@ -17,6 +17,13 @@
 	img {
 		margin-top: 10px;
 	}
+	#pageContent {
+   		font-family: 'MaruBuriExtraLight';
+		font-family: 'MaruBuriLight;
+		font-family: 'MaruBuri';
+		font-family: 'MaruBuriBold';
+		font-family: 'MaruBuriSemiBold';
+   	} 
 </style>
 </head>
 <body>
@@ -25,12 +32,13 @@
 
 <!-- !PAGE CONTENT! -->
 <div id="pageContent" class="w3-content" style="max-width:1500px" onmouseover="hoverMenuClose()">
-
-	<!-- Header -->
-	<jsp:include page="/WEB-INF/views/include/header.jsp" />
+	
+<!-- Header -->
+    <jsp:include page="/WEB-INF/views/include/header.jsp" />
 	
 	<!-- Shop -->
-	<p style="margin-left: 20px;"><span class="w3-white w3-xxlarge mt-2">SHOP</span></p>
+	<p style="margin-left: 20px; font-family: 'Montserrat', sans-serif"><span class="w3-white w3-xxlarge mt-2">SHOP</span></p>
+	
 	<jsp:include page="/WEB-INF/views/include/mainContent.jsp" />
  	
 <!-- footer  -->

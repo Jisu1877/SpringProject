@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +39,7 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 	CategoryDAO categoryDAO;
 	
 	//상품등록처리
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void setItemInsert(ItemVO itemVO, MultipartHttpServletRequest multipart) {
 		int cnt = 0;
@@ -128,13 +130,17 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 			int cnt = 0;
 			
 			//비어있는 파일이 있다면 remove 처리하기
-			for(int i=0; i<fileList.size(); i++) {
-				if(fileList.get(i).getOriginalFilename().equals("")) {
-					fileList.remove(i);
-				}
-			}
-			
+//			
+//			for(int i=0; i<fileList.size(); i++) {
+//				if(fileList.get(i).getOriginalFilename().equals("")) {
+//					fileList.remove(i);
+//				}
+//			}
+//			
 			for(MultipartFile file : fileList) {
+				if (file.getSize() == 0) {
+					continue;
+				}
 				cnt++;
 				String oFileName = file.getOriginalFilename();
 				String sFileName = saveFileName(oFileName); //서버에 저장될 파일명을 결정해준다.
@@ -394,7 +400,6 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		}
 	}
 
-
 	@Override
 	public void setItemUpdate(ItemVO itemVO, MultipartHttpServletRequest multipart, String item_image) {
 		int cnt = 0;
@@ -443,7 +448,7 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		ItemImageVO itemImageVO = new ItemImageVO();
 		String ItemImage = setItemImage(multipart, itemImageVO, itemVO.getItem_idx());
 		
-		//itemVO DB 수정 저장(트랜잭션 처리)
+		//itemVO DB 수정 저장
 		itemDAO.setItemUpdate(itemVO);
 		
 		//대표이미지가 변경된 경우에만..
@@ -473,7 +478,7 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		}
 		
 		//itemNotice DB 수정 저장
-		//itemDAO.setItemNoticeUpdate(itemVO.getItem_idx(), itemVO);
+		itemDAO.setItemNoticeUpdate(itemVO.getItem_idx(), itemVO);
 	}
 	
 }

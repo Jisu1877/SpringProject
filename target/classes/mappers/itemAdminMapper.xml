@@ -56,7 +56,11 @@
 	</update>
 	
 	<update id="setItemUpdate">
-		update ga_item set item_name = #{itemVO.item_name}, item_summary = #{itemVO.item_summary}, display_flag = #{itemVO.display_flag}, sale_price = #{itemVO.sale_price}, seller_discount_flag = #{itemVO.seller_discount_flag}, seller_discount_amount = #{itemVO.seller_discount_amount}, seller_point_flag = #{itemVO.seller_point_flag}, seller_point = #{itemVO.seller_point}, sold_out = #{itemVO.sold_out}, stock_quantity = #{itemVO.stock_quantity}, stock_schedule_date = #{itemVO.stock_schedule_date}, order_min_quantity = #{itemVO.order_min_quantity}, order_max_quantity = #{itemVO.order_max_quantity}, item_option_flag = #{itemVO.item_option_flag}, detail_content = #{itemVO.detail_content}, brand = #{itemVO.brand}, form = #{itemVO.form}, item_model_name = #{itemVO.item_model_name}, origin_country = #{itemVO.origin_country}, after_service = #{itemVO.after_service}, shipment_address = #{itemVO.shipment_address}, shipment_return_address = #{itemVO.shipment_return_address}, shipment_type = #{itemVO.shipment_type}, shipping_price = #{itemVO.shipping_price}, shipping_free_amount = #{itemVO.shipping_free_amount}, shipping_extra_charge = #{itemVO.shipping_extra_charge}, item_return_flag =  #{itemVO.item_return_flag}, shipping_return_price = #{itemVO.shipping_return_price}, item_keyword = #{itemVO.item_keyword} where item_idx = #{itemVO.item_idx} 
+		update ga_item set item_name = #{itemVO.item_name}, item_summary = #{itemVO.item_summary}, display_flag = #{itemVO.display_flag}, sale_price = #{itemVO.sale_price}, seller_discount_flag = #{itemVO.seller_discount_flag}, seller_discount_amount = #{itemVO.seller_discount_amount}, seller_point_flag = #{itemVO.seller_point_flag}, seller_point = #{itemVO.seller_point}, sold_out = #{itemVO.sold_out}, stock_quantity = #{itemVO.stock_quantity}, stock_schedule_date = #{itemVO.stock_schedule_date}, order_min_quantity = #{itemVO.order_min_quantity}, order_max_quantity = #{itemVO.order_max_quantity}, item_option_flag = #{itemVO.item_option_flag}, detail_content = #{itemVO.detail_content}, brand = #{itemVO.brand}, form = #{itemVO.form}, item_model_name = #{itemVO.item_model_name}, origin_country = #{itemVO.origin_country}, after_service = #{itemVO.after_service}, shipment_address = #{itemVO.shipment_address}, shipment_return_address = #{itemVO.shipment_return_address}, shipment_type = #{itemVO.shipment_type}, shipping_price = #{itemVO.shipping_price}, shipping_free_amount = #{itemVO.shipping_free_amount}, shipping_extra_charge = #{itemVO.shipping_extra_charge}, item_return_flag =  #{itemVO.item_return_flag}, shipping_return_price = #{itemVO.shipping_return_price}, item_keyword = #{itemVO.item_keyword} where item_idx = #{itemVO.item_idx}
+	</update>
+	
+	<update id="setItemNoticeUpdate">
+		update ga_item_notice set notice_value1 = #{itemVO.notice_value1}, notice_value2 = #{itemVO.notice_value2}, notice_value3 = #{itemVO.notice_value3}, notice_value4 = #{itemVO.notice_value4}, notice_value5 = #{itemVO.notice_value5} where item_idx = #{itemVO.item_idx}
 	</update>
 	
 	<delete id="setItemImageDelete">
@@ -70,4 +74,5 @@
 	<delete id="setItemImageDeleteName">
 		delete from ga_item_image where image_name = #{item_image};
 	</delete>
+	
 </mapper>

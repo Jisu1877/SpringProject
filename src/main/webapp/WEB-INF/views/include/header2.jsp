@@ -5,6 +5,9 @@
 <header class="w3-center w3-margin-bottom" style="position: relative;" >
   <div>
 	   <img class="w3-image" src="${ctp}/images/main3.jpg" width="1500" height="400" style="opacity:90%;" id="mainImage">
+	   <div class="w3-display-middle w3-center">
+	   	<span id="title" class="w3-text-white" style="font-size:90px">the Garden</span>
+	   </div>
   </div>
   <p></p>
 </header>

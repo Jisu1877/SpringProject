@@ -50,6 +50,7 @@ public class ItemVO {
 	
 	private ArrayList<ItemOptionVO> itemOptionList;
 	private ArrayList<ItemImageVO> itemImageList;
+	private ArrayList<CategoryGroupVO> categoryGroupList;
 	private ItemImageVO itemImageVO;
 	private ItemNoticeVO itemNoticeVO;
 	

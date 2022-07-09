@@ -177,6 +177,7 @@
 			},
 			success : function(data) {
 				if(data == 1) {
+					alert("수정처리가 완료되었습니다.");
 					location.reload();
 				}
 				else {
@@ -190,21 +191,23 @@
 	}
 	
 	/* 삭제처리 */
-	function category_group_delete(idx, level) {
+	function category_group_delete(idx, level, code) {
 		let ans = confirm("해당 카테고리를 삭제하시겠습니까?");
 		if(ans) {
 			$.ajax({
 				type : "post",
 				url : "${ctp}/admin/category/category_group_delete",
 				data : { category_group_idx : idx,
-				     	 category_group_level : level
+				     	 category_group_level : level,
+				     	category_group_code : code
 				},
 				success : function(data) {
 					if(data == 1) {
+						alert("대분류 삭제처리가 완료되었습니다.");
 						location.reload();
 					}
 					else {
-						alert("삭제 처리 실패. 다시 시도해주세요.");
+						alert("해당 카테고리로 등록된 판매중인 상품이 존재합니다. 해당 상품을 삭제처리한 후 진행하세요.");
 					}
 				},
 				error : function() {
@@ -287,10 +290,11 @@
 				data : {category_idx : idx},
 				success : function(data) {
 					if(data == 1) {
+						alert("중분류 삭제처리가 완료되었습니다.");
 						location.reload();
 					}
 					else {
-						alert("삭제 처리 실패. 다시 시도해주세요.");
+						alert("해당 카테고리로 등록된 판매중인 상품이 존재합니다. 해당 상품을 삭제처리한 후 진행하세요.");
 					}
 				},
 				error : function() {
@@ -372,7 +376,7 @@
 											<input type="button" id="updateBtn${vo.category_group_idx}" class="w3-btn w3-2020-classic-blue w3-small" value="수정" onclick="category_group_update(${vo.category_group_idx})">
 											<input type="button" id="updateOkBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-small" value="수정완료" onclick="category_group_updateOk(${vo.category_group_idx}, ${vo.category_group_level})" style="display: none; margin-left: 30px;">
 										</c:if>
-										<input type="button" id="deleteBtn${vo.category_group_idx}" class="w3-btn w3-2020-classic-blue w3-small" value="삭제" onclick="category_group_delete(${vo.category_group_idx}, ${vo.category_group_level})">
+										<input type="button" id="deleteBtn${vo.category_group_idx}" class="w3-btn w3-2020-classic-blue w3-small" value="삭제" onclick="category_group_delete(${vo.category_group_idx}, ${vo.category_group_level}, '${vo.category_group_code}')">
 									</td>
 									<td class="w3-center">
 										<input type="button" class="w3-btn w3-2020-navy-blazer w3-small" value="추가" onclick="categoryAdd(${vo.category_group_idx})">

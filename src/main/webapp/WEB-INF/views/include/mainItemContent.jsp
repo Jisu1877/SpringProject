@@ -8,13 +8,13 @@
   <div class="w3-row-padding w3-padding-16 w3-center">
   	<c:forEach var="itemVO" items="${itemVOS}">
   		<div class="w3-quarter">
-	  		<a href="#">
+	  		<a href="${ctp}/item/itemView?item_code=${itemVO.item_code}">
 	  			<!-- <div class="w3-display-container">
 			        <div class="w3-display-topleft w3-black w3-padding">Summer House</div>
 			    </div> -->
 				<img src="${ctp}/data/item/${itemVO.item_image}" alt="${itemVO.item_image}" style="width:100%">
 				<div>
-					<h5 class="text-left w3-white">
+					<h5 class="text-left w3-white" style="font-family:'MaruBuriSemiBold'">
 						<strong>
 							 ${fn:substring(itemVO.item_summary, 0, 21)}
 						    <c:if test="${fn:length(itemVO.item_summary) > 20}">

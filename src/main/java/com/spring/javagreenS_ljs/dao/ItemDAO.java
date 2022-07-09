@@ -44,4 +44,6 @@ public interface ItemDAO {
 
 	public void setItemImageDeleteName(@Param("item_image") String item_image);
 
+	public void setItemNoticeUpdate(@Param("item_idx") int item_idx, @Param("itemVO") ItemVO itemVO);
+
 }

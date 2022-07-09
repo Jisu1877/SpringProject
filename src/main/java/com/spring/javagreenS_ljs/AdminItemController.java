@@ -1,20 +1,17 @@
 package com.spring.javagreenS_ljs;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.gson.Gson;
@@ -139,7 +136,8 @@ public class AdminItemController {
 			itemAdminService.imgCheckUpdate(itemVO.getDetail_content());
 		}
 		//상품카테고리 코드 분리 
-		String[] code = item_code.split("_"); int category_idx = Integer.parseInt(code[1]);
+		String[] code = item_code.split("_"); 
+		int category_idx = Integer.parseInt(code[1]);
 		 
 	    //카테고리 검색(카테고리 명을 알아오기 위함) 
 		CategoryGroupVO categoryGroupVO = categoryAdminService.getCategoryGroupInfor(code[0]);
@@ -177,6 +175,7 @@ public class AdminItemController {
 	
 	
 	//상품 수정 처리
+	@Transactional(rollbackFor = Exception.class) //(트랜잭션 처리)
 	@RequestMapping(value = "/itemUpdate", method = RequestMethod.POST)
 	public String itemUpdatePost(ItemVO itemVO, MultipartHttpServletRequest multipart) {
 		//수정전 content 알아오기

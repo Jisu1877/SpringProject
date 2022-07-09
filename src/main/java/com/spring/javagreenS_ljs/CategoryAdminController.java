@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javagreenS_ljs.service.AdminService;
 import com.spring.javagreenS_ljs.service.CategoryAdminService;
+import com.spring.javagreenS_ljs.service.ItemAdminService;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.CategoryVO;
+import com.spring.javagreenS_ljs.vo.ItemVO;
 
 @Controller
 @RequestMapping("/admin/category")
@@ -23,6 +25,9 @@ public class CategoryAdminController {
 	
 	@Autowired
 	CategoryAdminService categoryAdminService;
+	
+	@Autowired
+	ItemAdminService itemAdminService;
 	
 	//카테고리 화면 호출
 	@RequestMapping(value = "/categoryHome", method = RequestMethod.GET)
@@ -158,7 +163,21 @@ public class CategoryAdminController {
 	
 	@ResponseBody
 	@RequestMapping(value =  "/category_group_delete", method = RequestMethod.POST)
-	public String category_group_delete(int category_group_idx, int category_group_level) {
+	public String category_group_delete(int category_group_idx, int category_group_level, String category_group_code) {
+		//해당 카테고리로 등록된 상품이 있는지 확인
+		ArrayList<ItemVO> itemVOS = itemAdminService.getItemList();
+		
+		for(int i=0; i<itemVOS.size(); i++) {
+			String item_code = itemVOS.get(i).getItem_code();
+			
+			String[] code = item_code.split("_"); 
+			String category = code[0];
+			
+			if(category_group_code.equals(category)) {
+				return "0";
+			}
+		}
+		
 		//삭제처리
 		categoryAdminService.setCategoryGroupDelete(category_group_idx);
 		
@@ -195,6 +214,20 @@ public class CategoryAdminController {
 	@ResponseBody
 	@RequestMapping(value = "/category_delete", method = RequestMethod.POST)
 	public String category_deletePost(int category_idx) {
+		//해당 카테고리로 등록된 상품이 있는지 확인
+		ArrayList<ItemVO> itemVOS = itemAdminService.getItemList();
+		
+		for(int i=0; i<itemVOS.size(); i++) {
+			String item_code = itemVOS.get(i).getItem_code();
+			
+			String[] code = item_code.split("_"); 
+			int category = Integer.parseInt(code[1]);
+			
+			if(category_idx == category) {
+				return "0";
+			}
+		}
+		
 		//중분류 삭제처리
 		categoryAdminService.setCategoryDelete(category_idx);
 		return "1";

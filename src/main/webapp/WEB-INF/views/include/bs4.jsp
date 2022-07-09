@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2021.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2020.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2019.css">
+<link href="https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/igorlino/elevatezoom-plus/1.1.6/src/jquery.ez-plus.js"></script>
 
 
