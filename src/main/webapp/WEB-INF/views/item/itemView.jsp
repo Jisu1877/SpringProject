@@ -67,37 +67,132 @@
 	}
 </style>
 <script>
-	let cnt = 1;
-	let amount = 1;
+	let totalAmount = 0;
+	let totalPrice = $("#sale_price").val();
+	console.log(totalPrice);
 	function optionSelect(ths) {
 		const idx = $(ths).val();
 		const option = $(ths).find('option:selected').data('label');
 		const price = $(ths).find('option:selected').data('price');
 		const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+		let order_min_quantity = $("#order_min_quantity").val();
+		let order_max_quantity = $("#order_max_quantity").val();
+		totalAmount++;
 		
 		if(option == "") {
 			return false;
 		}
-		
-		if($("#option_"+idx).length > 0){
+		else if($("#option_"+idx).length > 0){
 			alert("이미 선택한 옵션입니다.");
 			$("#optionSelect").val("").prop("selected", true);
+			totalAmount--;
 			return false;
 		}
+		else if(totalAmount > order_max_quantity) {
+			$("#optionSelect").val("").prop("selected", true);
+			alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
+			totalAmount--;
+			return false;
+		}
+		
 		
 		let optionDiv = $("#option_tmp_div").clone();
 		
 		optionDiv.attr("style", "display:block;");
 		optionDiv.attr("id", "option_"+idx);
 		optionDiv.find(".option").html(option);
-		optionDiv.find(".option_cnt").html(amount);
+		optionDiv.find(".option_cnt").html(order_min_quantity);
 		optionDiv.find(".option_cnt").attr("data-idx", idx);
+		optionDiv.find(".option_cnt").attr("id", "option_cnt_"+idx);
 		optionDiv.find(".option_price").html(price2 + "원");
-		optionDiv.find(".option_price").attr("data-price", price2);
+		optionDiv.find(".option_price").attr("data-price", price);
 		
 		$("#optonDemo").append(optionDiv);
-		cnt++;
+		let optionLength = $(".option_div").length;
+		if(optionLength > (Number(order_max_quantity) + 1)) {
+			$("#optionSelect").val("").prop("selected", true);
+			alert("최대 구매 수량은 " +order_max_quantity+ "개 입니다. 선택한 옵션을 삭제하고 추가하세요.");
+			$( 'div' ).remove( '#option_'+idx);
+		}
+		
 		$("#optionSelect").val("").prop("selected", true);
+		
+		totalPrice += price;
+		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+		$("#totalCnt").html(totalAmount);
+		$("#totalPrice").html(total);
+		$("#totalInfor").attr("style", "margin:30px; display:block; font-size:22px;");
+	}
+	
+	function minus(ths) {
+		const id = $(ths).parents("div.option_div").attr("id");
+		let amount = $(ths).siblings("span.option_cnt").html();
+		let order_min_quantity = $("#order_min_quantity").val();		
+		amount--;
+		
+		if(order_min_quantity > amount) {
+			$("#optionSelect").val("").prop("selected", true);
+			alert("최소 구매 가능 수량은 " +order_min_quantity+ "개 입니다.");
+			return false;
+		}
+		totalAmount--;
+		
+		let price = $("#"+id).find(".option_price").data('price');
+		let price2 = price * Number(amount);
+		let price3 = Math.floor(price2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+		$("#"+id).find(".option_price").html(price3 + "원");
+		$(ths).siblings("span.option_cnt").html(amount);
+		totalPrice -= price;
+		
+		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+		$("#totalCnt").html(totalAmount);
+		$("#totalPrice").html(total);
+	}
+	
+	function plus(ths) {
+		const id = $(ths).parents("div.option_div").attr("id");
+		let amount = $(ths).siblings("span.option_cnt").html();
+		const price = ($("#"+id).find(".option_price").data('price')) * (Number(amount) + 1);
+		let order_max_quantity = $("#order_max_quantity").val();		
+		const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+		amount++;
+		totalAmount++;
+		
+		if(order_max_quantity < amount) {
+			$("#optionSelect").val("").prop("selected", true);
+			alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
+			totalAmount--;
+			return false;
+		}
+		else if(totalAmount > order_max_quantity) {
+			$("#optionSelect").val("").prop("selected", true);
+			alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
+			totalAmount--;
+			return false;
+		}
+		$(ths).siblings("span.option_cnt").html(amount);
+		
+		totalPrice = price;
+		$("#"+id).find(".option_price").html(price2 + "원");
+		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+		$("#totalCnt").html(totalAmount);
+		$("#totalPrice").html(total);
+	}
+	
+	function deleteOption(ths) {
+		let amount = $(ths).parents().find(".option_cnt").html();
+		amount = Number(amount);
+		totalAmount -= amount;
+		const id = $(ths).parents("div.option_div").attr("id");
+ 		let price = $("#"+id).find(".option_price").data('price');
+ 		let price2 = Number(price) * Number(amount);
+		
+ 		totalPrice -= price2;
+ 		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+ 		$("#totalCnt").html(totalAmount);
+ 		$("#totalPrice").html(total);
+		
+ 		$( 'div' ).remove('#'+id);
 	}
 </script>
 </head>
@@ -240,19 +335,41 @@
 					<div style="margin:30px;">
 						<hr>
 					</div>
-					<div class="w3-border" style="margin:30px;">
-						<select id="optionSelect" name="optionSelect" class="w3-select" onchange="optionSelect(this)">
-								<option value="" selected>옵션을 선택하세요.</option>
-							<c:forEach var="vo" items="${itemVO.itemOptionList}">
-								<option value="${vo.item_option_idx}" data-label="${vo.option_name}" data-price="${vo.option_price}">${vo.option_name}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div style="margin:30px;">
-						<hr>
-					</div>
-					<div style="margin:30px;" id="optonDemo">
-						
+					<div style="margin:30px;">최소 구매 가능 수량 : ${itemVO.order_min_quantity}개&nbsp; |&nbsp; 최대 구매 가능 수량 : ${itemVO.order_max_quantity}개</div>
+					<c:if test="${itemVO.item_option_flag == 'y'}">
+						<div class="w3-border" style="margin:30px;">
+							<select id="optionSelect" name="optionSelect" class="w3-select" onchange="optionSelect(this)">
+									<option value="" selected>옵션을 선택하세요.</option>
+								<c:forEach var="vo" items="${itemVO.itemOptionList}">
+									<option value="${vo.item_option_idx}" data-label="${vo.option_name}" data-price="${vo.option_price}">${vo.option_name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div style="margin:30px;">
+							<hr>
+						</div>
+					</c:if>
+					<div style="margin:30px;" id="optonDemo"></div>
+					<c:if test="${itemVO.item_option_flag == 'n' && itemVO.order_min_quantity != itemVO.order_max_quantity}">
+						<div class="w3-row" style="margin:30px;">
+							<div class="w3-half">
+								<a onclick="minus2(this)"><i class="fa-solid fa-square-minus" style="font-size:23px"></i></a>
+								<span class="option_cnt" style="font-size:16px; vertical-align:top; margin:10px" data-cnt="0">1</span>
+								<a onclick="plus2(this)"><i class="fa-solid fa-square-plus" style="font-size:23px"></i></a>
+							</div>
+							<div class="w3-half" style="text-align:right; font-size:19px">
+								<span class="option_price"></span>
+							</div>
+						</div>
+					</c:if>
+					<div id="totalInfor" class="w3-row" style="display:none">
+						<div class="w3-half">
+							총 상품금액
+						</div>
+						<div class="w3-half" style="text-align:right;">
+							<span><font size="2">총 수량(<span id="totalCnt"></span>개)</font></span>
+							<span id="totalPrice"></span>원
+						</div>
 					</div>
 				</div>
 			</div>
@@ -261,17 +378,29 @@
 	</div>
 </div>
 
-<div id="option_tmp_div" style="display:none;">
+
+<input type="hidden" id="order_min_quantity" value="${itemVO.order_min_quantity}">
+<input type="hidden" id="order_max_quantity" value="${itemVO.order_max_quantity}">
+<c:if test="${itemVO.seller_discount_flag == 'n'}">
+<input type="hidden" id="sale_price" value="${itemVO.sale_price}">
+</c:if>
+<c:if test="${itemVO.seller_discount_flag == 'y'}">
+<input type="hidden" id="sale_price" value="${itemVO.sale_price - itemVO.seller_discount_amount}">
+</c:if>
+
+<div class="option_div" id="option_tmp_div" style="display:none;" data-option="">
 	<div class="w3-row">
 		<div class="w3-half">
 			<div class="mb-1 option"></div>
 		</div>
-		<div class="w3-row"></div>
+		<div class="w3-half" style="text-align:right; font-size:19px;">
+			<a onclick="deleteOption(this)"><i class="fa-solid fa-xmark"></i></a>
+		</div>
 		<div class="w3-row">
 			<div class="w3-half">
-				<i class="fa-solid fa-square-minus" style="font-size:23px"></i>
+				<a onclick="minus(this)"><i class="fa-solid fa-square-minus" style="font-size:23px"></i></a>
 				<span class="option_cnt" style="font-size:16px; vertical-align:top; margin:10px" data-cnt="0"></span>
-				<i class="fa-solid fa-square-plus" style="font-size:23px"></i>
+				<a onclick="plus(this)"><i class="fa-solid fa-square-plus" style="font-size:23px"></i></a>
 			</div>
 			<div class="w3-half" style="text-align:right; font-size:19px">
 				<span class="option_price"></span>
