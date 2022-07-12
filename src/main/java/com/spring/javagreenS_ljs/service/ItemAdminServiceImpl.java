@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.javagreenS_ljs.dao.CategoryDAO;
-import com.spring.javagreenS_ljs.dao.ItemDAO;
+import com.spring.javagreenS_ljs.dao.ItemAdminDAO;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
 import com.spring.javagreenS_ljs.vo.ItemOptionVO;
@@ -33,7 +33,7 @@ import com.spring.javagreenS_ljs.vo.ItemVO;
 public class ItemAdminServiceImpl implements ItemAdminService {
 	
 	@Autowired
-	ItemDAO itemDAO;
+	ItemAdminDAO itemDAO;
 	
 	@Autowired
 	CategoryDAO categoryDAO;

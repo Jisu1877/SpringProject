@@ -173,7 +173,7 @@ body {
 	<c:if test="${sLevel == 0}">
 		<span class="w3-button w3-white w3-hover-white w3-large mt-2"><a href="${ctp}/admin/mainHome">ADMIN</a></span>
 	</c:if>
-	<a href="${ctp}/item/cartList" class="w3-button w3-white w3-hover-white w3-xlarge w3-right"><i class="fa fa-shopping-cart"></i><span class="badge badge-pill w3-2021-marigold" id="cartCnt" style="font-size:11px;"></span></a>
+	<a href="${ctp}/cart/cartList" class="w3-button w3-white w3-hover-white w3-xlarge w3-right"><i class="fa fa-shopping-cart"></i><span class="badge badge-pill w3-2021-marigold" id="cartCnt" style="font-size:11px;"></span></a>
 	<div class="w3-clear"></div>
 	<div id="hoverMenu" class="w3-white">
 		<div class="w3-row" id="hoverMenuContent">

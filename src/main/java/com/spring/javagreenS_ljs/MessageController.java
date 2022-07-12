@@ -17,7 +17,7 @@ public class MessageController {
 			) {
 		
 		if(msgFlag.equals("NeedLogin")) {
-			model.addAttribute("msg", "로그인 후 이용하세요.");
+			model.addAttribute("msg", "로그인이 필요한 서비스입니다.");
 			model.addAttribute("url", "user/userLogin");
 		}
 		else if(msgFlag.equals("level0OnlyOk")) {

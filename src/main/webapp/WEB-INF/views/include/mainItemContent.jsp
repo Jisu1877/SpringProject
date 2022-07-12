@@ -12,9 +12,7 @@
   		<div class="w3-quarter">
 	  		<a href="${ctp}/item/itemView?item_code=${itemVO.item_code}">
 	  			<div class="w3-display-container">
-	  				<c:if test="${itemVO.stock_quantity == 1}">
-				        <div class="w3-display-topleft w3-2021-marigold w3-padding">품절 임박</div>
-	  				</c:if>
+			        <div class="w3-display-topleft w3-2019-princess-blue w3-padding" style="font-size:8px;">NEW</div>
 					<img src="${ctp}/data/item/${itemVO.item_image}" alt="${itemVO.item_image}" style="width:100%; margin-top:0px;">
 			    </div>
 				<div>
@@ -78,7 +76,7 @@
 	  		<a href="${ctp}/item/itemView?item_code=${itemVO.item_code}">
 	  			<div class="w3-display-container">
 	  				<c:if test="${itemVO.stock_quantity == 1}">
-				        <div class="w3-display-topleft w3-2021-marigold w3-padding">품절 임박</div>
+				        <div class="w3-display-topleft w3-2021-marigold w3-padding" style="font-size:10px;">품절 임박</div>
 	  				</c:if>
 					<img src="${ctp}/data/item/${itemVO.item_image}" alt="${itemVO.item_image}" style="width:100%; margin-top:0px;">
 			    </div>

@@ -58,15 +58,16 @@
 			 <!-- 회원전용페이지 모두 -->
 			<mapping path="/user/**"/>
 			<mapping path="/item/**"/>
+			<mapping path="/cart/**"/>
 			<exclude-mapping path="/user/userLogin"/>
 			<exclude-mapping path="/user/userJoin"/>
 			<exclude-mapping path="/user/userIdCheck"/>
 			<exclude-mapping path="/user/mailSend"/>
 			<exclude-mapping path="/user/userLogout"/>
 			<exclude-mapping path="/user/userLoginOther"/>
+			<exclude-mapping path="/user/loginCheck"/>
 			<exclude-mapping path="/item/itemView"/>
-			<exclude-mapping path="/item/loginCheck"/>
-			<exclude-mapping path="/item/cartCheck"/>
+			<exclude-mapping path="/cart/cartCheck"/>
 			<beans:ref bean="level2Interceptor"/>
 		</interceptor>
 	</interceptors>

@@ -1,6 +1,5 @@
 package com.spring.javagreenS_ljs;
 
-import java.net.http.HttpResponse;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -264,6 +262,17 @@ public class UserController {
 		
 		model.addAttribute("user_id", user_id);
 		return "redirect:/msg/userLogoutOk";
+	}
+	
+	// 로그인되어 있는지 확인
+	@ResponseBody
+	@RequestMapping(value = "/loginCheck", method=RequestMethod.POST)
+	public String loginCheckPost(HttpSession session) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		if(user_id != null) {
+			return "1";
+		}
+		return "0";
 	}
 	
 }

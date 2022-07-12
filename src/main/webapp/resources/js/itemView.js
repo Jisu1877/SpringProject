@@ -5,8 +5,6 @@ let seller_discount_flag = '';
 let seller_discount_amount = 0;
 let sw = 0;
 let optionIdxArr = [];
-let optionName = [];
-let optionPrice = [];
 let order_quantity = [];
 
 $(function() {
@@ -101,8 +99,6 @@ function optionSelect(ths) {
 	for(let i = 0; i < ($(".option_div").length)-1; i++) {
 		if(optionIdxArr[i] == null) {
 			optionIdxArr[i] = idx;
-			optionName[i] = option;
-			optionPrice[i] = price;
 			order_quantity[i] = order_min_quantity;
 		}
 	}
@@ -212,8 +208,6 @@ function deleteOption(ths) {
 	for(let i = 0; i < ($(".option_div").length)-1; i++) {
 		if(optionIdxArr[i] == idx) {
 			delete optionIdxArr[i];
-			delete optionName[i];
-			delete optionPrice[i];
 			delete order_quantity[i];
 		}
 	}
@@ -363,7 +357,8 @@ function inputCart() {
 	//로그인 상태인지 확인
 	$.ajax({
 		type : "post",
-		url : "loginCheck",
+		url : "/javagreenS_ljs/user/loginCheck",
+		async: false,
 		success : function(data) {
 			if(data == '0') {
 				alert("로그인이 필요한 서비스입니다.");
@@ -391,23 +386,21 @@ function inputCart() {
 		item_idx : item_idx,
 		item_option_flag : item_option_flag,
 		optionIdxArr : optionIdxArr,
-		optionName : optionName,
-		optionPrice : optionPrice,
-		optionQuantity : order_quantity,
-		total_quantity : totalAmount, //item_option_flag가 'n'이고 totalAmount 가 0이라면 주문 수량 1개라는 것.
+		option_quantity : order_quantity,
+		quantity : totalAmount,
 		total_price : totalPrice
 	}
 	
 	$.ajax({
 		type : "post",
 		traditional: true,
-		url : "inputCart",
+		url : "/javagreenS_ljs/cart/inputCart",
 		data : data,
 		success : function(res) {
 			if(res == '1') {
 				let an = confirm("장바구니에 상품을 담았습니다. \n장바구니로 이동하시겠습니까?");
 				if(an) {
-					location.href="/javagreenS_ljs/item/cartList";
+					location.href="/javagreenS_ljs/cart/cartList";
 				}
 				else {
 					location.reload();
@@ -418,4 +411,5 @@ function inputCart() {
 			
 		}
 	});
+	
 }

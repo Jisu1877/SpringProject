@@ -57,7 +57,7 @@
 					  </div>
    					</div>
    					<div id="elevate">
-		    			<img class="mySlides" id="elevate_zoom" src="${ctp}/data/item/${itemVO.item_image}" data-zoom-image="${ctp}/data/item/${itemVO.item_image}">
+		    			<img class="mySlides" id="elevate_zoom" src="${ctp}/data/item/${itemVO.item_image}" data-zoom-image="${ctp}/data/item/${itemVO.item_image}" style="width:510px;">
 						 <div class="w3-row-padding w3-section" id="image_list">
 						     <a data-image="${ctp}/data/item/${itemVO.item_image}" data-zoom-image="${ctp}/data/item/${itemVO.item_image}">
 					  		 	<img class="w3-opacity w3-hover-opacity-off" src="${ctp}/data/item/${itemVO.item_image}" style="width:52px;cursor:pointer">
@@ -347,10 +347,10 @@
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script>
  $(function() {
-	//initEzPlus();
+	initEzPlus();
 	document.getElementById("infor").style.display = "block";
 });
-/*
+
 function initEzPlus() {
 	$('#elevate_zoom').ezPlus({
 	    gallery: 'image_list',
@@ -382,7 +382,7 @@ function resetEzPlus() {
 	    zoomWindowPosition: 1,
 	    zoomWindowOffsetX: 10
 	});
-} */
+}
 
  
 function currentDiv(n) {
