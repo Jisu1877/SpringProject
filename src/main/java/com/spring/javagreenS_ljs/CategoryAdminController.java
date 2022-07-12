@@ -73,7 +73,20 @@ public class CategoryAdminController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/category_group_useNot", method = RequestMethod.POST)
-	public String category_group_useNotPost(int category_group_idx, int category_group_level) {
+	public String category_group_useNotPost(int category_group_idx, int category_group_level, String category_group_code) {
+		//해당 카테고리로 등록된 상품이 있는지 확인
+		ArrayList<ItemVO> itemVOS = itemAdminService.getItemAllInforOnlyDisplay();
+		
+		for(int i=0; i<itemVOS.size(); i++) {
+			String item_code = itemVOS.get(i).getItem_code();
+			
+			String[] code = item_code.split("_"); 
+			String category = code[0];
+			
+			if(category_group_code.equals(category)) {
+				return "0";
+			}
+		}
 		//카테고리 사용안함 처리 && 노출 레벨(0)로 조정
 		categoryAdminService.setCategoryUseNot(category_group_idx);
 		
@@ -232,6 +245,39 @@ public class CategoryAdminController {
 		categoryAdminService.setCategoryDelete(category_idx);
 		return "1";
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/category_useNot", method = RequestMethod.POST)
+	public String category_useNotPost(int category_idx) {
+		//해당 카테고리로 등록된 상품이 있는지 확인
+		ArrayList<ItemVO> itemVOS = itemAdminService.getItemAllInforOnlyDisplay();
+		
+		for(int i=0; i<itemVOS.size(); i++) {
+			String item_code = itemVOS.get(i).getItem_code();
+			
+			String[] code = item_code.split("_"); 
+			int category = Integer.parseInt(code[1]);
+			
+			if(category_idx == category) {
+				return "0";
+			}
+		}
+		
+		//중분류 사용중지처리
+		categoryAdminService.setCategoryUseNot2(category_idx);
+		return "1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/category_updateOk", method = RequestMethod.POST)
+	public String category_updateOkPost(int category_idx, String category_name) {
+		
+		//중분류 수정처리
+		categoryAdminService.setCategoryUpate2(category_idx,category_name);
+		return "1";
+	}
+	
 	
 	
 }

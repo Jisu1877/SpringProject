@@ -8,11 +8,11 @@
 	</select>
 	
 	<select id="getItemSearch" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
-		select * from ga_item as item JOIN ga_item_notice as notice ON item.item_idx = notice.item_idx where ${searchString} like concat('%', #{item_name},'%'); 
+		select * from ga_item as item JOIN ga_item_notice as notice ON item.item_idx = notice.item_idx where ${searchString} like concat('%', #{item_name},'%') and item_delete_flag = 'n' and display_flag = 'y'; 
 	</select>
 	
 	<select id="getItemAllInforOnlyDisplay" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
-		select * from ga_item where display_flag = 'y' and item_delete_flag = 'n'
+		select * from ga_item where display_flag = 'y' and item_delete_flag = 'n' order by item_idx desc
 	</select>
 	
 	<select id="getItemList" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
@@ -61,6 +61,14 @@
 	
 	<update id="setItemNoticeUpdate">
 		update ga_item_notice set notice_value1 = #{itemVO.notice_value1}, notice_value2 = #{itemVO.notice_value2}, notice_value3 = #{itemVO.notice_value3}, notice_value4 = #{itemVO.notice_value4}, notice_value5 = #{itemVO.notice_value5} where item_idx = #{itemVO.item_idx}
+	</update>
+	
+	<update id="setItemDelete">
+		update ga_item set item_delete_flag = 'y' where item_code = #{item_code}
+	</update>
+	
+	<update id="setItemDisplayUpdate">
+		update ga_item set display_flag = #{flag} where item_idx = #{item_idx}
 	</update>
 	
 	<delete id="setItemImageDelete">

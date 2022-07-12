@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javagreenS_ljs.vo.CartVO;
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
 import com.spring.javagreenS_ljs.vo.ItemOptionVO;
 import com.spring.javagreenS_ljs.vo.ItemVO;
@@ -45,5 +46,25 @@ public interface ItemDAO {
 	public void setItemImageDeleteName(@Param("item_image") String item_image);
 
 	public void setItemNoticeUpdate(@Param("item_idx") int item_idx, @Param("itemVO") ItemVO itemVO);
+
+	public void setInputCart(@Param("vo") CartVO vo);
+
+	public void setInputCartWithOptions(@Param("vo") CartVO vo);
+
+	public String getCartCnt(@Param("user_idx") int user_idx);
+
+	public CartVO getCartCodeCheck(@Param("shipping_group_code") String shipping_group_code);
+
+	public void setQuantity(@Param("vo") CartVO vo);
+
+	public void setQuantity2(@Param("vo") CartVO vo);
+
+	public void setItemDelete(@Param("item_code") String item_code);
+
+	public ArrayList<CartVO> getCartList(@Param("user_idx") int user_idx);
+
+	public ArrayList<CartVO> getCartListGroup(@Param("user_idx") int user_idx);
+
+	public void setItemDisplayUpdate(@Param("item_idx") int item_idx, @Param("flag") String flag);
 
 }

@@ -28,6 +28,65 @@
 	  		overflow-x : auto;
 	  		white-space:nowrap;
 	  	}
+	  	.switch {
+		  position: relative;
+		  display: inline-block;
+		  width: 60px;
+		  height: 34px;
+		}
+		
+		.switch input { 
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+		
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  background-color: #ccc;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+		
+		.slider:before {
+		  position: absolute;
+		  content: "";
+		  height: 26px;
+		  width: 26px;
+		  left: 4px;
+		  bottom: 4px;
+		  background-color: white;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+			  	
+	  	input:checked + .slider {
+		  background-color: #2196F3;
+		}
+		
+		input:focus + .slider {
+		  box-shadow: 0 0 1px #2196F3;
+		}
+		
+		input:checked + .slider:before {
+		  -webkit-transform: translateX(26px);
+		  -ms-transform: translateX(26px);
+		  transform: translateX(26px);
+		}
+		
+		/* Rounded sliders */
+		.slider.round {
+		  border-radius: 34px;
+		}
+		
+		.slider.round:before {
+		  border-radius: 50%;
+		}
 	</style>
 	<script>
 		let itemCode = "";
@@ -78,6 +137,29 @@
 			location.href = "${ctp}/admin/item/itemUpdate?item_code="+itemCode;
 		}
 		
+		function itemDelete() {
+			if(remember == 0){
+				alert("삭제를 원하는 상품을 선택하세요.");
+				return false;
+			}
+			itemCode = $("input[name=itemCheck]:checked").data("code");
+			location.href = "${ctp}/admin/item/itemDelete?item_code="+itemCode;
+		}
+		
+		function displayFlag(idx,flag) {
+			$.ajax({
+				type : "post",
+				url : "${ctp}/admin/item/displayFlagSW",
+				data : {item_idx : idx,
+						display_flag : flag},
+				success : function(res) {
+					location.reload();
+				},
+				error : function() {
+					alert("전송오류.");
+				}
+			});
+		}
 	</script>
 </head>
 <body class="w3-light-grey">
@@ -99,7 +181,7 @@
 		<div style="margin-bottom:10px;">
 			<a href="javascript:itemInquire()" class="w3-btn w3-small w3-2021-buttercream">상품조회</a>&nbsp;&nbsp;
 			<a href="javascript:itemUpdate()" class="w3-btn w3-small w3-2020-sunlight">상품수정</a>&nbsp;&nbsp;
-			<a href="#" class="w3-btn w3-small w3-2021-desert-mist">상품삭제</a>&nbsp;&nbsp;
+			<a href="javascript:itemDelete()" class="w3-btn w3-small w3-2021-desert-mist">상품삭제</a>&nbsp;&nbsp;
 		</div>
  		<div class="box w3-border w3-white">
  			<div class="w3-responsive tableStyle">
@@ -110,7 +192,7 @@
 		        		<th class="text-center">상품명</th>
 		        		<th class="text-center">판매가</th>
 		        		<th class="text-center">할인가</th>
-		        		<th class="text-center">포인트 지급여부</th>
+		        		<th class="text-center">포인트지급</th>
 		        		<th class="text-center">지급포인트</th>
 		        		<th class="text-center">판매상태</th>
 		        		<th class="text-center">전시상태</th>
@@ -150,20 +232,21 @@
 		        				</c:if>
 		        			</td>
 		        			<td class="text-center">
-		        				<c:if test="${vo.sold_out == '0'}">
-		        					판매 중
+		        				<c:if test="${vo.sold_out == '0' && vo.display_flag == 'y'}">
+	        						판매 중
+		        				</c:if>
+		        				<c:if test="${vo.sold_out == '0' && vo.display_flag == 'n'}">
+	        						전시중지
 		        				</c:if>
 		        				<c:if test="${vo.sold_out == '1'}">
 		        					품절
 		        				</c:if>
 		        			</td>
 		        			<td class="text-center">
-		        				<c:if test="${vo.display_flag == 'y'}">
-		        					전시 중
-		        				</c:if>
-		        				<c:if test="${vo.display_flag == 'n'}">
-		        					전시 중지
-		        				</c:if>
+		        				<label class="switch">
+		        					<input type="checkbox" ${vo.display_flag == 'y' ? 'checked' : ''} onclick="displayFlag('${vo.item_idx}','${vo.display_flag}')">
+							  		<span class="slider round"></span>
+								</label>
 		        			</td>
 		        			<td class="text-center">
 		        				${vo.stock_quantity}개

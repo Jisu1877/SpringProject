@@ -54,6 +54,22 @@ public class UserController {
 		return "user/userLogin";
 	}
 	
+	//따로 띄워주는 로그인 창 호출
+	@RequestMapping(value = "/userLoginOther", method = RequestMethod.GET)
+	public String userLoginOtherGet(HttpServletRequest request, Model model) {
+		//쿠키에 저장된 아이디 가져오기
+		Cookie[] cookies = request.getCookies();
+		for(int i=0; i<cookies.length; i++) {
+			if(cookies[i].getName().equals("cUser_id")) {
+				model.addAttribute("cUser_id", cookies[i].getValue());
+				break;
+			}
+		}
+		return "user/userLoginOther";
+	}
+	
+	
+	
 	@RequestMapping(value = "/userJoin", method = RequestMethod.GET)
 	public String userJoinGet() {
 		return "user/userJoin";
@@ -167,6 +183,7 @@ public class UserController {
 				strLevel = "Silver";
 			}
 			session.setAttribute("sUser_id", vo.getUser_id());
+			session.setAttribute("sUser_idx", vo2.getUser_idx());
 			session.setAttribute("sLevel", vo2.getLevel());
 			session.setAttribute("strLevel", strLevel);
 			
@@ -181,6 +198,63 @@ public class UserController {
 		}
 	}
 	
+	//따로 띄워주는 로그인처리
+	@RequestMapping(value = "/userLoginOther", method = RequestMethod.POST)
+	public String userLoginOtherPost(UserVO vo, Model model, HttpSession session,
+			HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(name ="idCheck", defaultValue = "", required = false) String idCheck,
+			@RequestParam(name ="host_ip", defaultValue = "", required = false) String host_ip) {
+		//확인을 위해 입력 아이디로 정보 가져오기
+		UserVO vo2 = userService.getUserInfor(vo.getUser_id());
+		
+		//아이디가 일치하지 않을 경우 //비밀번호가 일치하지 않을 경우  //탈퇴한 경우
+		if(vo2 == null || !passwordEncoder.matches(vo.getUser_pwd(), vo2.getUser_pwd()) || vo2.getLeave_date() != null) { 
+			return "redirect:/msg/userLoginNo";
+		}
+		else {
+			//로그인 성공 후 처리진행
+			//1. 아이디 저장 체크박스 클릭 시 쿠키에 아이디 저장처리
+			if(idCheck.equals("on")) {
+				Cookie cookie = new Cookie("cUser_id", vo.getUser_id());
+				cookie.setMaxAge(60*60*24*7);
+				response.addCookie(cookie);
+			}
+			else { //체크박스 해제시
+				Cookie[] cookies = request.getCookies();
+				for(int i=0; i<cookies.length; i++) {
+					if(cookies[i].getName().equals("cUser_id")) {
+						cookies[i].setMaxAge(0); //기존에 저장된 현재 user_id값을 삭제한다.
+						response.addCookie(cookies[i]);
+						break;
+					}
+				}
+			}
+			
+			//2. 필요한 정보 세션에 저장처리(레벨 한글변환/저장)
+			String strLevel = "";
+			if(vo2.getLevel() == 0) {
+				strLevel = "관리자";
+			}else if(vo2.getLevel() == 1) {
+				strLevel = "Gold";
+			}else if(vo2.getLevel() == 2) {
+				strLevel = "Silver";
+			}
+			session.setAttribute("sUser_id", vo.getUser_id());
+			session.setAttribute("sUser_idx", vo2.getUser_idx());
+			session.setAttribute("sLevel", vo2.getLevel());
+			session.setAttribute("strLevel", strLevel);
+			
+			//3.최종로그인날짜, 로그인횟수 업데이트
+			userService.setUserLoginUpdate(vo.getUser_id());
+			
+			//4.로그인 기록 테이블에 자료 저장
+			userService.setUserLog(vo2.getUser_idx(), host_ip);
+			
+			model.addAttribute("user_id", vo.getUser_id());
+			return "redirect:/msg/userLoginOtherOk";
+		}
+	}
+	
 	//로그아웃 처리
 	@RequestMapping(value = "/userLogout", method = RequestMethod.GET)
 	public String userLogoutGet(HttpSession session, Model model) {
@@ -191,4 +265,5 @@ public class UserController {
 		model.addAttribute("user_id", user_id);
 		return "redirect:/msg/userLogoutOk";
 	}
+	
 }

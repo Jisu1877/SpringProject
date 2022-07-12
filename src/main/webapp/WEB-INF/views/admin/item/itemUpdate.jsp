@@ -1225,7 +1225,7 @@
 				<div class="w3-white w3-padding">
 	 				<div class="w3-light-gray p-4">
 				    	<div style="font-size:20px;">배송</div>
-				    	<div class="form-group">
+				    	<div class="form-group" style="display:none">
 					      <label for="shipment_type_flag">배송비 구분 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
@@ -1234,8 +1234,9 @@
 							</div>
 						  </div>
 					  	</div>
-					  	<div id="shipmentPriceFrom" ${itemVO.shipment_type == 1 ? 'style="display:none"' : ''}>
-						  	<div class="w3-row">
+					  	<div id="shipmentPriceFrom">
+<%-- 					  	<div id="shipmentPriceFrom" ${itemVO.shipment_type == 1 ? 'style="display:none"' : ''}> --%>
+						  	<div class="w3-row" style="display:none">
 						  		<div class="w3-third">
 						    	<div class="form-group">
 							      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
@@ -1250,7 +1251,7 @@
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
 					        </div>
-						  	<div class="w3-row">
+						  	<div class="w3-row" style="display:none">
 						  		<div class="w3-third">
 						    	<div class="form-group">
 							      <label for="shipping_free_amount">조건부 무료배송 금액 <span style="color:red;">🔸&nbsp;</span></label>

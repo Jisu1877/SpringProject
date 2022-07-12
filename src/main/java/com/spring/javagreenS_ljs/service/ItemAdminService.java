@@ -36,5 +36,9 @@ public interface ItemAdminService {
 
 	public void setItemUpdate(ItemVO itemVO, MultipartHttpServletRequest multipart, String item_image);
 
+	public void setItemDelete(String item_code);
+
+	public void setItemDisplayUpdate(int item_idx, String flag);
+
 
 }

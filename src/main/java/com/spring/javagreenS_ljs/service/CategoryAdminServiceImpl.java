@@ -111,4 +111,14 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 		return categoryDAO.getCategoryInfor2(category_idx);
 	}
 
+	@Override
+	public void setCategoryUseNot2(int category_idx) {
+		categoryDAO.setCategoryUseNot2(category_idx);
+	}
+
+	@Override
+	public void setCategoryUpate2(int category_idx, String category_name) {
+		categoryDAO.setCategoryUpate2(category_idx,category_name);
+	}
+
 }

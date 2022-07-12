@@ -20,15 +20,15 @@ public class MessageController {
 			model.addAttribute("msg", "로그인 후 이용하세요.");
 			model.addAttribute("url", "user/userLogin");
 		}
-		if(msgFlag.equals("level0OnlyOk")) {
+		else if(msgFlag.equals("level0OnlyOk")) {
 			model.addAttribute("msg", "관리자만 접근 가능합니다.");
 			model.addAttribute("url", "user/userLogin");
 		}
-		if(msgFlag.equals("levelNo")) {
+		else if(msgFlag.equals("levelNo")) {
 			model.addAttribute("msg", "현재 레벨에서는 접근이 불가합니다.");
 			model.addAttribute("url", "user/userLogin");
 		}
-		if(msgFlag.equals("userJoinOk")) {
+		else if(msgFlag.equals("userJoinOk")) {
 			model.addAttribute("msg", name+"님 회원가입이 완료되었습니다.");
 			model.addAttribute("url", "user/userLogin");
 		}
@@ -39,6 +39,10 @@ public class MessageController {
 		else if(msgFlag.equals("userLoginOk")) {
 			model.addAttribute("msg", user_id+"님 환영합니다.");
 			model.addAttribute("url", "main/mainHome");
+		}
+		else if(msgFlag.equals("userLoginOtherOk")) {
+			model.addAttribute("msg", user_id+"님 환영합니다.");
+			model.addAttribute("url", "main/close");
 		}
 		else if(msgFlag.equals("userLogoutOk")) {
 			model.addAttribute("msg", user_id+"님 로그아웃 되었습니다.");
@@ -58,6 +62,14 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("itemUpdatetOk")) {
 			model.addAttribute("msg", "상품수정이 완료되었습니다.");
+			model.addAttribute("url", "/admin/item/itemList");
+		}
+		else if(msgFlag.equals("itemDeleteNo")) {
+			model.addAttribute("msg", "상품삭제 오류. 다시 시도해주세요.");
+			model.addAttribute("url", "/admin/item/itemList");
+		}
+		else if(msgFlag.equals("itemDeleteOk")) {
+			model.addAttribute("msg", "상품삭제가 완료되었습니다.");
 			model.addAttribute("url", "/admin/item/itemList");
 		}
 		

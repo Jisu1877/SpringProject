@@ -2,15 +2,21 @@ package com.spring.javagreenS_ljs;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javagreenS_ljs.service.CategoryAdminService;
 import com.spring.javagreenS_ljs.service.ItemAdminService;
+import com.spring.javagreenS_ljs.service.ItemService;
+import com.spring.javagreenS_ljs.vo.CartVO;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.CategoryVO;
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
@@ -69,4 +75,63 @@ public class ItemController {
 		model.addAttribute("itemVO" ,itemVO);
 		return "item/itemView";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/loginCheck", method = RequestMethod.POST)
+	public String loginCheckPost(HttpSession session) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		if(user_id != null) {
+			return "1";
+		}
+		return "0";
+	}
+	
+	
+	//장바구니 담기
+	@ResponseBody
+	@RequestMapping(value = "/inputCart", method = RequestMethod.POST)
+	public String inputCartPost(CartVO vo, HttpSession session) {
+		//세션 값 저장
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int)session.getAttribute("sUser_idx");
+		vo.setUser_id(user_id);
+		vo.setUser_idx(user_idx);
+		
+		itemService.setInputCart(vo);
+		
+		return "1";
+	}
+	
+	//장바구니 리스트로 이동
+	@RequestMapping(value = "/cartList", method = RequestMethod.GET)
+	public String cartListGet(HttpSession session, Model model) {
+		int user_idx = (int)session.getAttribute("sUser_idx");
+		
+		//장바구니 목록 가져오기
+		ArrayList<CartVO> cartVOS = itemService.getCartList(user_idx);
+		
+		ArrayList<ItemVO> itemVOS = new ArrayList<ItemVO>();
+		//상품 정보 가져오기
+		for(int i=0; i<cartVOS.size(); i++) {
+			ItemVO itemVO = itemAdminService.getItemContent(cartVOS.get(i).getItem_idx());
+			itemVOS.add(itemVO);
+		}
+		
+		model.addAttribute("itemVOS", itemVOS);
+		model.addAttribute("cartVOS", cartVOS);
+		return "order/cartListTable";
+	}
+	
+	//해당 회원 장바구니 담긴 개수 알아오기
+	@ResponseBody
+	@RequestMapping(value = "/cartCheck", method = RequestMethod.POST)
+	public String cartCheckPost(HttpSession session) {
+		String  cnt = "";
+		if(session.getAttribute("sUser_idx") != null) {
+			int user_idx = (int)session.getAttribute("sUser_idx");
+			cnt = itemService.getCartCnt(user_idx);
+		}
+		return cnt;
+	}
+	
 }

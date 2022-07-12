@@ -10,6 +10,9 @@
   <span class="w3-bar-item" style="font-size:22px; margin-top:4px;">
   	<a href="${ctp}/admin/mainHome">ADMIN CENTER</a>
   </span>
+  <span class="w3-button w3-2019-toffee w3-hover-khaki w3-xlarge w3-right" id="SidebarMenu" onclick="sidebarMenuopen()">
+	<i class="fa fa-bars"></i>
+  </span> 
   <span class="w3-bar-item w3-right" style="margin-top:6px;">
   	<a href="${ctp}/user/userLogout">LOGOUT</a>
   </span>

@@ -41,5 +41,9 @@ public interface CategoryAdminService {
 
 	public CategoryVO getCategoryInfor2(int category_idx);
 
+	public void setCategoryUseNot2(int category_idx);
+
+	public void setCategoryUpate2(int category_idx, String category_name);
+
 
 }

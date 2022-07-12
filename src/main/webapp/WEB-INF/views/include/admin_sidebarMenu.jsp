@@ -16,6 +16,31 @@
 		font-weight : 600;
 	}
 </style>
+<script>
+//Open and close sidebar
+function sidebarMenuopen() {
+  document.getElementById("mySidebar").style.width = "30%";
+  document.getElementById("mySidebar").style.display = "block";
+}
+
+function sidebarMenuClose() {
+  document.getElementById("mySidebar").style.display = "none";
+}
+</script>
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-black w3-animate-top w3-large" style="display:none;padding-top:150px" id="mySidebar">
+  <a href="javascript:void(0)" onclick="sidebarMenuClose()" class="w3-button w3-black w3-hover-black w3-xlarge w3-padding w3-display-topright" style="padding:6px 24px; margin-top: 50px;">
+    <i class="fa fa-remove"></i>
+  </a>
+  <div class="w3-bar-block w3-right">
+  	<h4>일반상품 관리</h4>
+	<a href="${ctp}/admin/category/categoryHome" class="w3-bar-item w3-button w3-text-grey w3-hover-black">카테고리관리</a>
+	<a href="${ctp}/admin/item/itemInsert" class="w3-bar-item w3-button w3-text-grey w3-hover-black">상품등록</a>
+	<a href="${ctp}/admin/item/itemList" class="w3-bar-item w3-button w3-text-grey w3-hover-black">상품조회/수정</a>
+  </div>
+</nav>
+
+
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-2019-brown-granite" style="z-index:3; width:250px; overflow:scroll" id="mySidebar"><br>
   <div class="w3-container w3-row">
@@ -72,17 +97,10 @@
 	  </div>
 	</div>
   	<div class="w3-dropdown-click">
-	  <button onclick="slideDown(3)" class="w3-2019-brown-granite menu"><strong>경매판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  <button onclick="slideDown(4)" class="w3-2019-brown-granite menu"><strong>기타설정 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
-	  <div id="Demo3" class="w3-bar-block w3-2020-ash" style="display: none">
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">경매상품 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">판매자 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">낙찰(주문) 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">배송현황 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">취소 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">판매방해 관리</a></button>
+	  <div id="Demo4" class="w3-bar-block w3-2020-ash" style="display: none">
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/offlineStoreInsert">오프라인매장 등록</a></button>
 	  </div>
 	</div>
   </div>

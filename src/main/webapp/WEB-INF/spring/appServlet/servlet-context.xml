@@ -18,8 +18,10 @@
 	<!-- <resources mapping="/resources/**" location="/resources/" /> -->
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/js/**" location="/resources/js/" />
+	<resources mapping="/css/**" location="/resources/css/" />
 	<resources mapping="/ckeditor/**" location="/resources/ckeditor/" />
 	<resources mapping="/data/ckeditor/**" location="/resources/data/ckeditor/" />
+	<resources mapping="/itemContent/**" location="/resources/data/ckeditor/itemContent/" />
 	<resources mapping="/data/**" location="/resources/data/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -55,11 +57,16 @@
 		<interceptor>
 			 <!-- 회원전용페이지 모두 -->
 			<mapping path="/user/**"/>
+			<mapping path="/item/**"/>
 			<exclude-mapping path="/user/userLogin"/>
 			<exclude-mapping path="/user/userJoin"/>
 			<exclude-mapping path="/user/userIdCheck"/>
 			<exclude-mapping path="/user/mailSend"/>
 			<exclude-mapping path="/user/userLogout"/>
+			<exclude-mapping path="/user/userLoginOther"/>
+			<exclude-mapping path="/item/itemView"/>
+			<exclude-mapping path="/item/loginCheck"/>
+			<exclude-mapping path="/item/cartCheck"/>
 			<beans:ref bean="level2Interceptor"/>
 		</interceptor>
 	</interceptors>

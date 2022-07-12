@@ -452,7 +452,7 @@
 				<div class="w3-white w3-padding">
 	 				<div class="w3-light-gray p-4">
 				    	<div style="font-size:20px;">배송</div>
-				    	<div class="form-group">
+				    	<!-- <div class="form-group">
 					      <label for="shipment_type_flag">배송비 구분 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">
 				        	<div class="form-check">
@@ -460,9 +460,9 @@
 							    <input type="radio" class="shipment_type" name="shipment_type" value="1">&nbsp;&nbsp;무료배송
 							</div>
 						  </div>
-					  	</div>
+					  	</div> -->
 					  	<div id="shipmentPriceFrom">
-						  	<div class="w3-row">
+						  	<!-- <div class="w3-row">
 						  		<div class="w3-third">
 						    	<div class="form-group">
 							      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
@@ -491,7 +491,8 @@
 						        </div>
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
-					        </div>
+					        </div> -->
+					        <br>
 					        <div class="w3-row">
 						  		<div class="w3-third">
 						    	<div class="form-group">

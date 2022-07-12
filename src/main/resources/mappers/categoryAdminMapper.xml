@@ -64,6 +64,14 @@
 		update ga_category_group set category_group_name = #{vo.category_group_name}, category_group_level = #{vo.category_group_level} where category_group_idx = #{vo.category_group_idx}
 	</update>
 	
+	<update id="setCategoryUseNot2">
+		update ga_category set category_use_yn = 'n' where category_idx = #{category_idx}
+	</update>
+	
+	<update id="setCategoryUpate2">
+		update ga_category set category_name = #{category_name} where category_idx = #{category_idx}
+	</update>
+	
 	<delete id="setCategoryGroupDelete">
 		delete from ga_category_group where category_group_idx = #{category_group_idx}
 	</delete>

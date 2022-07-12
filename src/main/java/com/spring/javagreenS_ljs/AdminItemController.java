@@ -202,4 +202,30 @@ public class AdminItemController {
 		
 		return "redirect:/msg/itemUpdatetOk";
 	}
+	
+	//상품 삭제 처리
+	@RequestMapping(value = "/itemDelete", method = RequestMethod.GET)
+	public String itemDeleteGet(@RequestParam(name="item_code", defaultValue = "NO", required = false) String item_code) {
+		if(item_code.equals("NO")) {
+			return "redirect:/msg/itemDeleteNo";
+		}
+		
+		itemAdminService.setItemDelete(item_code);
+		
+		return "redirect:/msg/itemDeleteOk";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/displayFlagSW", method = RequestMethod.POST)
+	public String displayFlagSWPost(int item_idx, String display_flag) {
+		String flag = null;
+		if(display_flag.equals("y")) {
+			flag = "n";
+		}
+		else {
+			flag = "y";
+		}
+		itemAdminService.setItemDisplayUpdate(item_idx,flag);
+		return "1";
+	}
 }

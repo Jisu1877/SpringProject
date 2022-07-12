@@ -12,5 +12,11 @@ public class AdminController {
 	@RequestMapping(value = "/mainHome", method = RequestMethod.GET)
 	public String mainHomeGet() {
 		return "admin/mainHome";
-	}	
+	}
+	
+	//오프라인 매장 등록 창 호출
+	@RequestMapping(value = "/offlineStoreInsert", method = RequestMethod.GET)
+	public String offlineStoreInsertGet() {
+		return "admin/other/offlineStoreInsert";
+	}
 }

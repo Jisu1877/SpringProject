@@ -472,21 +472,21 @@
 				<div class="w3-white w3-padding">
 	 				<div class="w3-light-gray p-4">
 				    	<div style="font-size:20px;">배송</div>
-				    	<div class="form-group">
+				    	<%-- <div class="form-group">
 					      <label for="shipment_type_flag">배송비 구분 &nbsp; :  &nbsp;</label>
 					      <c:if test="${itemVO.shipment_type == 1}">
 		        				무료배송
 			        		</c:if>
 			        		<c:if test="${itemVO.shipment_type == 2}">
 			        		    판매자 조건부
-			        	  </c:if>
+			        	  </c:if> --%>
 					      <!-- <div class="form-check-inline">
 				        	<div class="form-check">
 							    <input type="radio" class="shipment_type" name="shipment_type" value="2" checked>&nbsp;&nbsp;판매자 조건부&nbsp;&nbsp;&nbsp;
 							    <input type="radio" class="shipment_type" name="shipment_type" value="1">&nbsp;&nbsp;무료배송
 							</div>
 						  </div> -->
-					  	</div>
+					  	<%-- </div>
 					  	<div id="shipmentPriceFrom" ${itemVO.shipment_type == 1 ? 'style="display:none"' : ''}>
 						  	<div class="w3-row">
 						  		<div class="w3-third">
@@ -517,7 +517,8 @@
 						        </div>
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
-					        </div>
+					        </div> --%>
+					        <br>
 					        <div class="w3-row">
 						  		<div class="w3-third">
 						    	<div class="form-group">

@@ -43,5 +43,9 @@ public interface CategoryDAO {
 
 	public CategoryVO getCategoryInfor2(@Param("category_idx") int category_idx);
 
+	public Object setCategoryUseNot2(@Param("category_idx") int category_idx);
+
+	public void setCategoryUpate2(@Param("category_idx") int category_idx,@Param("category_name") String category_name);
+
 
 }

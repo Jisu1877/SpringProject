@@ -93,7 +93,7 @@
 	}
 	
 	/* 사용안함 처리 */
-	function category_group_useNot(idx) {
+	function category_group_useNot(idx,code) {
 		let level = document.getElementById("inputLevel"+idx).value;
 		
 		let ans = confirm("해당 카테고리를 '사용중지' 처리하시겠습니까?");
@@ -102,14 +102,15 @@
 				type : "post",
 				url : "${ctp}/admin/category/category_group_useNot",
 				data : {category_group_idx : idx,
-						category_group_level : level
+						category_group_level : level,
+						category_group_code : code
 				},
 				success : function(data) {
 					if(data == 1) {
 						location.reload();
 					}
 					else {
-						alert("사용중지 처리 실패. 다시 시도해주세요.");
+						alert("해당 카테고리로 등록된 판매중인 상품이 존재합니다. 해당 상품을 전시중지 처리 후 진행하세요.");
 					}
 				},
 				error : function() {
@@ -276,8 +277,26 @@
 	}
 	
 	/* 중분류 사용중지 */
-	function category_useNot() {
-		
+	function category_useNot(idx) {
+		let ans = confirm("해당 중분류 카테고리를 '사용중지' 처리하시겠습니까?");
+		if(ans) {
+			$.ajax({
+				type : "post",
+				url : "${ctp}/admin/category/category_useNot",
+				data : {category_idx : idx},
+				success : function(data) {
+					if(data == 1) {
+						location.reload();
+					}
+					else {
+						alert("해당 카테고리로 등록된 판매중인 상품이 존재합니다. 해당 상품을 전시중지 처리 후 진행하세요.");
+					}
+				},
+				error : function() {
+					alert("전송오류.");
+				}
+			});
+		}
 	}
 	
 	/* 중분류 삭제 */
@@ -304,6 +323,37 @@
 		}
 	}
 	
+	function category_update(idx) {
+		document.getElementById("spanCName"+idx).style.display = "none";
+		document.getElementById("inputCName"+idx).style.display = "block";
+		
+		document.getElementById("updateCBtn"+idx).style.display = "none";
+		document.getElementById("updateOkCBtn"+idx).style.display = "block";
+		document.getElementById("deleteCBtn"+idx).style.display = "none";
+	}
+	
+	function category_updateOk(idx) {
+		let category_name = $("#inputCName"+idx).val();
+		$.ajax({
+			type : "post",
+			url : "${ctp}/admin/category/category_updateOk",
+			data : { category_idx : idx,
+					 category_name : category_name
+			},
+			success : function(data) {
+				if(data == 1) {
+					alert("수정처리가 완료되었습니다.");
+					location.reload();
+				}
+				else {
+					alert("수정 처리 실패. 다시 시도해주세요.");
+				}
+			},
+			error : function() {
+				alert("전송오류.");
+			}
+		});
+	}
 </script>
 </head>
 <body class="w3-light-grey">
@@ -365,7 +415,7 @@
 									</td>
 									<td>
 										<c:if test="${vo.category_group_use_yn == 'y'}">
-											<input type="button" class="w3-button w3-white w3-hover-white w3-small" value="사용 중지" onclick="category_group_useNot(${vo.category_group_idx})">
+											<input type="button" class="w3-button w3-white w3-hover-white w3-small" value="사용 중지" onclick="category_group_useNot('${vo.category_group_idx}','${vo.category_group_code}')">
 										</c:if>
 										<c:if test="${vo.category_group_use_yn == 'n'}">
 											<input type="button" class="w3-button w3-white w3-hover-white w3-small" value="사용" onclick="category_group_use(${vo.category_group_idx})">
@@ -407,7 +457,15 @@
 								<c:forEach var="cVO" items="${vo.categoryList}">
 									<tr class="w3-light-gray subCategory${vo.category_group_idx}" style="display:none">
 										<td class="text-right">&nbsp; ${i+1}</td>
-										<td>${cVO.category_name}</td>
+										<td>
+											<span id="spanCName${cVO.category_idx}">
+											${cVO.category_name}&nbsp;
+											<c:if test="${cVO.category_use_yn == 'y'}">
+												<button class="badge badge-warning" disabled>사용중</button>
+											</c:if>
+											</span>
+											<input id="inputCName${cVO.category_idx}" type="text" value="${cVO.category_name}" style="display:none" class="w3-input">
+										</td>
 										<td>-</td>
 										<td class="text-center">
 											<c:if test="${vo.categoryList[i].category_use_yn == 'y'}">
@@ -419,10 +477,10 @@
 										</td>
 										<td class="text-center">
 											<c:if test="${vo.categoryList[i].category_use_yn == 'y'}">
-												<input type="button" id="updateBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정" onclick="category_group_update(${vo.category_group_idx})">
-												<input type="button" id="updateOkBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정완료" onclick="category_group_updateOk(${vo.category_group_idx}, ${vo.category_group_level})" style="display: none; margin-left: 30px;">
+												<input type="button" id="updateCBtn${cVO.category_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정" onclick="category_update(${cVO.category_idx})">
+												<input type="button" id="updateOkCBtn${cVO.category_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="수정완료" onclick="category_updateOk(${cVO.category_idx})" style="display: none; margin-left: 30px;">
 											</c:if>
-											<input type="button" id="deleteBtn${vo.category_group_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="삭제" onclick="category_delete(${cVO.category_idx})">
+											<input type="button" id="deleteCBtn${cVO.category_idx}" class="w3-btn w3-2019-toffee w3-tiny" value="삭제" onclick="category_delete(${cVO.category_idx})">
 										</td>
 										<td></td>
 										<td></td>

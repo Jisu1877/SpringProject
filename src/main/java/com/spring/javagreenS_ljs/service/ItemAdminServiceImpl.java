@@ -480,5 +480,17 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		//itemNotice DB 수정 저장
 		itemDAO.setItemNoticeUpdate(itemVO.getItem_idx(), itemVO);
 	}
+
+
+	@Override
+	public void setItemDelete(String item_code) {
+		itemDAO.setItemDelete(item_code);
+	}
+
+
+	@Override
+	public void setItemDisplayUpdate(int item_idx, String flag) {
+		itemDAO.setItemDisplayUpdate(item_idx, flag);
+	}
 	
 }

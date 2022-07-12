@@ -11,6 +11,7 @@ a:hover {
 	color : black;
 	font-weight: bold;
 }
+
 ul {
 	 list-style:none;
 	 text-align:center;
@@ -79,10 +80,20 @@ body {
 
 </style>
 <script type="text/javascript">
-/*  (function(){ 
+	$(document).ready(function(){ 
+		//장바구니 담긴 개수 알아오기
+		$.ajax({
+			type : "post",
+			url : "${ctp}/item/cartCheck",
+			success : function (data) {
+				$("#cartCnt").html(data);
+			},
+			error : function () {
+			}
+		});
 		
-	 })(); 
- */
+	 }); 
+	
 	function hoverMenuOpen() {
 		$("#hoverMenu").stop().slideDown(500);
 		document.getElementById("pageContent").style.opacity = "70%";
@@ -105,7 +116,7 @@ body {
 	
 	// Open and close sidebar
 	function sidebarMenuopen() {
-	  document.getElementById("mySidebar").style.width = "30%";
+	  document.getElementById("mySidebar").style.width = "50%";
 	  document.getElementById("mySidebar").style.display = "block";
 	}
 	
@@ -120,10 +131,24 @@ body {
     <i class="fa fa-remove"></i>
   </a>
   <div class="w3-bar-block w3-center">
-    <a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">About</a>
-    <a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Photos</a>
-    <a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Shop</a>
-    <a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">Contact</a>
+  	<c:if test="${empty sUser_id}">
+  		<a href="${ctp}/user/userLogin" class="w3-bar-item w3-button w3-text-grey w3-hover-black">LOGIN</a>
+  		<a href="${ctp}/user/userJoin" class="w3-bar-item w3-button w3-text-grey w3-hover-black">JOIN</a>
+  	</c:if>
+  	<c:if test="${!empty sUser_id}">
+  		<a href="${ctp}/user/userLogout" class="w3-bar-item w3-button w3-text-grey w3-hover-black">LOGOUT</a>
+  	</c:if>
+  	<c:if test="${sLevel == 0}">
+  		<a href="${ctp}/admin/mainHome" class="w3-bar-item w3-button w3-text-grey w3-hover-black">ADMIN</a>
+  	</c:if>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">베스트</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">식물 경매</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">오프라인 매장</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">반려식물 클리닉</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">공지사항</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">FAQ</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">마이페이지</a>
+  	<a href="#" class="w3-bar-item w3-button w3-text-grey w3-hover-black">1:1문의</a>
   </div>
 </nav>
 
@@ -148,13 +173,13 @@ body {
 	<c:if test="${sLevel == 0}">
 		<span class="w3-button w3-white w3-hover-white w3-large mt-2"><a href="${ctp}/admin/mainHome">ADMIN</a></span>
 	</c:if>
-	<span class="w3-button w3-white w3-hover-white w3-xlarge w3-right"><i class="fa fa-shopping-cart"></i></span>
+	<a href="${ctp}/item/cartList" class="w3-button w3-white w3-hover-white w3-xlarge w3-right"><i class="fa fa-shopping-cart"></i><span class="badge badge-pill w3-2021-marigold" id="cartCnt" style="font-size:11px;"></span></a>
 	<div class="w3-clear"></div>
 	<div id="hoverMenu" class="w3-white">
 		<div class="w3-row" id="hoverMenuContent">
 			<div class="w3-quarter">
 				<ul>
-					<li><a href="#"><span class="w3-white w3-hover-white w3-xlarge mt-2"><b>Shop</b></span></a></li>
+					<li><a href="#shop"><span class="w3-white w3-hover-white w3-xlarge mt-2"><b>Shop</b></span></a></li>
 					<li>&nbsp;</li>
 					<li class="sub"><a href="#">베스트</a></li>
 					<li class="sub"><a href="#">식물 경매</a></li>
@@ -166,7 +191,6 @@ body {
 					<li><a href="#"><span class="w3-white w3-hover-white w3-xlarge mt-2"><b>Gardening</b></span></a></li>
 					<li>&nbsp;</li>
 					<li class="sub"><a href="#">반려식물 클리닉</a></li>
-					<li class="sub"><a href="#">가드닝 교육</a></li>
 				</ul>
 			</div>
 			<div class="w3-quarter">

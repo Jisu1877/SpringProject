@@ -10,196 +10,14 @@
 <title>상품정보조회</title>
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 <link rel="icon" href="${ctp}/images/favicon.png">
-<style>
-	#pageContent {
-		font-family: 'MaruBuriExtraLight' !important;
-		font-family: 'MaruBuriLight' !important;
-		font-family: 'MaruBuri' !important;
-		font-family: 'MaruBuriBold' !important;
-		font-family: 'MaruBuriSemiBold' !important;
-	}
-	
-	#discountPrice {
-		text-decoration: line-through;
-	}
-	
-	#benefits {
-		margin: 10px;
-		padding: 10px;
-		background-color: whitesmoke;
-		font-family: 'Montserrat', sans-serif;
-		font-size: 12px;
-	}
-	
-	.montserrat {
-		font-family: 'Montserrat', sans-serif;
-	}
-	
-	#elevate_zoom {
-		display:block;
-	}
-	
-	/*set a border on the images to prevent shifting*/
-	#gallery_01 img {
-		border: 1px solid white;
-	}
-	
-	/*Change the colour*/
-	.active img {
-		opacity: 1 !important;
-	}
-	
-	.zoomWindowContainer {
-		width: 510px !important;
-	}
-	
-	#small {
-		display: none;
-	}
- 	
-	@media screen and (max-width:1200px) { 
-	 	#elevate {
-	 		display: none;
-	 	}
-	 	#small {
-			display: block;
-		}
-	}
-</style>
-<script>
-	let totalAmount = 0;
-	let totalPrice = $("#sale_price").val();
-	console.log(totalPrice);
-	function optionSelect(ths) {
-		const idx = $(ths).val();
-		const option = $(ths).find('option:selected').data('label');
-		const price = $(ths).find('option:selected').data('price');
-		const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-		let order_min_quantity = $("#order_min_quantity").val();
-		let order_max_quantity = $("#order_max_quantity").val();
-		totalAmount++;
-		
-		if(option == "") {
-			return false;
-		}
-		else if($("#option_"+idx).length > 0){
-			alert("이미 선택한 옵션입니다.");
-			$("#optionSelect").val("").prop("selected", true);
-			totalAmount--;
-			return false;
-		}
-		else if(totalAmount > order_max_quantity) {
-			$("#optionSelect").val("").prop("selected", true);
-			alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-			totalAmount--;
-			return false;
-		}
-		
-		
-		let optionDiv = $("#option_tmp_div").clone();
-		
-		optionDiv.attr("style", "display:block;");
-		optionDiv.attr("id", "option_"+idx);
-		optionDiv.find(".option").html(option);
-		optionDiv.find(".option_cnt").html(order_min_quantity);
-		optionDiv.find(".option_cnt").attr("data-idx", idx);
-		optionDiv.find(".option_cnt").attr("id", "option_cnt_"+idx);
-		optionDiv.find(".option_price").html(price2 + "원");
-		optionDiv.find(".option_price").attr("data-price", price);
-		
-		$("#optonDemo").append(optionDiv);
-		let optionLength = $(".option_div").length;
-		if(optionLength > (Number(order_max_quantity) + 1)) {
-			$("#optionSelect").val("").prop("selected", true);
-			alert("최대 구매 수량은 " +order_max_quantity+ "개 입니다. 선택한 옵션을 삭제하고 추가하세요.");
-			$( 'div' ).remove( '#option_'+idx);
-		}
-		
-		$("#optionSelect").val("").prop("selected", true);
-		
-		totalPrice += price;
-		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-		$("#totalCnt").html(totalAmount);
-		$("#totalPrice").html(total);
-		$("#totalInfor").attr("style", "margin:30px; display:block; font-size:22px;");
-	}
-	
-	function minus(ths) {
-		const id = $(ths).parents("div.option_div").attr("id");
-		let amount = $(ths).siblings("span.option_cnt").html();
-		let order_min_quantity = $("#order_min_quantity").val();		
-		amount--;
-		
-		if(order_min_quantity > amount) {
-			$("#optionSelect").val("").prop("selected", true);
-			alert("최소 구매 가능 수량은 " +order_min_quantity+ "개 입니다.");
-			return false;
-		}
-		totalAmount--;
-		
-		let price = $("#"+id).find(".option_price").data('price');
-		let price2 = price * Number(amount);
-		let price3 = Math.floor(price2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-		$("#"+id).find(".option_price").html(price3 + "원");
-		$(ths).siblings("span.option_cnt").html(amount);
-		totalPrice -= price;
-		
-		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-		$("#totalCnt").html(totalAmount);
-		$("#totalPrice").html(total);
-	}
-	
-	function plus(ths) {
-		const id = $(ths).parents("div.option_div").attr("id");
-		let amount = $(ths).siblings("span.option_cnt").html();
-		const price = ($("#"+id).find(".option_price").data('price')) * (Number(amount) + 1);
-		let order_max_quantity = $("#order_max_quantity").val();		
-		const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-		amount++;
-		totalAmount++;
-		
-		if(order_max_quantity < amount) {
-			$("#optionSelect").val("").prop("selected", true);
-			alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-			totalAmount--;
-			return false;
-		}
-		else if(totalAmount > order_max_quantity) {
-			$("#optionSelect").val("").prop("selected", true);
-			alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-			totalAmount--;
-			return false;
-		}
-		$(ths).siblings("span.option_cnt").html(amount);
-		
-		totalPrice = price;
-		$("#"+id).find(".option_price").html(price2 + "원");
-		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-		$("#totalCnt").html(totalAmount);
-		$("#totalPrice").html(total);
-	}
-	
-	function deleteOption(ths) {
-		let amount = $(ths).parents().find(".option_cnt").html();
-		amount = Number(amount);
-		totalAmount -= amount;
-		const id = $(ths).parents("div.option_div").attr("id");
- 		let price = $("#"+id).find(".option_price").data('price');
- 		let price2 = Number(price) * Number(amount);
-		
- 		totalPrice -= price2;
- 		let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
- 		$("#totalCnt").html(totalAmount);
- 		$("#totalPrice").html(total);
-		
- 		$( 'div' ).remove('#'+id);
-	}
-</script>
+<link rel="stylesheet" type="text/css" href="${ctp}/css/itemView.css" />
+<script src="${ctp}/js/itemView.js"></script>
 </head>
 <body>
 <!-- Nav  -->
+<span id="navBar">
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
-
+</span>
 <jsp:include page="/WEB-INF/views/include/header2.jsp" />
 
 <!-- !PAGE CONTENT! -->
@@ -207,12 +25,12 @@
 	<div class="container" style="margin-bottom:100px; margin-top:70px;">
 		<div class="mb-2 montserrat">
 			<a href="${ctp}/main/mainHome">홈</a> &nbsp; <i class="fa-solid fa-angle-right"></i> &nbsp;
-			<a>${itemVO.category_group_name}</a>
+			<a href="${ctp}/main/categorySearch?code=${category.category_group_code}&name=${itemVO.category_group_name}">${itemVO.category_group_name}</a>
 			<span class="w3-dropdown-click">
 				<a onclick="myFunction()"><i class="fa-solid fa-caret-down"></i></a> &nbsp;
 				<div id="Demo" class="w3-dropdown-content w3-bar-block w3-border">
 					<c:forEach var="category" items="${itemVO.categoryGroupList}">
-					    <a href="#" class="w3-bar-item w3-btn">${category.category_group_name}</a>
+					    <a href="${ctp}/main/categorySearch?code=${category.category_group_code}&name=${category.category_group_name}" class="w3-bar-item w3-btn">${category.category_group_name}</a>
 					</c:forEach>
 			    </div>
 			</span>
@@ -256,7 +74,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="w3-col m5 l5">
+		<div class="w3-col m7 l6" style="margin-bottom:50px;">
 			<div class="box w3-border">
 				<div style="font-size: 20px; padding:30px; margin: 10px;">
 					<b>${itemVO.item_summary}</b>
@@ -298,10 +116,6 @@
 									구매적립 <i class="fa-solid fa-caret-right"></i> ${itemVO.seller_point}Point<br>
 									리뷰적립 <i class="fa-solid fa-caret-right"></i> 100Point
 									<hr>
-									<span><font color="red">TIP.</font>추가 혜택 안내</span><br>
-									<i class="fa-solid fa-circle-check"></i>&nbsp; 가입 후 첫 구매시 10% 할인쿠폰 발급<br>
-									<i class="fa-solid fa-circle-check"></i>&nbsp; 10만원 이상 결제시 10% 할인쿠폰 발급
-									<hr>
 									- 모든 포인트와 쿠폰은 구매확정 이후 적립 및 발급됩니다.
 							    </div>
 							</span>
@@ -317,10 +131,6 @@
 									리뷰적립 <i class="fa-solid fa-caret-right"></i> 100Point
 									<span style="font-size: 8px;">구매적립이 없는 상품입니다.</span><br>
 									<hr>
-									<span><font color="red">TIP.</font>추가 혜택 안내</span><br>
-									<i class="fa-solid fa-circle-check"></i>&nbsp; 가입 후 첫 구매시 10% 할인쿠폰 발급<br>
-									<i class="fa-solid fa-circle-check"></i>&nbsp; 10만원 이상 결제시 10% 할인쿠폰 발급
-									<hr>
 									- 모든 포인트와 쿠폰은 구매확정 이후 적립 및 발급됩니다.
 							    </div>
 							</span>
@@ -335,13 +145,14 @@
 					<div style="margin:30px;">
 						<hr>
 					</div>
-					<div style="margin:30px;">최소 구매 가능 수량 : ${itemVO.order_min_quantity}개&nbsp; |&nbsp; 최대 구매 가능 수량 : ${itemVO.order_max_quantity}개</div>
+					<%-- <div style="margin-left:30px;">남은 재고 수량 : ${itemVO.stock_quantity}</div> --%>
+					<div style="margin-left:30px; font-size:14px;">(1회 최소 구매 가능 수량 : ${itemVO.order_min_quantity}개&nbsp; |&nbsp; 최대 구매 가능 수량 : ${itemVO.order_max_quantity}개)</div>
 					<c:if test="${itemVO.item_option_flag == 'y'}">
 						<div class="w3-border" style="margin:30px;">
 							<select id="optionSelect" name="optionSelect" class="w3-select" onchange="optionSelect(this)">
 									<option value="" selected>옵션을 선택하세요.</option>
 								<c:forEach var="vo" items="${itemVO.itemOptionList}">
-									<option value="${vo.item_option_idx}" data-label="${vo.option_name}" data-price="${vo.option_price}">${vo.option_name}</option>
+									<option value="${vo.item_option_idx}" data-label="${vo.option_name}" data-price="${vo.option_price}">${vo.option_name}(+${vo.option_price})</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -361,6 +172,40 @@
 								<span class="option_price"></span>
 							</div>
 						</div>
+						<div id="totalInfor" class="w3-row" style="margin:30px; font-size:22px;">
+						<div class="w3-half">
+							총 상품금액
+						</div>
+						<div class="w3-half" style="text-align:right;">
+							<span><font size="2">총 수량(<span id="totalCnt">${itemVO.order_min_quantity}</span>개)</font></span>
+							<c:if test="${itemVO.seller_discount_flag == 'n'}">
+								<c:set var="priceFmt2" value="${itemVO.sale_price}"/>
+								<span id="totalPrice"><fmt:formatNumber value="${priceFmt2}"/></span>원
+							</c:if>
+							<c:if test="${itemVO.seller_discount_flag == 'y'}">
+								<c:set var="priceFmt3" value="${itemVO.sale_price - itemVO.seller_discount_amount}"/>
+								<span id="totalPrice"><fmt:formatNumber value="${priceFmt3}"/></span>원
+							</c:if>
+						</div>
+						</div>
+					</c:if>
+					<c:if test="${itemVO.item_option_flag == 'n' && itemVO.order_min_quantity == itemVO.order_max_quantity}">
+						<div id="totalInfor" class="w3-row" style="margin:30px; font-size:22px;">
+						<div class="w3-half">
+							총 상품금액
+						</div>
+						<div class="w3-half" style="text-align:right;">
+							<span><font size="2">총 수량(<span id="totalCnt">${itemVO.order_min_quantity}</span>개)</font></span>
+							<c:if test="${itemVO.seller_discount_flag == 'n'}">
+								<c:set var="priceFmt4" value="${itemVO.sale_price}"/>
+								<span id="totalPrice"><fmt:formatNumber value="${priceFmt4}"/></span>원
+							</c:if>
+							<c:if test="${itemVO.seller_discount_flag == 'y'}">
+								<c:set var="priceFmt5" value="${itemVO.sale_price - itemVO.seller_discount_amount}"/>
+								<span id="totalPrice"><fmt:formatNumber value="${priceFmt5}"/></span>원
+							</c:if>
+						</div>
+					</div>
 					</c:if>
 					<div id="totalInfor" class="w3-row" style="display:none">
 						<div class="w3-half">
@@ -371,22 +216,110 @@
 							<span id="totalPrice"></span>원
 						</div>
 					</div>
+					<div style="margin:30px;">
+						<a class="w3-button w3-2021-marigold form-control btn-lg" style="font-family: 'Montserrat', sans-serif" onclick="buyItem()">구매하기</a>
+					</div>
+					<div class="w3-row w3-center" style="margin:30px; font-family: 'Montserrat', sans-serif">
+						<div class="w3-third">
+							<a class="w3-button w3-white w3-hover-white w3-border w3-round-large" style="width:90%">
+								<span class="iconify" data-icon="ooui:ongoing-conversation-rtl"></span>&nbsp;문의하기
+							</a>
+						</div>
+						<div class="w3-third">
+							<a class="w3-button w3-white w3-hover-white w3-border w3-round-large" style="width:90%">
+								<span class="iconify" data-icon="akar-icons:heart"></span>&nbsp;찜하기
+							</a>
+						</div>
+						<div class="w3-third">
+							<a class="w3-button w3-white w3-hover-white w3-border w3-round-large" style="width:90%" onclick="inputCart()">
+								<i class="fa-solid fa-cart-arrow-down"></i>&nbsp;장바구니
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="w3-col m2 l1"></div>
+			<div class="w3-row">
+			    <a href="javascript:void(0)" onclick="openCity(event, 'infor');">
+			      <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">상세정보</div>
+			    </a>
+			    <a href="javascript:void(0)" onclick="openCity(event, 'review');">
+			      <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">리뷰</div>
+			    </a>
+			    <a href="javascript:void(0)" onclick="openCity(event, 'QA');">
+			      <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Q&A</div>
+			    </a>
+			</div>
+			<div id="infor" class="w3-container info" style="display:none">
+			    <h4 style="font-family: 'MaruBuriBold';">상품 정보</h4>
+			    <table class="table table-border">
+					<tr>
+						<td>상품코드</td><td>${itemVO.item_code}</td>
+						<td>브랜드</td><td>${itemVO.brand}</td>
+					</tr>			    
+					<tr>
+						<td>모델명</td><td>${itemVO.item_model_name}</td>
+						<td>원산지</td><td>${itemVO.origin_country}</td>
+					</tr>			    
+					<tr>
+						<td>형태</td><td>${itemVO.form}</td>
+						<td>A/S안내</td><td>${itemVO.after_service}</td>
+					</tr>			    
+			    </table>
+			    <div>
+			    	${itemVO.detail_content}
+			    </div>
+			    <hr>
+			    <div class="text-left mb-4">
+			    	<h4>#keyword</h4>
+					<c:set var="keywords" value="${fn:split(itemVO.item_keyword,'/')}" />
+					<c:forEach var="keyword" items="${keywords}" varStatus="g">
+						<c:if test="${keyword != ''}">
+							<a href="#" style="font-size:16px;" class="w3-2021-buttercream">#${keyword}</a>
+						</c:if>
+					</c:forEach> 
+				</div>
+				<hr>
+				<h4 style="font-family: 'MaruBuriBold';">상품 정보 고시</h4>
+				<table class="table table-border">
+					<tr>
+						<td>품명/모델명</td><td>${itemVO.notice_value1}</td>
+					</tr>			    
+					<tr>
+						<td>법에 의한 인증, 허가 등을 받았음을 확인할 수 있는 경우 그에 대한 사항</td><td>${itemVO.notice_value2}</td>
+					</tr>			    
+					<tr>
+						<td>제조자(사)</td><td>${itemVO.notice_value3}</td>
+					</tr>			    
+					<tr>
+						<td>제조국</td><td>${itemVO.notice_value4}</td>
+					</tr>			    
+					<tr>
+						<td>소비자상담 관련 전화번호</td><td>${itemVO.notice_value5}</td>
+					</tr>			    
+			    </table>
+			</div>
+			<div id="review" class="w3-container info" style="display:none">
+			    <h2>Paris</h2>
+			    <p>Paris is the capital of France.</p> 
+			</div>
+			<div id="QA" class="w3-container info" style="display:none">
+			    <h2>Tokyo</h2>
+			    <p>Tokyo is the capital of Japan.</p>
+			</div>
+			</div>
 		</div>
 	</div>
 </div>
 
-
+<input type="hidden" id="item_idx" value="${itemVO.item_idx}">
 <input type="hidden" id="order_min_quantity" value="${itemVO.order_min_quantity}">
 <input type="hidden" id="order_max_quantity" value="${itemVO.order_max_quantity}">
-<c:if test="${itemVO.seller_discount_flag == 'n'}">
+<input type="hidden" id="stock_quantity" value="${itemVO.stock_quantity}">
 <input type="hidden" id="sale_price" value="${itemVO.sale_price}">
-</c:if>
-<c:if test="${itemVO.seller_discount_flag == 'y'}">
-<input type="hidden" id="sale_price" value="${itemVO.sale_price - itemVO.seller_discount_amount}">
-</c:if>
+<input type="hidden" id="seller_discount_flag" value="${itemVO.seller_discount_flag}">
+<input type="hidden" id="item_option_flag" value="${itemVO.item_option_flag}">
+<input type="hidden" id="seller_discount_amount" value="${itemVO.seller_discount_amount}">
+
 
 <div class="option_div" id="option_tmp_div" style="display:none;" data-option="">
 	<div class="w3-row">
@@ -413,10 +346,11 @@
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script>
-/* $(function() {
-	initEzPlus();
+ $(function() {
+	//initEzPlus();
+	document.getElementById("infor").style.display = "block";
 });
-
+/*
 function initEzPlus() {
 	$('#elevate_zoom').ezPlus({
 	    gallery: 'image_list',
@@ -488,6 +422,21 @@ function myFunction2() {
     x.className = x.className.replace(" w3-show", "");
   }
 }
+
+function openCity(evt, name) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("info");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-border-green", "");
+  }
+  document.getElementById(name).style.display = "block";
+  evt.currentTarget.firstElementChild.className += " w3-border-green";
+}
+
 </script>
 </body>
 </html>

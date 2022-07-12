@@ -37,8 +37,15 @@
     <jsp:include page="/WEB-INF/views/include/header.jsp" />
 	
 	<!-- Shop -->
-	<p style="margin-left: 20px; font-family: 'Montserrat', sans-serif"><span class="w3-white w3-xxlarge mt-2">SHOP</span></p>
-	
+	<div id="shop">
+		<p style="margin-left: 20px; font-family: 'Montserrat', sans-serif">
+			<span class="w3-white w3-xxlarge mt-2">SHOP</span>
+		  	<span style="font-size: 18px; margin-left: 10px;"> The Garden 전 상품 무료배송!</span>
+		  	<span class="w3-tag w3-round w3-green w3-border w3-border-white">
+				FREE Shipping
+		    </span>
+		</p>
+	</div>
 	<jsp:include page="/WEB-INF/views/include/mainContent.jsp" />
  	
 <!-- footer  -->
