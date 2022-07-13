@@ -105,10 +105,10 @@ function itemInsert() {
 	let notice_value4 = myForm.notice_value4.value;
 	let notice_value5 = myForm.notice_value5.value;
 	
-	let shipping_price = myForm.shipping_price.value;
+	/*let shipping_price = myForm.shipping_price.value;
 	let shipping_free_amount = myForm.shipping_free_amount.value;
 	let shipping_extra_charge = myForm.shipping_extra_charge.value;
-	let shipping_return_price = myForm.shipping_return_price.value;
+	let shipping_return_price = myForm.shipping_return_price.value;*/
 	
 	//전송 전에 주소를 하나로 묶어서 전송처리 준비한다.
 	//출고지
@@ -193,7 +193,7 @@ function itemInsert() {
 		myForm.order_min_quantity.focus();
 		return false;
 	}
-	else if(order_max_quantity == "") {
+	/*else if(order_max_quantity == "") {
 		alert("최대 주문 수량을 입력하세요.");
 		myForm.order_max_quantity.focus();
 		return false;
@@ -202,7 +202,7 @@ function itemInsert() {
 		alert("최대 주문 수량은 최소 주문 수량보다 적을 수 없습니다.");
 		myForm.order_max_quantity.focus();
 		return false;
-	}
+	}*/
 	else if(titlephoto == "") {
 		alert("대표 이미지 등록은 필수 사항입니다.");
 		return false;
@@ -234,7 +234,7 @@ function itemInsert() {
 		myForm.after_service.focus();
 		return false;
 	}
-	else if(shipping_price == "" && shipment_type_flag != 1) {
+/*	else if(shipping_price == "" && shipment_type_flag != 1) {
 		alert("배송비를 입력하세요.");
 		myForm.shipping_price.focus();
 		return false;
@@ -269,7 +269,7 @@ function itemInsert() {
 		myForm.shipping_return_price.focus();
 		return false;
 	}
-	else if(shipment_postcode == "" || shipment_roadAddress == "" || shipment_detailAddress == "") {
+*/	else if(shipment_postcode == "" || shipment_roadAddress == "" || shipment_detailAddress == "") {
 		alert("출고지 주소를 입력하세요.");
 		myForm.shipment_postcode.focus();
 		return false;
@@ -301,7 +301,7 @@ function itemInsert() {
 				return false;
 			}
 		}
-		CKEDITOR.instances.detail_content.getData();
+		//CKEDITOR.instances.detail_content.getData();
 		
 		return true;
 	}
@@ -461,7 +461,7 @@ function minValueCheck3() {
 	}
 }
 
-function minValueCheck4() {
+/*function minValueCheck4() {
 	let order_max_quantity = myForm.order_max_quantity.value;
 	
 	if(order_max_quantity < 1 && order_max_quantity != "") {
@@ -470,7 +470,7 @@ function minValueCheck4() {
 		myForm.order_max_quantity.focus();
 		return false;
 	}
-}
+}*/
 
 //옵션 추가 
 function addOptions() {

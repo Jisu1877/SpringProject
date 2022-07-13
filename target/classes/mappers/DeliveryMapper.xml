@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS_ljs.dao.DeliveryDAO">
+	<select id="getDeliveryList" resultType="com.spring.javagreenS_ljs.vo.UserDeliveryVO">
+		select * from ga_user_delivery where user_idx = #{user_idx} and default_flag = 'y'
+	</select>
+	
+	<insert id="setDeliveryInfor">
+		insert into ga_user_delivery values (DEFAULT, #{vo.user_idx}, #{vo.default_flag}, #{vo.title}, #{vo.delivery_name}, #{vo.delivery_tel}, #{vo.postcode}, #{vo.roadAddress}, #{vo.detailAddress}, #{vo.extraAddress}, #{vo.message}, DEFAULT)
+	</insert>
+</mapper>

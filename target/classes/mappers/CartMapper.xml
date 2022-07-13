@@ -29,12 +29,19 @@
 		WHERE user_idx = #{user_idx}
 	</select>
 	
-	<select id="getCartListGroup" resultType="com.spring.javagreenS_ljs.vo.CartVO">
-		select * from ga_cart where user_idx = #{user_idx} GROUP BY item_idx;
-	</select>
-	
 	<update id="setQuantity">
 		update ga_cart set quantity = quantity + ${vo.quantity} where shipping_group_code = #{vo.shipping_group_code}
 	</update>
 	
+	<update id="cartMinusPost">
+		update ga_cart set quantity = quantity - 1 where cart_idx = #{cartIdx}
+	</update>
+	
+	<update id="cartPlusPost">
+		update ga_cart set quantity = quantity + 1 where cart_idx = #{cartIdx}
+	</update>
+	
+	<delete id="setCartDelete">
+		delete from ga_cart where cart_idx = #{cartIdx}
+	</delete>
 </mapper>

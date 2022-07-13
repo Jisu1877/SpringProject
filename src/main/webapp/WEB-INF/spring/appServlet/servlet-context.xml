@@ -59,6 +59,7 @@
 			<mapping path="/user/**"/>
 			<mapping path="/item/**"/>
 			<mapping path="/cart/**"/>
+			<mapping path="/order/**"/>
 			<exclude-mapping path="/user/userLogin"/>
 			<exclude-mapping path="/user/userJoin"/>
 			<exclude-mapping path="/user/userIdCheck"/>

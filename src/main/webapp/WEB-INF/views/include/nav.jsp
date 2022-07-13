@@ -84,7 +84,7 @@ body {
 		//장바구니 담긴 개수 알아오기
 		$.ajax({
 			type : "post",
-			url : "${ctp}/item/cartCheck",
+			url : "${ctp}/cart/cartCheck",
 			success : function (data) {
 				$("#cartCnt").html(data);
 			},

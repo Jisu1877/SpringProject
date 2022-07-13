@@ -23,22 +23,6 @@
 <!-- !PAGE CONTENT! -->
 <div id="pageContent" class="w3-content" style="max-width:1500px" onmouseover="hoverMenuClose()">
 	<div class="container" style="margin-bottom:100px; margin-top:70px;">
-		<div class="mb-2 montserrat">
-			<a href="${ctp}/main/mainHome">홈</a> &nbsp; <i class="fa-solid fa-angle-right"></i> &nbsp;
-			<a href="${ctp}/main/categorySearch?code=${category.category_group_code}&name=${itemVO.category_group_name}">${itemVO.category_group_name}</a>
-			<span class="w3-dropdown-click">
-				<a onclick="myFunction()"><i class="fa-solid fa-caret-down"></i></a> &nbsp;
-				<div id="Demo" class="w3-dropdown-content w3-bar-block w3-border">
-					<c:forEach var="category" items="${itemVO.categoryGroupList}">
-					    <a href="${ctp}/main/categorySearch?code=${category.category_group_code}&name=${category.category_group_name}" class="w3-bar-item w3-btn">${category.category_group_name}</a>
-					</c:forEach>
-			    </div>
-			</span>
-			<c:if test="${itemVO.category_name != 'NO'}">
-				<i class="fa-solid fa-angle-right"></i> &nbsp; 
-				<a>${itemVO.category_name}</a>
-			</c:if>
-		</div>
     	<div class="w3-content" style="max-width:1200px;">
     		<div class="w3-col m5 l6">
    				<div class="box">
@@ -73,6 +57,22 @@
 				 	</div>
 				</div>
 			</div>
+		</div>
+		<div class="mb-2 montserrat">
+			<a href="${ctp}/main/mainHome">홈</a> &nbsp; <i class="fa-solid fa-angle-right"></i> &nbsp;
+			<a href="${ctp}/main/categorySearch?code=${category_group_code}&name=${itemVO.category_group_name}">${itemVO.category_group_name}</a>
+			<span class="w3-dropdown-click">
+				<a onclick="myFunction()"><i class="fa-solid fa-caret-down"></i></a> &nbsp;
+				<div id="Demo" class="w3-dropdown-content w3-bar-block w3-border">
+					<c:forEach var="category" items="${itemVO.categoryGroupList}">
+					    <a href="${ctp}/main/categorySearch?code=${category_group_code}&name=${category.category_group_name}" class="w3-bar-item w3-btn">${category.category_group_name}</a>
+					</c:forEach>
+			    </div>
+			</span>
+			<c:if test="${itemVO.category_name != 'NO'}">
+				<i class="fa-solid fa-angle-right"></i> &nbsp; 
+				<a href="${ctp}/main/categorySearch2?code=${category_group_code}&name=${itemVO.category_name}&idx=${category_idx}&groupName=${category.category_group_name}">${itemVO.category_name}</a>
+			</c:if>
 		</div>
 		<div class="w3-col m7 l6" style="margin-bottom:50px;">
 			<div class="box w3-border">
@@ -146,7 +146,7 @@
 						<hr>
 					</div>
 					<%-- <div style="margin-left:30px;">남은 재고 수량 : ${itemVO.stock_quantity}</div> --%>
-					<div style="margin-left:30px; font-size:14px;">(1회 최소 구매 가능 수량 : ${itemVO.order_min_quantity}개&nbsp; |&nbsp; 최대 구매 가능 수량 : ${itemVO.order_max_quantity}개)</div>
+					<div style="margin-left:30px; font-size:14px;">( 최소 구매 수량 : ${itemVO.order_min_quantity}개&nbsp;)</div>
 					<c:if test="${itemVO.item_option_flag == 'y'}">
 						<div class="w3-border" style="margin:30px;">
 							<select id="optionSelect" name="optionSelect" class="w3-select" onchange="optionSelect(this)">

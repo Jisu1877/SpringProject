@@ -11,18 +11,18 @@ $(function() {
 	sale_price = $("#sale_price").val();
 	seller_discount_flag = $("#seller_discount_flag").val();
 	seller_discount_amount = $("#seller_discount_amount").val();
-	
+	totalAmount = $("#order_min_quantity").val();
 	setTotalPrice();
 	
 });
 
 function setTotalPrice() {
 	if(seller_discount_flag == 'y') {
-		totalPrice = Number(sale_price) - Number(seller_discount_amount);
+		totalPrice = (Number(sale_price) - Number(seller_discount_amount)) * totalAmount;
 		realPrice = Number(sale_price) - Number(seller_discount_amount);
 	}
 	else {
-		totalPrice = Number(sale_price);
+		totalPrice = Number(sale_price) * totalAmount;
 	}
 }
 
@@ -32,9 +32,7 @@ function optionSelect(ths) {
 	const price = $(ths).find('option:selected').data('price');
 	const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	let order_min_quantity = $("#order_min_quantity").val();
-	let order_max_quantity = $("#order_max_quantity").val();
 	let stock_quantity = $("#stock_quantity").val();
-	totalAmount++;
 	
 	if(option == "") {
 		return false;
@@ -48,12 +46,6 @@ function optionSelect(ths) {
 	else if(stock_quantity < totalAmount) {
 		alert("현재 남은 재고 수량은 "+stock_quantity+"개 입니다.");
 		$("#optionSelect").val("").prop("selected", true);
-		totalAmount--;
-		return false;
-	}
-	else if(totalAmount > order_max_quantity) {
-		$("#optionSelect").val("").prop("selected", true);
-		alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
 		totalAmount--;
 		return false;
 	}
@@ -71,11 +63,11 @@ function optionSelect(ths) {
 	
 	$("#optonDemo").append(optionDiv);
 	let optionLength = $(".option_div").length;
-	if(optionLength > (Number(order_max_quantity) + 1)) {
+	/*if(optionLength > (Number(order_max_quantity) + 1)) {
 		$("#optionSelect").val("").prop("selected", true);
 		alert("최대 구매 수량은 " +order_max_quantity+ "개 입니다. 선택한 옵션을 삭제하고 추가하세요.");
 		$( 'div' ).remove( '#option_'+idx);
-	}
+	}*/
 	
 	$("#optionSelect").val("").prop("selected", true);
 	
@@ -147,30 +139,18 @@ function plus(ths) {
 	const id = $(ths).parents("div.option_div").attr("id");
 	let amount = $(ths).siblings("span.option_cnt").html();
 	const price = ($("#"+id).find(".option_price").data('price')) * (Number(amount) + 1);
-	let order_max_quantity = $("#order_max_quantity").val();
 	let stock_quantity = $("#stock_quantity").val();
 	const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	amount++;
 	totalAmount++;
 	
-	if(stock_quantity < totalAmount) {
+/*	if(stock_quantity < totalAmount) {
 		alert("현재 남은 재고 수량은 "+stock_quantity+"개 입니다.");
 		$("#optionSelect").val("").prop("selected", true);
 		totalAmount--;
 		return false;
 	}
-	else if(order_max_quantity < amount) {
-		$("#optionSelect").val("").prop("selected", true);
-		alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-		totalAmount--;
-		return false;
-	}
-	else if(totalAmount > order_max_quantity) {
-		$("#optionSelect").val("").prop("selected", true);
-		alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-		totalAmount--;
-		return false;
-	}
+	*/
 	$(ths).siblings("span.option_cnt").html(amount);
 	
 	totalPrice += $("#"+id).find(".option_price").data('price');
@@ -263,27 +243,10 @@ function plus2(ths) {
 		sw = 1;
 	}
 	let amount = $(ths).siblings("span.option_cnt").html();
-	let order_max_quantity = $("#order_max_quantity").val();	
 	let stock_quantity = $("#stock_quantity").val();
 	amount++;
 	totalAmount++;
 	
-	if(stock_quantity < totalAmount) {
-		alert("현재 남은 재고 수량은 "+stock_quantity+"개 입니다.");
-		$("#optionSelect").val("").prop("selected", true);
-		totalAmount--;
-		return false;
-	}
-	else if(order_max_quantity < amount) {
-		alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-		totalAmount--;
-		return false;
-	}
-	else if(totalAmount > order_max_quantity) {
-		alert("최대 구매 가능 수량은 " +order_max_quantity+ "개 입니다.");
-		totalAmount--;
-		return false;
-	}
 	$(ths).siblings("span.option_cnt").html(amount);
 	
 	if(seller_discount_flag == 'y') {
@@ -342,8 +305,6 @@ function inputCart() {
 		2. 상품 고유번호
 		3. 회원 아이디(session에서 받아오기)
 		4. 옵션 고유번호(배열)
-		5. 옵션명(배열)
-		6. 추가금액(배열)
 		7. 주문 수량
 		8. 옵션 사용여부
 	*/
@@ -377,11 +338,12 @@ function inputCart() {
 			alert("전송오류.");
 		}
 	});
-
+	
 	let item_idx = $("#item_idx").val();
 	if(totalAmount == 0) {
 		totalAmount = 1;
 	}
+	
 	let data = {
 		item_idx : item_idx,
 		item_option_flag : item_option_flag,

@@ -72,6 +72,10 @@ public class MessageController {
 			model.addAttribute("msg", "상품삭제가 완료되었습니다.");
 			model.addAttribute("url", "/admin/item/itemList");
 		}
+		else if(msgFlag.equals("deliveryInsertOk")) {
+			model.addAttribute("msg", "배송정보 등록이 완료되었습니다.");
+			model.addAttribute("url", "main/close");
+		}
 		
 		return "include/message";
 	}

@@ -77,7 +77,17 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public ArrayList<CartVO> getCartListGroup(int user_idx) {
-		return cartDAO.getCartListGroup(user_idx);
+	public void setCartDelete(int cartIdx) {
+		cartDAO.setCartDelete(cartIdx);
+	}
+
+	@Override
+	public void cartMinusPost(int cartIdx) {
+		cartDAO.cartMinusPost(cartIdx);
+	}
+
+	@Override
+	public void cartPlusPost(int cartIdx) {
+		cartDAO.cartPlusPost(cartIdx);
 	}
 }

@@ -35,7 +35,7 @@ public class CartController {
 		int user_idx = (int) session.getAttribute("sUser_idx");
 		vo.setUser_id(user_id);
 		vo.setUser_idx(user_idx);
-
+		
 		cartService.setInputCart(vo);
 
 		return "1";
@@ -64,5 +64,32 @@ public class CartController {
 		}
 		return cnt;
 	}
-
+	
+	//장바구니 목록 삭제하기
+	@ResponseBody
+	@RequestMapping(value = "/cartDelete", method = RequestMethod.POST)
+	public String cartDeletePost(int cartIdx) {
+		cartService.setCartDelete(cartIdx);
+		
+		return "1";
+	}
+	
+	//장바구니 목록 수량 마이너스 처리
+	@ResponseBody
+	@RequestMapping(value = "/cartMinus", method = RequestMethod.POST)
+	public String cartMinusPost(int cartIdx) {
+		cartService.cartMinusPost(cartIdx);
+		
+		return "1";
+	}
+	
+	//장바구니 목록 수량 플러스 처리
+	@ResponseBody
+	@RequestMapping(value = "/cartPlus", method = RequestMethod.POST)
+	public String cartPlusPost(int cartIdx) {
+		cartService.cartPlusPost(cartIdx);
+		
+		return "1";
+	}
+	
 }

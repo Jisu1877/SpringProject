@@ -223,11 +223,11 @@
 					    		  </div>
 						        </div>
 					        </div>
-					        <div class="w3-third" style="padding-left: 20px;">
+					        <div class="w3-third" style="padding-left: 20px; display:none">
 					        	<div class="form-group">
 							      <label for="order_max_quantity">최대 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력">
 						    			<div class="input-group-append">
 									      	<input type="button" value="개" size="2" class="btn w3-black" disabled='disabled' />
 									    </div>
@@ -492,7 +492,7 @@
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
 					        </div> -->
-					        <br>
+					       <!--  <br>
 					        <div class="w3-row">
 						  		<div class="w3-third">
 						    	<div class="form-group">
@@ -507,9 +507,9 @@
 						        </div>
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
-					        </div>
+					        </div> -->
 				        </div>
-				        <hr>
+				        <br>
 				        <div class="form-group">
 					      <label for="item_return_flag">반품 가능여부 <span style="color:red;">🔸&nbsp;</span></label>
 					      <div class="form-check-inline">

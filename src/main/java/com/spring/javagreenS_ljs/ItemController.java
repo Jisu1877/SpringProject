@@ -72,6 +72,8 @@ public class ItemController {
 		ArrayList<ItemImageVO> imageList = itemAdminService.getItemImageInfor(itemVO.getItem_idx());
 		itemVO.setItemImageList(imageList);
 		
+		model.addAttribute("category_group_code", code[0]);
+		model.addAttribute("category_idx", code[1]);
 		model.addAttribute("itemVO" ,itemVO);
 		return "item/itemView";
 	}

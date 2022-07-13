@@ -12,6 +12,10 @@ public interface CartService {
 
 	public ArrayList<CartVO> getCartList(int user_idx);
 
-	public ArrayList<CartVO> getCartListGroup(int user_idx);
+	public void setCartDelete(int cartIdx);
+
+	public void cartMinusPost(int cartIdx);
+
+	public void cartPlusPost(int cartIdx);
 	
 }

@@ -210,16 +210,6 @@
 			myForm.order_min_quantity.focus();
 			return false;
 		}
-		else if(order_max_quantity == "") {
-			alert("최대 주문 수량을 입력하세요.");
-			myForm.order_max_quantity.focus();
-			return false;
-		}
-		else if(order_min_quantity > order_max_quantity) {
-			alert("최대 주문 수량은 최소 주문 수량보다 적을 수 없습니다.");
-			myForm.order_max_quantity.focus();
-			return false;
-		}
 		else if(imageCount == 1 && imageFlag == 0) {
 			alert("추가 이미지는 최소 1장 이상 등록해야합니다.");
 			return false;
@@ -245,36 +235,6 @@
 		else if(after_service == "") {
 			alert("A/S안내 내용을 입력하세요.");
 			myForm.after_service.focus();
-			return false;
-		}
-		else if(shipping_price == "" && shipment_type_flag != 1) {
-			alert("배송비를 입력하세요.");
-			myForm.shipping_price.focus();
-			return false;
-		}
-		else if(shipping_free_amount == "" && shipment_type_flag != 1) {
-			alert("조건부 무료배송 금액을 입력하세요.");
-			myForm.shipping_free_amount.focus();
-			return false;
-		}
-		else if(shipping_extra_charge == "" && shipment_type_flag != 1) {
-			alert("제주도 추가 배송비를 입력하세요.");
-			myForm.shipping_extra_charge.focus();
-			return false;
-		}
-		else if(shipping_price <= 0 && shipment_type_flag != 1) {
-			alert("배송비를 0원 이상의 금액으로 입력하세요.");
-			myForm.shipping_price.focus();
-			return false;
-		}
-		else if(shipping_free_amount <= 0 && shipment_type_flag != 1) {
-			alert("조건부 무료배송 금액을 0원 이상의 금액으로 입력하세요.");
-			myForm.shipping_free_amount.focus();
-			return false;
-		}
-		else if(shipping_extra_charge < 0 && shipment_type_flag != 1) {
-			alert("제주도 추가 배송비 금액에 음수값을 입력할 수 없습니다.");
-			myForm.shipping_extra_charge.focus();
 			return false;
 		}
 		else if(shipping_return_price == "") {
@@ -970,7 +930,7 @@
 						        </div>
 					        </div>
 					        <div class="w3-third" style="padding-left: 20px;">
-					        	<div class="form-group">
+					        	<div class="form-group" style="display:none">
 							      <label for="order_max_quantity">최대 주문 수량 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
 						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.order_max_quantity}" min="1" id="order_max_quantity" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
@@ -1241,7 +1201,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_price">배송비 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.shipping_price}" id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="3000" id="shipping_price" name="shipping_price" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력">
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" />
 									    </div>
@@ -1256,7 +1216,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_free_amount">조건부 무료배송 금액 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.shipping_free_amount}" id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="3000" id="shipping_free_amount" name="shipping_free_amount" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력">
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" />
 									    </div>
@@ -1271,7 +1231,7 @@
 						    	<div class="form-group">
 							      <label for="shipping_extra_charge">제주도 추가 배송비 <span style="color:red;">🔸&nbsp;</span></label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
-						    			<input class="input w3-padding-16 w3-border form-control" value="${itemVO.shipping_extra_charge}" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
+						    			<input class="input w3-padding-16 w3-border form-control" value="3000" id="shipping_extra_charge" name="shipping_extra_charge" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" required>
 						    			<div class="input-group-append">
 									      	<input type="button" value="원" size="2" class="btn w3-black" />
 									    </div>

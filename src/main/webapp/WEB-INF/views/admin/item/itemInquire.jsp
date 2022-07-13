@@ -226,7 +226,7 @@
 						        </div>
 					        </div>
 					        <div class="w3-third" style="padding-left: 20px;">
-					        	<div class="form-group">
+					        	<div class="form-group" style="display:none">
 							      <label for="order_max_quantity">최대 주문 수량 </label>
 							      <div class="input-group mb-3" style="margin-bottom:0px">
 						    			<input class="input w3-padding-16 w3-border form-control" min="1" id="order_max_quantity" value="${itemVO.order_max_quantity}" onchange="minValueCheck4()" name="order_max_quantity" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력" readonly>
@@ -470,8 +470,8 @@
 			
 			<div class="box w3-border" style="margin-top: 20px;">
 				<div class="w3-white w3-padding">
-	 				<div class="w3-light-gray p-4">
-				    	<div style="font-size:20px;">배송</div>
+	 				<!-- <div class="w3-light-gray p-4">
+				    	<div style="font-size:20px;">배송</div> -->
 				    	<%-- <div class="form-group">
 					      <label for="shipment_type_flag">배송비 구분 &nbsp; :  &nbsp;</label>
 					      <c:if test="${itemVO.shipment_type == 1}">
@@ -519,7 +519,7 @@
 						        <div class="w3-third"></div>
 					        </div> --%>
 					        <br>
-					        <div class="w3-row">
+					        <div class="w3-row" style="display:none">
 						  		<div class="w3-third">
 						    	<div class="form-group">
 							      <label for="shipping_extra_charge">제주도 추가 배송비 </label>
@@ -534,23 +534,20 @@
 						        <div class="w3-third"></div>
 						        <div class="w3-third"></div>
 					        </div>
-				        </div>
-				        <hr>
-				        <div class="form-group">
-					      <label for="item_return_flag">반품 가능여부 &nbsp; : &nbsp;</label>
-					      <c:if test="${itemVO.item_return_flag == 'y'}">
-		        				가능
-			        		</c:if>
-			        		<c:if test="${itemVO.item_return_flag == 'n'}">
-			        		    불가능
-			        	  </c:if>
-					     <!--  <div class="form-check-inline">
-				        	<div class="form-check">
-							    <input type="radio" class="item_return_flag" name="item_return_flag" value="y" checked>&nbsp;&nbsp;가능&nbsp;&nbsp;&nbsp;
-							    <input type="radio" class="item_return_flag" name="item_return_flag" value="n">&nbsp;&nbsp;불가능
-							</div>
-						  </div> -->
-					  	</div>
+					        <div class="form-group">
+						      <label for="item_return_flag">반품 가능여부 &nbsp; : &nbsp;</label>
+						      <c:if test="${itemVO.item_return_flag == 'y'}">
+			        				가능
+				        		</c:if>
+				        		<c:if test="${itemVO.item_return_flag == 'n'}">
+				        		    불가능
+				        	  </c:if>
+						     <!--  <div class="form-check-inline">
+					        	<div class="form-check">
+								    <input type="radio" class="item_return_flag" name="item_return_flag" value="y" checked>&nbsp;&nbsp;가능&nbsp;&nbsp;&nbsp;
+								    <input type="radio" class="item_return_flag" name="item_return_flag" value="n">&nbsp;&nbsp;불가능
+								</div>
+							  </div> -->
 					  	<div class="w3-row">
 					  		<div class="w3-third">
 					    	<div class="form-group">
