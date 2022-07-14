@@ -161,7 +161,7 @@
 						</div>
 					</c:if>
 					<div style="margin:30px;" id="optonDemo"></div>
-					<c:if test="${itemVO.item_option_flag == 'n' && itemVO.order_min_quantity != itemVO.order_max_quantity}">
+					<c:if test="${itemVO.item_option_flag == 'n'}">
 						<div class="w3-row" style="margin:30px;">
 							<div class="w3-half">
 								<a onclick="minus2(this)"><i class="fa-solid fa-square-minus" style="font-size:23px"></i></a>
@@ -188,24 +188,6 @@
 							</c:if>
 						</div>
 						</div>
-					</c:if>
-					<c:if test="${itemVO.item_option_flag == 'n' && itemVO.order_min_quantity == itemVO.order_max_quantity}">
-						<div id="totalInfor" class="w3-row" style="margin:30px; font-size:22px;">
-						<div class="w3-half">
-							총 상품금액
-						</div>
-						<div class="w3-half" style="text-align:right;">
-							<span><font size="2">총 수량(<span id="totalCnt">${itemVO.order_min_quantity}</span>개)</font></span>
-							<c:if test="${itemVO.seller_discount_flag == 'n'}">
-								<c:set var="priceFmt4" value="${itemVO.sale_price}"/>
-								<span id="totalPrice"><fmt:formatNumber value="${priceFmt4}"/></span>원
-							</c:if>
-							<c:if test="${itemVO.seller_discount_flag == 'y'}">
-								<c:set var="priceFmt5" value="${itemVO.sale_price - itemVO.seller_discount_amount}"/>
-								<span id="totalPrice"><fmt:formatNumber value="${priceFmt5}"/></span>원
-							</c:if>
-						</div>
-					</div>
 					</c:if>
 					<div id="totalInfor" class="w3-row" style="display:none">
 						<div class="w3-half">

@@ -256,12 +256,10 @@ public class UserController {
 	//로그아웃 처리
 	@RequestMapping(value = "/userLogout", method = RequestMethod.GET)
 	public String userLogoutGet(HttpSession session, Model model) {
-		String user_id = (String)session.getAttribute("sUser_id");
 		
 		session.invalidate();
 		
-		model.addAttribute("user_id", user_id);
-		return "redirect:/msg/userLogoutOk";
+		return "redirect:/user/userLogin";
 	}
 	
 	// 로그인되어 있는지 확인

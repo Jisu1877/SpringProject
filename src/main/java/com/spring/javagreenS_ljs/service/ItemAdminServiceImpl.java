@@ -465,16 +465,38 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		
 		//해당 item_idx로 등록된 옵션이 있었는지 확인하고,
 		ArrayList<ItemOptionVO> itemOptionVOS = itemDAO.getItemOptionInfor(itemVO.getItem_idx());
-		if(itemOptionVOS != null || itemOptionVOS.isEmpty()) {
-			//등록된 옵션이 있다면 모두 삭제처리
-			itemDAO.setItemOptionDelete(itemVO.getItem_idx());
+		
+		String[] Option_idx = itemVO.getStr_option_idx().split("/");
+		
+		//옵션 사용하지 않음으로 설정했다면 option_display_flag 'n'로 변경시키기
+		if(itemVO.getItem_option_flag().equals("n")) {
+			for(int i = 0; i<Option_idx.length; i++) {
+				int idx = Integer.parseInt(Option_idx[i]);
+				itemDAO.setdeleteOption(idx);
+			}
 		}
 		
-		//옵션 사용으로 설정했다면 itemOption DB에 새롭게 저장
+		//옵션 사용으로 설정했다면 itemOption DB에 (Option_idx가 0 이 아니면 해당 idx로 업데이트 / 0이면 새로 등록 한다)
 		if(itemVO.getItem_option_flag().equals("y")) {
 			for(int i = 0; i<cnt; i++) {
-				itemDAO.setItemOption(itemVO.getItem_idx(),Option_names[i],Option_prices[i],Option_stocks[i],Option_sold_out[i]);
+				int idx = Integer.parseInt(Option_idx[i]);
+				if(idx == 0) {
+					itemDAO.setItemOption(itemVO.getItem_idx(),Option_names[i],Option_prices[i],Option_stocks[i],Option_sold_out[i]);
+				}
+				else {
+					int price = Integer.parseInt(Option_prices[i]);
+					int quantity = Integer.parseInt(Option_stocks[i]);
+					ItemOptionVO vo = new ItemOptionVO();
+					vo.setItem_option_idx(idx);
+					vo.setOption_name(Option_names[i]);
+					vo.setOption_price(price);
+					vo.setOption_stock_quantity(quantity);
+					vo.setOption_sold_out(Option_sold_out[i]);
+					
+					itemDAO.setItemOptionUpdate(vo);
+				}
 			}
+			
 		}
 		
 		//itemNotice DB 수정 저장
@@ -491,6 +513,12 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 	@Override
 	public void setItemDisplayUpdate(int item_idx, String flag) {
 		itemDAO.setItemDisplayUpdate(item_idx, flag);
+	}
+
+
+	@Override
+	public void setdeleteOption(int item_option_idx) {
+		itemDAO.setdeleteOption(item_option_idx);
 	}
 	
 }

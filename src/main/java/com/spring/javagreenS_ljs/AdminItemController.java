@@ -228,4 +228,11 @@ public class AdminItemController {
 		itemAdminService.setItemDisplayUpdate(item_idx,flag);
 		return "1";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteOption", method = RequestMethod.POST)
+	public String deleteOptionPost(int item_option_idx) {
+		itemAdminService.setdeleteOption(item_option_idx);
+		return "1";
+	}
 }

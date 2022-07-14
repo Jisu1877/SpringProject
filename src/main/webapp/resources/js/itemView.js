@@ -43,12 +43,12 @@ function optionSelect(ths) {
 		totalAmount--;
 		return false;
 	}
-	else if(stock_quantity < totalAmount) {
+/*	else if(stock_quantity < totalAmount) {
 		alert("현재 남은 재고 수량은 "+stock_quantity+"개 입니다.");
 		$("#optionSelect").val("").prop("selected", true);
 		totalAmount--;
 		return false;
-	}
+	}*/
 	
 	let optionDiv = $("#option_tmp_div").clone();
 	
@@ -149,8 +149,8 @@ function plus(ths) {
 		$("#optionSelect").val("").prop("selected", true);
 		totalAmount--;
 		return false;
-	}
-	*/
+	}*/
+	
 	$(ths).siblings("span.option_cnt").html(amount);
 	
 	totalPrice += $("#"+id).find(".option_price").data('price');

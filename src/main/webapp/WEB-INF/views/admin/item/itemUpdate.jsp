@@ -46,6 +46,7 @@
 	
 	function itemUpdate() {
 		let optionLength = $("input[name=option_names]").length;
+		let option_idx = '';
 		let optionName = '';
 		let optionPrice = '';
 		let optionStock = '';
@@ -53,10 +54,12 @@
 			optionName += $("input[name=option_names]").eq(i).val() + "/";
 			optionPrice += $("input[name=option_prices]").eq(i).val() + "/";
 			optionStock += $("input[name=option_stock_quantities]").eq(i).val() + "/";
+			option_idx += $("input[name=option_names]").data('idx') + "/";
 		}
 		myForm.option_name.value = optionName;
 		myForm.str_option_price.value = optionPrice;
 		myForm.str_option_stock_quantity.value = optionStock;
+		myForm.str_option_idx.value = option_idx;
 		
 		let item_name = myForm.item_name.value;
 		let item_summary = myForm.item_summary.value;
@@ -469,13 +472,13 @@
 	}
 
 	//옵션 추가 
-	function addOptions(optionCnt) {
+	function addOptions(optionCnt,idx) {
 		let count = optionCnt + i;
 		let str = '';
 		str += '<tr id="addoptionTr'+count+'">';	
 		str += '<td width="5.1%"></td>';	
 		str += '<td width="30%">';	
-		str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+count+'" name="option_names" type="text" placeholder="옵션 이름" required>';	
+		str += '<input class="input w3-padding-16 w3-border form-control" id="option_name'+count+'" name="option_names" data-idx="0" type="text" placeholder="옵션 이름" required>';	
 		str += '</td>';	
 		str += '<td>';	
 		str += '<input class="input w3-padding-16 w3-border form-control" onchange="optionPriceCheck('+count+')"  min="0" id="option_price'+count+'" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액" required>';	
@@ -492,7 +495,24 @@
 	}
 
 	//옵션삭제
-	function deleteOptions(num) {
+	function deleteOptions(num,idx) {
+		let ans = confirm("해당 옵션을 삭제 하시겠습니까? 이 작업은 수정등록 버튼을 누르지 않아도 바로 반영됩니다.");
+		if(!ans) {
+			return false;
+		}
+		
+		$.ajax({
+			type : "post",
+			url : "deleteOption",
+			data : {item_option_idx : idx},
+			success : function(res) {
+				
+			},
+			error : function() {
+				
+			}
+		});
+		
 		$('tr').remove("#addoptionTr"+num);
 	}
 
@@ -974,7 +994,7 @@
 								      		<td>
 								      		</td>
 								      		<td>
-								      			<input class="input w3-padding-16 w3-border form-control" id="option_name${i}" value="${vo.option_name}" name="option_names" type="text" placeholder="옵션 이름">
+								      			<input class="input w3-padding-16 w3-border form-control" id="option_name${i}" value="${vo.option_name}" name="option_names" data-idx="${vo.item_option_idx}" type="text" placeholder="옵션 이름">
 								      		</td>
 								      		<td>
 								      			<input class="input w3-padding-16 w3-border form-control" value="${vo.option_price}" onchange="optionPriceCheck(1)" min="0" id="option_price${i}" name="option_prices" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="옵션 추가금액">
@@ -984,7 +1004,7 @@
 								      		</td>
 								      		 <td width="5%">
 								      		 	<c:if test="${i != 1}">
-								      		 		<a href="javascript:deleteOptions(${i})"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>
+								      		 		<a href="javascript:deleteOptions(${i},${vo.item_option_idx})"><i class="fa-solid fa-trash-can" style="font-size: 20px; padding-top:5px;" title="옵션지우기"></i></a>
 								      		 	</c:if>
 								      		</td>
 								      		<c:set var="i" value="${i + 1}"/>
@@ -1371,6 +1391,7 @@
 				        <input type="hidden" name="option_name">
 				        <input type="hidden" name="str_option_price">
 				        <input type="hidden" name="str_option_stock_quantity">
+				        <input type="hidden" name="str_option_idx">
 				        <input type="hidden" name="titlephoto">
 				        <input type="hidden" name="item_idx" value="${itemVO.item_idx}">
 				        <input type="hidden" name="item_code" value="${itemVO.item_code}">

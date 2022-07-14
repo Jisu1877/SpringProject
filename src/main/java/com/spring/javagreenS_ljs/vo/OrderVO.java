@@ -10,8 +10,6 @@ public class OrderVO {
 	private String email;
 	private String tel;
 	private int user_delivery_idx;
-	private String return_bank_name;
-	private String return_bank_user_name;
 	private String order_admin_memo;
 	private String created_date;
 	
@@ -20,8 +18,9 @@ public class OrderVO {
 	private String[] order_item_image;
 	private int[] order_item_price;
 	private String[] order_item_option_flag;
+	private String[] order_option_idx;
 	private String[] order_option_name;
 	private String[] order_option_price;
 	private String[] order_quantity;
-	
+	private String item_name;
 }

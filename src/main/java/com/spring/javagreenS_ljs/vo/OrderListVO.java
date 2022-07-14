@@ -11,8 +11,12 @@ public class OrderListVO {
 	private String item_image;
 	private int item_price;
 	private String item_option_flag;
+	private int option_idx;
 	private String option_name;
 	private String option_price;
+	private int order_quantity;
 	private String order_status_code;
 	private String created_date;
+	
+	private int user_idx;
 }

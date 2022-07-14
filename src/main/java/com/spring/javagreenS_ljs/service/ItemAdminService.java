@@ -40,5 +40,7 @@ public interface ItemAdminService {
 
 	public void setItemDisplayUpdate(int item_idx, String flag);
 
+	public void setdeleteOption(int item_option_idx);
+
 
 }

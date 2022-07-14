@@ -13,7 +13,9 @@ public class MessageController {
 	@RequestMapping(value = "/msg/{msgFlag}", method = RequestMethod.GET)
 	public String msgGet(@PathVariable String msgFlag, Model model,
 			@RequestParam(value = "user_id", defaultValue = "", required = false) String user_id,
-			@RequestParam(value = "name", defaultValue = "", required = false) String name
+			@RequestParam(value = "name", defaultValue = "", required = false) String name,
+			@RequestParam(value = "value1", defaultValue = "", required = false) String value1,
+			@RequestParam(value = "value2", defaultValue = "", required = false) String value2
 			) {
 		
 		if(msgFlag.equals("NeedLogin")) {
@@ -44,38 +46,43 @@ public class MessageController {
 			model.addAttribute("msg", user_id+"님 환영합니다.");
 			model.addAttribute("url", "main/close");
 		}
-		else if(msgFlag.equals("userLogoutOk")) {
-			model.addAttribute("msg", user_id+"님 로그아웃 되었습니다.");
-			model.addAttribute("url", "user/userLogin");
-		}
 		else if(msgFlag.equals("itemInsertOk")) {
 			model.addAttribute("msg", "상품등록이 완료되었습니다.");
-			model.addAttribute("url", "/admin/item/itemList");
+			model.addAttribute("url", "admin/item/itemList");
 		}
 		else if(msgFlag.equals("itemInquireNo")) {
 			model.addAttribute("msg", "상품조회 오류. 다시 시도해주세요.");
-			model.addAttribute("url", "/admin/item/itemList");
+			model.addAttribute("url", "admin/item/itemList");
 		}
 		else if(msgFlag.equals("itemUpdateNo")) {
 			model.addAttribute("msg", "상품수정 오류. 다시 시도해주세요.");
-			model.addAttribute("url", "/admin/item/itemList");
+			model.addAttribute("url", "admin/item/itemList");
 		}
 		else if(msgFlag.equals("itemUpdatetOk")) {
 			model.addAttribute("msg", "상품수정이 완료되었습니다.");
-			model.addAttribute("url", "/admin/item/itemList");
+			model.addAttribute("url", "admin/item/itemList");
 		}
 		else if(msgFlag.equals("itemDeleteNo")) {
 			model.addAttribute("msg", "상품삭제 오류. 다시 시도해주세요.");
-			model.addAttribute("url", "/admin/item/itemList");
+			model.addAttribute("url", "admin/item/itemList");
 		}
 		else if(msgFlag.equals("itemDeleteOk")) {
 			model.addAttribute("msg", "상품삭제가 완료되었습니다.");
-			model.addAttribute("url", "/admin/item/itemList");
+			model.addAttribute("url", "admin/item/itemList");
 		}
 		else if(msgFlag.equals("deliveryInsertOk")) {
 			model.addAttribute("msg", "배송정보 등록이 완료되었습니다.");
 			model.addAttribute("url", "main/close");
 		}
+		else if(msgFlag.equals("quantityNO")) { 
+		    model.addAttribute("msg", name+" 상품의 남은 재고 수량은 "+value1+" 개 입니다.");
+		    model.addAttribute("url", "cart/cartList"); 
+		}
+		else if(msgFlag.equals("quantityOptionNO")) { 
+			model.addAttribute("msg", name+"("+value2+") 상품의 남은 재고 수량은 "+value1+" 개 입니다.");
+			model.addAttribute("url", "cart/cartList"); 
+		}
+		 
 		
 		return "include/message";
 	}

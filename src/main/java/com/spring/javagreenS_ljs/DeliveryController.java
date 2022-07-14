@@ -19,6 +19,7 @@ public class DeliveryController {
 	@Autowired
 	DeliveryService deliveryService;
 	
+	//배송지 추가 창 호출
 	@RequestMapping(value = "/deliveryInsert", method = RequestMethod.GET)
 	public String deliveryInsertGet(String flag, Model model) {
 		
@@ -26,14 +27,36 @@ public class DeliveryController {
 		return "delivery/deliveryInsert";
 	}
 	
+	//배송지 추가 처리
 	@ResponseBody
 	@RequestMapping(value = "/deliveryInsert", method = RequestMethod.POST)
 	public String deliveryInsertPost(UserDeliveryVO vo, HttpSession session) {
 		int user_idx = (int) session.getAttribute("sUser_idx");
 		vo.setUser_idx(user_idx);
 		
+		//이미 등록한 배송지가 있는지 확인
+		UserDeliveryVO deliveryVO = deliveryService.getDeliveryList(user_idx);
+		
+		String deliveryFlag = "";
+		if(deliveryVO == null) {
+			//비어있다면 기본 주소로 등록
+			deliveryFlag = "y";
+		}
+		else {
+			//이미 등록된 배송지가 있다면 추가 주소로 등록
+			deliveryFlag = "n";
+		}
+		vo.setDefault_flag(deliveryFlag);
+		
+		//배송지 추가 처리
 		deliveryService.setDeliveryInfor(vo);
 		
 		return "1";
+	}
+	
+	//배송지 목록 불러오기
+	@RequestMapping(value = "/deliveryList", method = RequestMethod.GET)
+	public String deliveryListGet() {
+		return "";
 	}
 }

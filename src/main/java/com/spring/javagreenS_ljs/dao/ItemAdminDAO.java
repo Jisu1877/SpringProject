@@ -51,4 +51,8 @@ public interface ItemAdminDAO {
 	
 	public void setItemDisplayUpdate(@Param("item_idx") int item_idx, @Param("flag") String flag);
 
+	public void setdeleteOption(@Param("item_option_idx") int item_option_idx);
+
+	public void setItemOptionUpdate(@Param("vo") ItemOptionVO vo);
+
 }

@@ -24,7 +24,7 @@
 	</select>
 	
 	<select id="getItemOptionInfor" resultType="com.spring.javagreenS_ljs.vo.ItemOptionVO">
-		select * from ga_item_option where item_idx = #{item_idx} order by item_option_idx
+		select * from ga_item_option where item_idx = #{item_idx} and option_display_flag = 'y' order by item_option_idx
 	</select>
 	
 	<select id="getItemImageInfor" resultType="com.spring.javagreenS_ljs.vo.ItemImageVO">
@@ -69,6 +69,14 @@
 	
 	<update id="setItemDisplayUpdate">
 		update ga_item set display_flag = #{flag} where item_idx = #{item_idx}
+	</update>
+	
+	<update id="setdeleteOption">
+		update ga_item_option set option_display_flag = 'n' where item_option_idx = #{item_option_idx}
+	</update>
+	
+	<update id="setItemOptionUpdate">
+		update ga_item_option set option_name = #{vo.option_name}, option_price = #{vo.option_price}, option_stock_quantity = #{vo.option_stock_quantity}, option_sold_out = #{vo.option_sold_out} where item_option_idx = #{vo.item_option_idx}
 	</update>
 	
 	<delete id="setItemImageDelete">

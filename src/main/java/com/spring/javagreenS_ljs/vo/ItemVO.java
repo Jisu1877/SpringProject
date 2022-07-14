@@ -61,6 +61,7 @@ public class ItemVO {
 	private String option_display_flag;
 	
 	private String option_name;
+	private String str_option_idx;
 	private String str_option_price;
 	private String str_option_stock_quantity;
 	

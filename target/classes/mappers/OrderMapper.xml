@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS_ljs.dao.OrderDAO">
+	<insert id="setOrderListTempInsert">
+		insert into ga_order_list_temp values (DEFAULT, #{vo.item_idx}, #{vo.user_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT);
+	</insert>
+	
+	<select id="getOrderListTempList" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		select * from ga_order_list_temp where user_idx = #{user_idx}
+	</select>
+	
+	<delete id="setOrderListTempDelete">
+		delete from ga_order_list_temp where user_idx = #{user_idx}
+	</delete>
+	
+</mapper>

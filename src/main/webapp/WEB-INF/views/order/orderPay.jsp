@@ -11,13 +11,14 @@
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 <link rel="icon" href="${ctp}/images/favicon.png">
 <style>
-  	.total_price {
+  	#total_price {
 	font-size: 20px;
 	font-weight: bold;
 	margin: 20px;
 }
 </style>
 <script>
+	/* 배송지 등록하기 */
 	function deliveryInsert(flag) {
 		let default_flag = '';
 		if(flag == 'n') {
@@ -35,36 +36,31 @@
 		window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 	}
 	
+	/* 배송지 목록 조회*/
+	function deliveryList() {
+		let url = "${ctp}/delivery/deliveryList";
+		let winX = 700;
+        let winY = 600;
+        let x = (window.screen.width/2) - (winX/2);
+        let y = (window.screen.height/2) - (winY/2)
+		window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+	}
+	
 	/* 결제하기  */
 	function order() {
-  /*  		<input type="hidden" name="order_item_idx" value="${orderVO.order_item_idx}">
-   		<input type="hidden" name="order_item_name" value="${orderVO.order_item_name}">
-   		<input type="hidden" name="order_item_image" value="${orderVO.order_item_image}">
-   		<input type="hidden" name="order_item_price" value="${orderVO.order_item_price}">
-   		<input type="hidden" name="order_item_option_flag" value="${orderVO.order_item_option_flag}">
-   		<input type="hidden" name="order_option_name" value="${orderVO.order_option_name}">
-   		<input type="hidden" name="order_option_price" value="${orderVO.order_option_price}">
-   		<input type="hidden" name="order_quantity" value="${orderVO.order_quantity}">
-   		<input type="hidden" name="order_total_amount" value="${orderVO.order_total_amount}"> */
+		let deliveryFlag = $("input[name=deliveryFlag]").val();
 		
-   		let data = {
-   			order_item_idx : ${orderVO.order_item_idx[0]}
-   		}
-   		
-   		$.ajax({
-   			type : "post",
-   			url : "${ctp}/order/orderCheck",
-   			data : data,
-   			success : function(res) {
-				if(res == "1") {
-					alert("결제 성공");
-				}
-			},
-			error : function() {
-				alert("전송오류");
-			}
-   		});
+		if(deliveryFlag == 'n') {
+			alert("배송지를 등록한 후 결제할 수 있습니다.");
+			return false;
+		}
+		
+		let order_total_amount = $("#total_price").data("price");
+		
+		$("#order_total_amount").val(order_total_amount);
+		payForm.submit();
 	}
+	
 </script>
 </head>
 <body>
@@ -115,7 +111,7 @@
 			<div style="margin-top: 20px;">
 			  <ul>
 			    <li style="font-size:21px;"><b>총 결제 금액</b></li>
-			    <li class="total_price"><fmt:formatNumber value="${orderVO.order_total_amount}"/>원</li>
+			    <li id="total_price" data-price="${orderVO.order_total_amount}"><fmt:formatNumber value="${orderVO.order_total_amount}"/>원</li>
 			    <li><input type="button" value="결제하기" class="w3-2021-desert-mist btn-lg" onclick="order()" style="width:30%"></li>
 			  </ul>
 			</div>
@@ -132,7 +128,7 @@
 		    	</c:if>
 		    	<c:if test="${deliveryFlag == 'y'}">
 		    		<div class="w3-padding">
-	    				<div><i class="fa-solid fa-location-dot" style="margin-bottom:10px"></i>&nbsp;기본 주소(${deliveryVO.title})</div>
+	    				<div><i class="fa-solid fa-location-dot" style="margin-bottom:10px"></i>&nbsp;선택 주소(${deliveryVO.title})</div>
 		    			<table class="w3-table">
 		    				<tr>
 		    					<td width="20%" class="text-center">수령인</td>
@@ -162,7 +158,7 @@
 		    		<hr>
 		    		<div class="mb-3" style="text-align:center">
 			    		<input type="button" value="배송지 추가" class="w3-2021-buttercream btn" style="width:40%" onclick="deliveryInsert('y')">
-			    		<input type="button" value="배송지 목록" class="w3-2021-buttercream btn" style="width:40%" onclick="">
+			    		<input type="button" value="배송지 목록" class="w3-2021-buttercream btn" style="width:40%" onclick="deliveryList()">
 		    		</div>
 		    	</c:if>
 		    	<div class="w3-bottombar w3-2020-sunlight w3-padding" style="margin-bottom: 20px;">
@@ -254,6 +250,13 @@
 			</div>
 		  </div>
    		</div>
+   		<c:if test="${deliveryFlag == 'y'}">
+   			<input type="hidden" name="deliveryFlag" value="y">
+   		</c:if>
+   		<c:if test="${deliveryFlag == 'n'}">
+   			<input type="hidden" name="deliveryFlag" value="n">
+   		</c:if>
+   		<input type="hidden" name="order_total_amount" id="order_total_amount">
     	</form>
 	</div>
 </div>
