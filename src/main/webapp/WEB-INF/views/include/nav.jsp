@@ -205,7 +205,7 @@ body {
 				<ul>
 					<li><a href="#"><span class="w3-white w3-hover-white w3-xlarge mt-2"><b>Member</b></span></a></li>
 					<li>&nbsp;</li>
-					<li class="sub"><a href="#">마이페이지</a></li>
+					<li class="sub"><a href="${ctp}/user/myPageOpen">마이페이지</a></li>
 					<li class="sub"><a href="#">1:1문의</a></li>
 				</ul>
 			</div>

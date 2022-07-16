@@ -11,7 +11,7 @@
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 <link rel="icon" href="${ctp}/images/favicon.png">
 <style>
-  	#total_price {
+  	#total_price, #pointUse, #priceCalc {
 	font-size: 20px;
 	font-weight: bold;
 	margin: 20px;
@@ -46,6 +46,130 @@
 		window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 	}
 	
+	
+	//전액사용 버튼을 눌렀을 시..
+	function PointUseAll() {
+		let ownPoint = ${userVO.point};
+		let payment_price = $("#total_price").data("price");
+		let payment_price_cal = 0;
+		// 보유포인트가 결제금액보다 많으면..
+		if(ownPoint > payment_price) {
+			document.getElementById("point").value = payment_price;
+			let point2 = document.getElementById("point").value;
+				//포인트를 입력했다가 지우면..
+				if(point2 == "") {
+					document.getElementById("pointUse").style.display = "block";
+					document.getElementById("pointUse").innerHTML = "- 0 Point";
+					
+					payment_price_cal = Number(payment_price) - Number(point2); 
+					
+					document.getElementById("priceCalc").style.display = "block";
+					document.getElementById("priceCalc").innerHTML = " = "+payment_price_cal.toLocaleString() + " 원";
+					$(".calcPrice").attr("data-cal", payment_price_cal);
+					$(".calcPrice").data("cal", payment_price_cal);
+					
+					return false;
+				}
+				//포인트 사용할시..
+				document.getElementById("pointUse").style.display = "block";
+				
+				document.getElementById("pointUse").innerHTML = " - " + point2.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') + " Point";
+				
+				payment_price_cal = Number(payment_price) - Number(point2); 
+				
+				document.getElementById("priceCalc").style.display = "block";
+				document.getElementById("priceCalc").innerHTML = payment_price_cal.toLocaleString() + " 원";
+				$(".calcPrice").attr("data-cal", payment_price_cal);
+				$(".calcPrice").data("cal", payment_price_cal);
+				
+		}
+		// 보유포인트가 결제금액보다 많지않으면..
+		else {
+			document.getElementById("point").value = ownPoint;
+			let point2 = document.getElementById("point").value;
+				//포인트 사용하지 않을시..
+				if(point2 == "") {
+					document.getElementById("pointUse").style.display = "block";
+					document.getElementById("pointUse").innerHTML = "- 0 Point";
+					
+					payment_price_cal = Number(payment_price) - Number(point2); 
+					
+					document.getElementById("priceCalc").style.display = "block";
+					document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + " 원";	
+					$(".calcPrice").attr("data-cal", payment_price_cal);
+					$(".calcPrice").data("cal", payment_price_cal);
+					return false;
+				}
+				document.getElementById("pointUse").style.display = "block";
+				
+				document.getElementById("pointUse").innerHTML = " - " + point2.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') + " Point";
+				
+				payment_price_cal = Number(payment_price) - Number(point2); 
+				
+				document.getElementById("priceCalc").style.display = "block";
+				
+				document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + " 원";	
+				$(".calcPrice").attr("data-cal", payment_price_cal);
+				$(".calcPrice").data("cal", payment_price_cal);
+				
+		}
+		
+	}
+	
+	function PointUse() {
+		let point = document.getElementById("point").value;
+		let ownPoint = ${userVO.point};
+		let payment_price = $("#total_price").data("price");
+		
+		if(point > ownPoint) {
+			alert("보유하신 포인트보다 많은 포인트를 입력하셨습니다.");
+			document.getElementById("point").value = "";
+			document.getElementById("point").focus();
+			return false;
+		}
+		else if(point > payment_price) {
+			alert("결제금액보다 많은 포인트를 입력하셨습니다.");
+			document.getElementById("point").value = "";
+			document.getElementById("point").focus();
+			return false;
+		}
+		else if(point < 0) {
+			alert("포인트는 음수값을 입력할 수 없습니다.");
+			document.getElementById("point").value = "";
+			document.getElementById("point").focus();
+			return false;
+		}
+		else {
+			//포인트를 사용안한다고 지우면..
+			if(point == "") {
+				document.getElementById("pointUse").style.display = "block";
+				document.getElementById("pointUse").innerHTML = "- 0 Point";
+				
+				let payment_price_cal = Number(payment_price) - Number(point); 
+				
+				document.getElementById("priceCalc").style.display = "block";
+				document.getElementById("priceCalc").innerHTML = " = "+payment_price_cal.toLocaleString() + " 원";
+				$(".calcPrice").attr("data-cal", payment_price_cal);
+				$(".calcPrice").data("cal", payment_price_cal);
+				
+				return false;
+			}
+			else {
+				document.getElementById("pointUse").style.display = "block";
+				
+				document.getElementById("pointUse").innerHTML = " - " + point.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',') + " Point";
+				
+				let payment_price_cal = Number(payment_price) - Number(point); 
+				
+				document.getElementById("priceCalc").style.display = "block";
+				
+				document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + " 원";	
+				$(".calcPrice").attr("data-cal", payment_price_cal);
+				$(".calcPrice").data("cal", payment_price_cal);
+			}
+		}
+	}
+	
 	/* 결제하기  */
 	function order() {
 		let deliveryFlag = $("input[name=deliveryFlag]").val();
@@ -56,11 +180,18 @@
 		}
 		
 		let order_total_amount = $("#total_price").data("price");
+		let point = document.getElementById("point").value;
+		let priceCalc = 0;
+		if(point != "") {
+			priceCalc = Number($(".calcPrice").attr("data-cal"));
+		}
 		
 		$("#order_total_amount").val(order_total_amount);
+		$("#use_point").val(point);
+		$("#order_total_amount_calc").val(priceCalc);
+		
 		payForm.submit();
 	}
-	
 </script>
 </head>
 <body>
@@ -69,7 +200,7 @@
 <jsp:include page="/WEB-INF/views/include/header2.jsp" />
 
 <!-- !PAGE CONTENT! -->
-<div id="pageContent" class="w3-content" style="max-width:1500px" onmouseover="hoverMenuClose()">
+<div id="pageContent" style="max-width:1500px" onmouseover="hoverMenuClose()">
 	<div style="margin-bottom:100px; margin-left:30px; margin-right:30px;">
     	<form name="payForm" method="post">
    		<div class="w3-row" style="padding:20px;">
@@ -108,12 +239,16 @@
 			</table>
 		  </div>
 			<hr>
-			<div style="margin-top: 20px;">
-			  <ul>
-			    <li style="font-size:21px;"><b>총 결제 금액</b></li>
-			    <li id="total_price" data-price="${orderVO.order_total_amount}"><fmt:formatNumber value="${orderVO.order_total_amount}"/>원</li>
-			    <li><input type="button" value="결제하기" class="w3-2021-desert-mist btn-lg" onclick="order()" style="width:30%"></li>
-			  </ul>
+			<div style="margin-top: 20px; text-align: center">
+			    <div style="font-size:21px;"><b>총 결제 금액</b></div>
+			    <div id="total_price" data-price="${orderVO.order_total_amount}">
+			    	<fmt:formatNumber value="${orderVO.order_total_amount}"/>원 
+			    </div>
+		    	<div id="pointUse" style="display:none"></div> 
+		    	<div id="priceCalc" class="calcPrice" data-cal="0" style="display:none; font-size:22px;"></div>
+			    <div>
+			    	<input type="button" value="결제하기" class="w3-2021-desert-mist btn-lg" onclick="order()" style="width:30%">
+			    </div>
 			</div>
 			</div>
 			<div class="w3-col m5 l5" id="delivery">
@@ -161,60 +296,6 @@
 			    		<input type="button" value="배송지 목록" class="w3-2021-buttercream btn" style="width:40%" onclick="deliveryList()">
 		    		</div>
 		    	</c:if>
-		    	<div class="w3-bottombar w3-2020-sunlight w3-padding" style="margin-bottom: 20px;">
-		    		주문자 정보
-		    	</div>
-		    	<div class="w3-padding" style="margin-bottom: 20px;">
-    				<div><i class="fa-solid fa-user"></i>&nbsp;
-    					<a href="#" style="font-size:12px;">회원정보 수정하기</a>
-    				</div>
-	    			<table class="w3-table">
-	    				<tr>
-	    					<td width="20%">주문자</td>
-	    					<td>| ${userVO.name}</td>
-	    				</tr>
-	    				<tr>
-	    					<td width="20%">연락처</td>
-	    					<td>| ${userVO.tel}</td>
-	    				</tr>
-	    				<tr>
-	    					<td width="20%">이메일</td>
-	    					<td>| ${userVO.email}</td>
-	    				</tr>
-	    				<tr>
-	    					<td width="20%">회원등급</td>
-	    					<td>| 
-	    						<c:if test="${userVO.level == 1}">
-	    							Gold
-	    						</c:if>
-	    						<c:if test="${userVO.level == 2}">
-	    							Silver
-	    						</c:if>
-	    						<c:if test="${userVO.level == 0}">
-	    							Admin
-	    						</c:if>
-	    						<span class="w3-dropdown-click">
-									<a onclick="myFunction2()"><i class="fa-solid fa-circle-question"></i></a>
-									<div id="pointDemo" class="w3-dropdown-content w3-bar-block w3-border montserrat" style="padding:10px; font-size: 12px;">
-										더 가든은 회원 등급제를 운영하고 있습니다.<br>
-										(Silver/Gold)
-										<hr>
-										Gold 레벨 변경 요건은?<br>
-										- 로그인 횟수 50회 이상<br>
-										- 구매 총 가격 30만원 이상
-										<hr>
-										Gold 레벨의 혜택은?<br>
-										- 식물 경매 참여 가능
-								    </div>
-								</span>
-	    					</td>
-	    				</tr>
-	    				<tr>
-	    					<td width="20%">보유 포인트</td>
-	    					<td>| <fmt:formatNumber value="${userVO.point}"/> Point</td>
-	    				</tr>
-	    			</table>
-	    		</div>
 	    		<div class="w3-bottombar w3-2021-desert-mist w3-padding" style="margin-bottom: 20px;">
 		    		혜택 적용
 		    	</div>
@@ -247,6 +328,61 @@
 	    				</tr>
 	    			</table>
 	    		</div>
+	    		<div class="w3-bottombar w3-2020-sunlight w3-padding" style="margin-bottom: 20px;">
+		    		주문자 정보
+		    	</div>
+		    	<div class="w3-padding" style="margin-bottom: 20px;">
+    				<div><i class="fa-solid fa-user"></i>&nbsp;
+    					<a href="#" style="font-size:12px;">회원정보 수정하기</a>
+    				</div>
+	    			<table class="w3-table">
+	    				<tr>
+	    					<td width="20%">주문자</td>
+	    					<td>| ${userVO.name}</td>
+	    				</tr>
+	    				<tr>
+	    					<td width="20%">연락처</td>
+	    					<td>| ${userVO.tel}</td>
+	    				</tr>
+	    				<tr>
+	    					<td width="20%">이메일</td>
+	    					<td>| ${userVO.email}</td>
+	    				</tr>
+	    				<tr>
+	    					<td width="20%">회원등급</td>
+	    					<td>| 
+	    						<c:if test="${userVO.level == 1}">
+	    							Gold
+	    						</c:if>
+	    						<c:if test="${userVO.level == 2}">
+	    							Silver
+	    						</c:if>
+	    						<c:if test="${userVO.level == 0}">
+	    							Admin
+	    						</c:if>
+	    						<span class="w3-dropup-click">
+									<a onclick="myFunction2()"><i class="fa-solid fa-circle-question"></i></a>
+									<div id="pointDemo" class="w3-dropdown-content w3-bar-block w3-border montserrat" style="padding:10px; font-size: 12px;">
+										더 가든은 회원 등급제를 운영하고 있습니다.<br>
+										(Silver/Gold)
+										<hr>
+										Gold 레벨 변경 요건은?<br>
+										- 로그인 횟수 50회 이상<br>
+										- 구매 횟수 10회 이상<br>
+										- 구매 총 가격 30만원 이상
+										<hr>
+										Gold 레벨의 혜택은?<br>
+										- 식물 경매 참여 가능
+								    </div>
+								</span>
+	    					</td>
+	    				</tr>
+	    				<tr>
+	    					<td width="20%">보유 포인트</td>
+	    					<td>| <fmt:formatNumber value="${userVO.point}"/> Point</td>
+	    				</tr>
+	    			</table>
+	    		</div>
 			</div>
 		  </div>
    		</div>
@@ -257,6 +393,8 @@
    			<input type="hidden" name="deliveryFlag" value="n">
    		</c:if>
    		<input type="hidden" name="order_total_amount" id="order_total_amount">
+   		<input type="hidden" name="point" id="use_point">
+   		<input type="hidden" name="order_total_amount_calc" id="order_total_amount_calc">
     	</form>
 	</div>
 </div>

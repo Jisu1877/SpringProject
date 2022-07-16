@@ -82,6 +82,10 @@ public class MessageController {
 			model.addAttribute("msg", name+"("+value2+") 상품의 남은 재고 수량은 "+value1+" 개 입니다.");
 			model.addAttribute("url", "cart/cartList"); 
 		}
+		else if(msgFlag.equals("paymentOk")) { 
+			model.addAttribute("msg", "결제가 완료 되었습니다.");
+			model.addAttribute("url", "order/payResult"); 
+		}
 		 
 		
 		return "include/message";

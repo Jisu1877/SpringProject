@@ -22,5 +22,9 @@ public class OrderVO {
 	private String[] order_option_name;
 	private String[] order_option_price;
 	private String[] order_quantity;
+	private String[] cart_idx;
 	private String item_name;
+	private String point;
+	private int order_total_amount_calc;
+	
 }

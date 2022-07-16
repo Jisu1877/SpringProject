@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,13 +48,13 @@ public class OrderController {
 		//구매가능 여부 체크
 		String[] order_item_idx = orderVO.getOrder_item_idx();
 		String[] order_item_name = orderVO.getOrder_item_name();
-		String[] order_item_option_flag = orderVO.getOrder_item_option_flag();
-		String[] order_option_idx = orderVO.getOrder_option_idx();
-		String[] order_option_name = orderVO.getOrder_option_name();
+ 		String[] order_item_option_flag = orderVO.getOrder_item_option_flag();
+  		String[] order_option_idx = orderVO.getOrder_option_idx();
+ 		String[] order_option_name = orderVO.getOrder_option_name();
 		String[] order_quantity = orderVO.getOrder_quantity();
 		
-		for(int i = 0; i < order_item_option_flag.length; i++) {
-			if(order_item_option_flag[i].equals("n")) {
+ 		for(int i = 0; i < order_item_option_flag.length; i++) {
+ 			if(order_item_option_flag[i].equals("n")) {
 				int item_idx = Integer.parseInt(order_item_idx[i]);
 				int stock_quantity = itemService.getStockquantity(item_idx);
 				int orderQuantity = Integer.parseInt(order_quantity[i]);
@@ -116,6 +117,53 @@ public class OrderController {
 		String user_id = (String) session.getAttribute("sUser_id");
 		int user_idx = (int) session.getAttribute("sUser_idx");
 		
+		//구매가능 여부 체크
+		String[] order_item_idx = orderVO.getOrder_item_idx();
+		String[] order_item_name = orderVO.getOrder_item_name();
+ 		String[] order_item_option_flag = orderVO.getOrder_item_option_flag();
+  		String[] order_option_idx = orderVO.getOrder_option_idx();
+ 		String[] order_option_name = orderVO.getOrder_option_name();
+		String[] order_quantity = orderVO.getOrder_quantity();
+		
+ 		for(int i = 0; i < order_item_option_flag.length; i++) {
+ 			if(order_item_option_flag[i].equals("n")) {
+				int item_idx = Integer.parseInt(order_item_idx[i]);
+				int stock_quantity = itemService.getStockquantity(item_idx);
+				int orderQuantity = Integer.parseInt(order_quantity[i]);
+				if(orderQuantity > stock_quantity) {
+					model.addAttribute("name", order_item_name[i]);
+					model.addAttribute("value1", stock_quantity);
+					return "redirect:/msg/quantityNO";
+				}
+			}
+			else {
+				int option_idx = Integer.parseInt(order_option_idx[i]);
+				int option_stock_quantity = itemService.getOptionStockquantity(option_idx);
+				int orderQuantity = Integer.parseInt(order_quantity[i]);
+				if(orderQuantity > option_stock_quantity) {
+					model.addAttribute("name", order_item_name[i]);
+					model.addAttribute("value1", option_stock_quantity);
+					model.addAttribute("value2", order_option_name[i]);
+					return "redirect:/msg/quantityOptionNO";
+				}
+			}
+		}
+		
+ 		//결제로 이동하기 전 최종 결제 총 금액과 사용 포인트를 temp 데이터베이스에 저장한다.
+ 		int total_amount = 0;
+ 		int point = 0;
+ 		
+ 		if(orderVO.getOrder_total_amount_calc() != 0 && !orderVO.getPoint().equals("")) {
+ 			total_amount = orderVO.getOrder_total_amount_calc();
+ 			point = Integer.parseInt(orderVO.getPoint());
+ 		}
+ 		else {
+ 			total_amount = orderVO.getOrder_total_amount();
+ 		}
+ 		
+ 		orderService.setOrder_total_amount_and_point(user_idx, total_amount, point);
+ 		
+ 		
 		//회원 정보 가져오기
 		UserVO userVO = userService.getUserInfor(user_id);
 		
@@ -139,21 +187,39 @@ public class OrderController {
 		PayMentVO vo = new PayMentVO();
 		vo.setName(name);
 		vo.setAmount(imsi);
-		//vo.setAmount(orderVO.getOrder_total_amount());
+		//vo.setAmount(total_amount);
 		vo.setBuyer_email(userVO.getEmail());
 		vo.setBuyer_name(userVO.getName());
 		vo.setBuyer_tel(userVO.getTel());
 		vo.setBuyer_addr(deliveryVO.getRoadAddress());
 		vo.setBuyer_postcode(deliveryVO.getPostcode());
+		
 		model.addAttribute("vo", vo);
+		
 		return "order/payment";
 	}
 	
-	
+	//결제 완료 후 처리
 	@RequestMapping(value="/paymentResult", method=RequestMethod.GET)
-	public String paymentResultGet(Model model) {
+	public String paymentResultGet(Model model, HttpSession session, PayMentVO payMentVO) {
+		String user_id = (String) session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
 		
-		return "order/paymentResult";
+		//결제가 완료된 이후에 진행 처리
+		orderService.setOrderProcess(user_id, user_idx);
+		
+		session.setAttribute("payMentVO", payMentVO);
+		
+		return "redirect:/msg/paymentOk";
+	}
+	
+	@RequestMapping(value = "/payResult", method = RequestMethod.GET)
+	public String payResultGet(HttpSession session, Model model) {
+		
+		PayMentVO payMentVO = (PayMentVO)session.getAttribute("payMentVO");
+		
+		model.addAttribute("payMentVO", payMentVO);
+		return "order/payResult";
 	}
 	
 }

@@ -19,4 +19,13 @@ public class OrderListVO {
 	private String created_date;
 	
 	private int user_idx;
+	private int order_total_amount;
+	private int cart_idx;
+	private int use_point;
+	
+	private String email;
+	private String tel;
+	private int user_delivery_idx;
+	private String order_admin_memo;
+	
 }

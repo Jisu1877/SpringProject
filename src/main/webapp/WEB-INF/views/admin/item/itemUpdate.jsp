@@ -54,7 +54,7 @@
 			optionName += $("input[name=option_names]").eq(i).val() + "/";
 			optionPrice += $("input[name=option_prices]").eq(i).val() + "/";
 			optionStock += $("input[name=option_stock_quantities]").eq(i).val() + "/";
-			option_idx += $("input[name=option_names]").data('idx') + "/";
+			option_idx += $("#option_name"+(i+1)).data('idx') + "/";
 		}
 		myForm.option_name.value = optionName;
 		myForm.str_option_price.value = optionPrice;
@@ -287,7 +287,7 @@
 			}
 			myForm.stock_schedule_date.value = document.getElementById("stock_schedule_date").value;
 			
-			CKEDITOR.instances.detail_content.getData();
+			//CKEDITOR.instances.detail_content.getData();
 			
 			return true;
 		}

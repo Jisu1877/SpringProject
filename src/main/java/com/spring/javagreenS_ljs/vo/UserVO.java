@@ -1,5 +1,7 @@
 package com.spring.javagreenS_ljs.vo;
 
+import java.util.ArrayList;
+
 import lombok.Data;
 
 public @Data class UserVO {
@@ -10,6 +12,7 @@ public @Data class UserVO {
 	private String gender;
 	private String email;
 	private String tel;
+	private String user_image;
 	private int status_code;
 	private int login_count;
 	private int buy_count;
@@ -24,4 +27,6 @@ public @Data class UserVO {
 	private String deny_date;
 	private String leave_date;
 	private String leave_reason;
+	
+	ArrayList<OrderListVO> orderList;
 }

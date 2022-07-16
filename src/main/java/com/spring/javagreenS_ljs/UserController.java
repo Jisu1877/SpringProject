@@ -1,5 +1,10 @@
 package com.spring.javagreenS_ljs;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -21,7 +26,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.javagreenS_ljs.service.ItemService;
+import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
+import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.UserVO;
 
 @Controller
@@ -33,6 +41,9 @@ public class UserController {
 	
 	@Autowired
 	JavaMailSender mailSender;
+	
+	@Autowired
+	OrderService orderService;
 	
 	//회원가입 비밀번호 암호화 방식 : BCryptPasswordEncoder
 	@Autowired
@@ -133,6 +144,10 @@ public class UserController {
 		//비밀번호 암호화 처리(BCryptPasswordEncoder)
 		String encPwd = passwordEncoder.encode(vo.getUser_pwd());
 		vo.setUser_pwd(encPwd);
+		
+		//회원 프로필 이미지 명 만들기(noimage_ + 성별)
+		String user_image = "noimage_" + vo.getGender() + ".png";
+		vo.setUser_image(user_image);
 		
 		userService.setUserJoin(vo);
 		model.addAttribute("name", vo.getName());
@@ -271,6 +286,31 @@ public class UserController {
 			return "1";
 		}
 		return "0";
+	}
+	
+	@RequestMapping(value = "/myPageOpen", method = RequestMethod.GET)
+	public String myPageOpenGet(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		//주문 + 주문 목록 정보 가져오기(이번달 건만)
+		ArrayList<OrderListVO> orderListOnlyThisMonth = orderService.getOrderListOnlyThisMonth(user_idx);
+		
+		//전체 주문 건도 가져오기
+		ArrayList<OrderListVO> orderList = orderService.getOrderList(user_idx);
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
+        Date now = new Date();
+        String nowDate = sdf1.format(now);
+		
+		
+        model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("orderList", orderList);
+		model.addAttribute("orderListOnlyThisMonth", orderListOnlyThisMonth);
+		return "user/myPage";
 	}
 	
 }

@@ -285,11 +285,34 @@
 				url : "${ctp}/admin/category/category_useNot",
 				data : {category_idx : idx},
 				success : function(data) {
-					if(data == 1) {
+					if(data == "1") {
 						location.reload();
 					}
 					else {
 						alert("해당 카테고리로 등록된 판매중인 상품이 존재합니다. 해당 상품을 전시중지 처리 후 진행하세요.");
+					}
+				},
+				error : function() {
+					alert("전송오류.");
+				}
+			});
+		}
+	}
+	
+	/* 중분류 사용 처리 */
+	function category_use(idx) {
+		let ans = confirm("해당 중분류 카테고리를 사용하시겠습니까?");
+		if(ans) {
+			$.ajax({
+				type : "post",
+				url : "${ctp}/admin/category/category_use",
+				data : {category_idx : idx},
+				success : function(data) {
+					if(data == "1") {
+						location.reload();
+					}
+					else {
+						alert("다시 시도해주세요.");
 					}
 				},
 				error : function() {
@@ -472,7 +495,7 @@
 												<input type="button" class="w3-btn w3-2020-amberglow w3-tiny" value="사용 중지" onclick="category_useNot(${vo.categoryList[i].category_idx})">
 											</c:if>
 											<c:if test="${vo.categoryList[i].category_use_yn == 'n'}">
-												<input type="button" class="w3-btn w3-2020-amberglow w3-tiny" value="사용" onclick="category_group_use(${vo.category_group_idx})">
+												<input type="button" class="w3-btn w3-2020-amberglow w3-tiny" value="사용" onclick="category_use(${vo.categoryList[i].category_idx})">
 											</c:if>
 										</td>
 										<td class="text-center">

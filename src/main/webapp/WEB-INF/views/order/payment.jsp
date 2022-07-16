@@ -29,7 +29,7 @@
 		}, function(rsp) {
 			  var paySw = 'no';
 		    if ( rsp.success ) {
-		        var msg = '결제가 완료되었습니다.';
+		        var msg = ' ';
 		        msg += '고유ID : ' + rsp.imp_uid;
 		        msg += '상점 거래ID : ' + rsp.merchant_uid;
 		        msg += '결제 금액 : ' + rsp.paid_amount;
@@ -41,8 +41,8 @@
 		    }
 		    alert(msg);
 		    if(paySw == 'no') {
-			    alert("다시 주문구매창으로 이동합니다.");
-		    	location.href='${ctp}/order/orderCheck';
+			    alert("다시 장바구니로 이동합니다.");
+		    	location.href='${ctp}/cart/cartList';
 		    }
 		    else {
 					var temp = "";
@@ -56,22 +56,33 @@
 					temp += '&imp_uid=' + rsp.imp_uid;
 					temp += '&merchant_uid=' + rsp.merchant_uid;
 					temp += '&paid_amount=' + rsp.paid_amount;
-					temp += '&apply_num=' + rsp.apply_num;
+					temp += '&apply_num=' + rsp.apply_num; 
 					location.href='${ctp}/order/paymentResult'+temp;
 		    }
 		});
 	</script>
-</head>
+	<style>
+		body,h1 {font-family: "Raleway", sans-serif}
+		body, html {height: 100%}
+		.bgimg {
+		  background-image: url('${ctp}/images/payMain.jpg');
+		  min-height: 100%;
+		  background-position: center;
+		  background-size: cover;
+		}
+	</style>
 </head>
 <body>
 <!-- Nav  -->
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 
-<!-- !PAGE CONTENT! -->
-<div id="pageContent" class="w3-content" style="max-width:1500px" onmouseover="hoverMenuClose()">
-	<div class="container" style="margin-bottom:100px; margin-top:70px;">
-    	
-	</div>
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+  <div class="w3-display-middle">
+    <!-- <h1 class="w3-jumbo w3-animate-top">Payment in progress</h1> -->
+    <h1 class="w3-jumbo w3-animate-top">결제 진행 중</h1>
+    <hr class="w3-border-grey" style="margin:auto;width:40%">
+    <p class="w3-large w3-center">Payment in progress</p>
+  </div>
 </div>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>

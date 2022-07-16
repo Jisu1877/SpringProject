@@ -47,5 +47,7 @@ public interface CategoryDAO {
 
 	public void setCategoryUpate2(@Param("category_idx") int category_idx,@Param("category_name") String category_name);
 
+	public void setCategoryUse2(@Param("category_idx") int category_idx);
+
 
 }

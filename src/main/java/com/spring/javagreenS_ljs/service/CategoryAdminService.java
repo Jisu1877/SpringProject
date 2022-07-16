@@ -45,5 +45,7 @@ public interface CategoryAdminService {
 
 	public void setCategoryUpate2(int category_idx, String category_name);
 
+	public void setCategoryUse2(int category_idx);
+
 
 }

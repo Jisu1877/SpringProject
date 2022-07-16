@@ -121,4 +121,9 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 		categoryDAO.setCategoryUpate2(category_idx,category_name);
 	}
 
+	@Override
+	public void setCategoryUse2(int category_idx) {
+		categoryDAO.setCategoryUse2(category_idx);
+	}
+
 }

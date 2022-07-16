@@ -238,10 +238,6 @@ function minus2(ths) {
 }
 
 function plus2(ths) {
-	if(sw == 0) {
-		totalAmount = 1;
-		sw = 1;
-	}
 	let amount = $(ths).siblings("span.option_cnt").html();
 	let stock_quantity = $("#stock_quantity").val();
 	amount++;
@@ -265,7 +261,7 @@ function plus2(ths) {
 function buyItem() {
 	let item_option_flag = $("#item_option_flag").val();
 	//상품을 선택했는지 확인
-	if(totalAmount == 0 && item_option_flag == 'y') {
+	if(optionIdxArr.length == 0 && item_option_flag == 'y') {
 		alert("옵션을 선택하세요.");
 		return false;
 	}
@@ -273,7 +269,7 @@ function buyItem() {
 	//로그인 상태인지 확인
 	$.ajax({
 		type : "post",
-		url : "loginCheck",
+		url : "/javagreenS_ljs/user/loginCheck",
 		success : function(data) {
 			if(data == '0') {
 				alert("로그인이 필요한 서비스입니다.");
@@ -294,7 +290,96 @@ function buyItem() {
 	});
 	
 	//주문/결제 창으로 넘어가기 준비
+	if(totalAmount == 0) {
+		totalAmount = 1;
+	}
 	
+	/*let data;
+	if($("#item_option_flag").val() == 'y') {
+		data = {
+			item_idx : $("#item_idx").val(),
+			item_option_flag : $("#item_option_flag").val(),
+			optionIdxArr : optionIdxArr,
+			option_quantity : order_quantity,
+			quantity : totalAmount,
+			total_price : totalPrice
+		}
+	}
+	else {
+		data = {
+			item_idx : $("#item_idx").val(),
+			item_option_flag : $("#item_option_flag").val(),
+			optionIdxArr : optionIdxArr,
+			option_quantity : order_quantity,
+			quantity : totalAmount,
+			total_price : totalPrice
+		}
+	}
+	
+	$.ajax({
+		type : "post",
+		traditional: true,
+		url : "/javagreenS_ljs/cart/inputCart",
+		data : data,
+		success : function(res) {
+			if(res == '1') {
+				let item_idx = [];
+				let item_name = [];
+				let item_image = [];
+				let item_price = [];
+				let item_option_flag = [];
+				let option_idx = [];
+				let option_name = [];
+				let option_price = [];
+				let order_quantity = [];
+				let cart_idx = [];
+				
+				if($("#item_option_flag").val() == 'y') {
+					for(let i = 0; i < ($(".option_div").length)-1; i++) {
+						item_idx[i] = $("#item_idx").val();
+						item_name[i] = $("#item_name").val();
+						item_image[i] = $("#item_image").val();
+						item_price[i] = Number(totalPrice);
+						item_option_flag[i] = $("#item_option_flag").val();
+						option_idx[i] = optionIdxArr;
+						option_name[i] = $("#option"+i).data("label");
+						option_price[i] = $("#option"+i).data("price");
+						order_quantity[i] = order_quantity;
+						cart_idx[i] = 0;
+					}
+				}
+				else {
+					item_idx[0] = $("#item_idx").val();
+					item_name[0] = $("#item_name").val();
+					item_image[0] = $("#item_image").val();
+					item_price[0] = Number(totalPrice);
+					item_option_flag[0] = $("#item_option_flag").val();
+					option_idx[0] = 0;
+					option_name[0] = '';
+					option_prices[0] = 0;
+					order_quantity[0] = totalAmount;
+					cart_idx[0] = 0;
+				}
+				
+				cartForm.order_item_idx.value = item_idx;
+				cartForm.order_item_name.value = item_name;
+				cartForm.order_item_image.value = item_image;
+				cartForm.order_item_price.value = item_price;
+				cartForm.order_item_option_flag.value = item_option_flag;
+				cartForm.order_option_idx.value = option_idx;
+				cartForm.order_option_name.value = option_name;
+				cartForm.order_option_price.value = option_price;
+				cartForm.order_quantity.value = order_quantity;
+				$("input[name=cart_idx]").val(cart_idx);
+				
+				payForm.submit();
+			}
+		},
+		error : function() {
+			
+		}
+	});
+	*/
 }
 
 /* 장바구니 담기 */
@@ -310,11 +395,12 @@ function inputCart() {
 	*/
 	let item_option_flag = $("#item_option_flag").val();
 	//상품을 선택했는지 확인
-	if(totalAmount == 0 && item_option_flag == 'y') {
+	if(optionIdxArr.length == 0 && item_option_flag == 'y') {
 		alert("옵션을 선택하세요.");
 		return false;
 	}
 	
+	//장바구니 담기전
 	//로그인 상태인지 확인
 	$.ajax({
 		type : "post",
@@ -370,7 +456,7 @@ function inputCart() {
 			}
 		},
 		error : function() {
-			
+			alert("전송오류.");
 		}
 	});
 	

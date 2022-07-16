@@ -471,8 +471,10 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 		//옵션 사용하지 않음으로 설정했다면 option_display_flag 'n'로 변경시키기
 		if(itemVO.getItem_option_flag().equals("n")) {
 			for(int i = 0; i<Option_idx.length; i++) {
-				int idx = Integer.parseInt(Option_idx[i]);
-				itemDAO.setdeleteOption(idx);
+				if(!Option_idx[i].equals("")) {
+					int idx = Integer.parseInt(Option_idx[i]);
+					itemDAO.setdeleteOption(idx);
+				}
 			}
 		}
 		

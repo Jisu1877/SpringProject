@@ -247,6 +247,7 @@ public class CategoryAdminController {
 	}
 	
 	
+	//중분류 사용중지처리
 	@ResponseBody
 	@RequestMapping(value = "/category_useNot", method = RequestMethod.POST)
 	public String category_useNotPost(int category_idx) {
@@ -277,6 +278,16 @@ public class CategoryAdminController {
 		categoryAdminService.setCategoryUpate2(category_idx,category_name);
 		return "1";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/category_use", method = RequestMethod.POST)
+	public String category_usePost(int category_idx) {
+		
+		//중분류 사용 처리
+		categoryAdminService.setCategoryUse2(category_idx);
+		return "1";
+	}
+	
 	
 	
 	

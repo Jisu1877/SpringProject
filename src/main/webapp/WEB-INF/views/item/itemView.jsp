@@ -128,8 +128,8 @@
 								<div id="pointDemo" class="w3-dropdown-content w3-bar-block w3-border montserrat" style="padding:10px; font-size: 12px;">
 									더 가든 고객을 위한 혜택!
 									<hr>
-									리뷰적립 <i class="fa-solid fa-caret-right"></i> 100Point
-									<span style="font-size: 8px;">구매적립이 없는 상품입니다.</span><br>
+									리뷰적립 <i class="fa-solid fa-caret-right"></i> 100Point<br>
+									<span style="font-size: 8px;">구매적립이 없는 상품입니다.</span>
 									<hr>
 									- 모든 포인트와 쿠폰은 구매확정 이후 적립 및 발급됩니다.
 							    </div>
@@ -151,8 +151,8 @@
 						<div class="w3-border" style="margin:30px;">
 							<select id="optionSelect" name="optionSelect" class="w3-select" onchange="optionSelect(this)">
 									<option value="" selected>옵션을 선택하세요.</option>
-								<c:forEach var="vo" items="${itemVO.itemOptionList}">
-									<option value="${vo.item_option_idx}" data-label="${vo.option_name}" data-price="${vo.option_price}">${vo.option_name}(+${vo.option_price})</option>
+								<c:forEach var="vo" items="${itemVO.itemOptionList}" varStatus="st">
+									<option id="option${st.count}" value="${vo.item_option_idx}" data-label="${vo.option_name}" data-price="${vo.option_price}">${vo.option_name}(+${vo.option_price})</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -165,7 +165,7 @@
 						<div class="w3-row" style="margin:30px;">
 							<div class="w3-half">
 								<a onclick="minus2(this)"><i class="fa-solid fa-square-minus" style="font-size:23px"></i></a>
-								<span class="option_cnt" style="font-size:16px; vertical-align:top; margin:10px" data-cnt="0">1</span>
+								<span class="option_cnt" style="font-size:16px; vertical-align:top; margin:10px" data-cnt="0">${itemVO.order_min_quantity}</span>
 								<a onclick="plus2(this)"><i class="fa-solid fa-square-plus" style="font-size:23px"></i></a>
 							</div>
 							<div class="w3-half" style="text-align:right; font-size:19px">
@@ -179,11 +179,11 @@
 						<div class="w3-half" style="text-align:right;">
 							<span><font size="2">총 수량(<span id="totalCnt">${itemVO.order_min_quantity}</span>개)</font></span>
 							<c:if test="${itemVO.seller_discount_flag == 'n'}">
-								<c:set var="priceFmt2" value="${itemVO.sale_price}"/>
+								<c:set var="priceFmt2" value="${itemVO.sale_price * itemVO.order_min_quantity}"/>
 								<span id="totalPrice"><fmt:formatNumber value="${priceFmt2}"/></span>원
 							</c:if>
 							<c:if test="${itemVO.seller_discount_flag == 'y'}">
-								<c:set var="priceFmt3" value="${itemVO.sale_price - itemVO.seller_discount_amount}"/>
+								<c:set var="priceFmt3" value="${(itemVO.sale_price - itemVO.seller_discount_amount) * itemVO.order_min_quantity}"/>
 								<span id="totalPrice"><fmt:formatNumber value="${priceFmt3}"/></span>원
 							</c:if>
 						</div>
@@ -294,6 +294,8 @@
 </div>
 
 <input type="hidden" id="item_idx" value="${itemVO.item_idx}">
+<input type="hidden" id="item_name" value="${itemVO.item_name}">
+<input type="hidden" id="item_image" value="${itemVO.item_image}">
 <input type="hidden" id="order_min_quantity" value="${itemVO.order_min_quantity}">
 <input type="hidden" id="order_max_quantity" value="${itemVO.order_max_quantity}">
 <input type="hidden" id="stock_quantity" value="${itemVO.stock_quantity}">
@@ -324,16 +326,27 @@
 	</div>
 	<hr>
 </div>
-
-
+<form name="payForm" method="get" action="${ctp}/order/orderCheck">
+	<input type="hidden" name="order_item_idx">
+	<input type="hidden" name="order_item_name">
+	<input type="hidden" name="order_item_image">
+	<input type="hidden" name="order_item_price">
+	<input type="hidden" name="order_item_option_flag">
+	<input type="hidden" name="order_option_idx">
+	<input type="hidden" name="order_option_name">
+	<input type="hidden" name="order_option_price">
+	<input type="hidden" name="order_quantity">
+	<input type="hidden" name="order_total_amount">
+	<input type="hidden" name="cart_idx">
+</form>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script>
  $(function() {
-	initEzPlus();
+	//initEzPlus();
 	document.getElementById("infor").style.display = "block";
 });
 
-function initEzPlus() {
+/* function initEzPlus() {
 	$('#elevate_zoom').ezPlus({
 	    gallery: 'image_list',
 	    cursor: 'pointer',
@@ -365,7 +378,7 @@ function resetEzPlus() {
 	    zoomWindowOffsetX: 10
 	});
 }
-
+ */
  
 function currentDiv(n) {
   showDivs(slideIndex = n);

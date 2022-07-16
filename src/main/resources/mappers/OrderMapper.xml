@@ -4,15 +4,47 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javagreenS_ljs.dao.OrderDAO">
 	<insert id="setOrderListTempInsert">
-		insert into ga_order_list_temp values (DEFAULT, #{vo.item_idx}, #{vo.user_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT);
+		insert into ga_order_list_temp values (DEFAULT, #{vo.item_idx}, #{vo.user_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, NULL, NULL, #{vo.cart_idx}, DEFAULT);
+	</insert>
+	
+	<insert id="setOrderHistory">
+		insert into ga_order values (DEFAULT, #{orderVO.user_idx}, #{orderVO.order_total_amount}, #{orderVO.email}, #{orderVO.tel}, #{orderVO.user_delivery_idx}, NULL, DEFAULT);
+	</insert>
+	
+	<insert id="setOrderListHistory">
+		insert into ga_order_list values (DEFAULT, #{vo.order_idx}, #{vo.item_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT, DEFAULT);
 	</insert>
 	
 	<select id="getOrderListTempList" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
 		select * from ga_order_list_temp where user_idx = #{user_idx}
 	</select>
 	
+	<select id="getOrderIdx" resultType="int">
+		select max(order_idx) from ga_order where user_idx = #{user_idx}
+	</select>
+	
+	<select id="getOrderListOnlyThisMonth" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		SELECT * FROM ga_order o
+		JOIN ga_order_list ol
+		ON o.order_idx = ol.order_idx
+		WHERE o.user_idx = #{user_idx} and date(o.created_date) between date(#{firstDate}) and date(#{lastDate}) 
+		order by o.created_date desc
+	</select>
+	
+	<select id="getOrderList" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		SELECT * FROM ga_order o
+		JOIN ga_order_list ol
+		ON o.order_idx = ol.order_idx
+		WHERE o.user_idx = #{user_idx}
+		order by o.created_date desc
+	</select>
+	
 	<delete id="setOrderListTempDelete">
 		delete from ga_order_list_temp where user_idx = #{user_idx}
 	</delete>
+	
+	<update id="setOrder_total_amount_and_point">
+		update ga_order_list_temp set order_total_amount = #{total_amount}, use_point = #{point} where user_idx = #{user_idx}
+	</update>
 	
 </mapper>

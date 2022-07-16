@@ -72,6 +72,10 @@
 		update ga_category set category_name = #{category_name} where category_idx = #{category_idx}
 	</update>
 	
+	<update id="setCategoryUse2">
+		update ga_category set category_use_yn = 'y' where category_idx = #{category_idx}
+	</update>
+	
 	<delete id="setCategoryGroupDelete">
 		delete from ga_category_group where category_group_idx = #{category_group_idx}
 	</delete>

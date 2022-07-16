@@ -37,7 +37,7 @@ public class CartController {
 		vo.setUser_idx(user_idx);
 		
 		cartService.setInputCart(vo);
-
+		
 		return "1";
 	}
 

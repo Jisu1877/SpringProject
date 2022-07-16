@@ -21,7 +21,7 @@
 	</select>
 	
 	<select id="getCartList" resultType="com.spring.javagreenS_ljs.vo.CartVO">
-		SELECT * FROM ga_cart c
+		SELECT *, i.item_option_flag as flag FROM ga_cart c
 		LEFT JOIN ga_item i
 		ON c.item_idx = i.item_idx
 		LEFT JOIN ga_item_option o

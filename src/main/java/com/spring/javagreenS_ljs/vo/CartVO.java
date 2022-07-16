@@ -21,4 +21,5 @@ public class CartVO extends ItemVO {
 	
 	private int[] optionIdxArr;
 	private int[] option_quantity;
+	private String flag;
 }

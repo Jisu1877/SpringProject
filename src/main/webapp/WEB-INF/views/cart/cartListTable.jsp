@@ -59,6 +59,7 @@ a {text-decoration:none;}
 	let option_name = [];
 	let option_price = [];
 	let quantity = [];
+	let cart_idx = [];
 
 	$(document).ready(function(){
 	  var currentPosition = parseInt($(".quickmenu").css("top"));
@@ -103,6 +104,7 @@ a {text-decoration:none;}
 			option_name[i] = $("#section_" + idx).find("#option_name").val();
 			option_price[i] = $("#section_" + idx).find("#option_price").val();
 			quantity[i] = $("#section_" + idx).find("#quantity").val();
+			cart_idx[i] = $("#section_" + idx).find("#cart_idx").val();
 			i++;
 		});
 		
@@ -143,6 +145,7 @@ a {text-decoration:none;}
 			option_name[i] = $("#section_" + idx).find("#option_name").val();
 			option_price[i] = $("#section_" + idx).find("#option_price").val();
 			quantity[i] = $("#section_" + idx).find("#quantity").val();
+			cart_idx[i] = $("#section_" + idx).find("#cart_idx").val();
 			i++;
 		});
 		const total_price = Math.floor(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
@@ -251,6 +254,7 @@ a {text-decoration:none;}
 		cartForm.order_option_name.value = option_name;
 		cartForm.order_option_price.value = option_price;
 		cartForm.order_quantity.value = quantity;
+		$("input[name=cart_idx]").val(cart_idx);
 		
 		cartForm.submit();		
 	}
@@ -280,10 +284,10 @@ a {text-decoration:none;}
    				<c:forEach var="cartVO" items="${cartList}" varStatus="st">
    					<tr id="section_${cartVO.cart_idx}">
    						<td width="10%">
-		   					<input type="checkbox" class="w3-check" id="check_${cartVO.cart_idx}" onchange="calcSelected();" data-idx="${cartVO.cart_idx}" ${cartVO.option_display_flag == 'n' || cartVO.display_flag == 'n' || cartVO.item_delete_flag == 'y' ? 'disabled="disabled"' : 'name="check_item"'} >
+		   					<input type="checkbox" class="w3-check" id="check_${cartVO.cart_idx}" onchange="calcSelected();" data-idx="${cartVO.cart_idx}" ${cartVO.flag != cartVO.item_option_flag || cartVO.option_display_flag == 'n' || cartVO.display_flag == 'n' || cartVO.item_delete_flag == 'y' ? 'disabled="disabled"' : 'name="check_item"'} >
    						</td>
    						<td width="20%">
-   							<img src="${ctp}/data/item/${cartVO.item_image}" width="150px;" ${cartVO.option_display_flag == 'n' || cartVO.display_flag == 'n' || cartVO.item_delete_flag == 'y' ? 'style="opacity:20%"' : ''}/>
+   							<img src="${ctp}/data/item/${cartVO.item_image}" width="150px;" ${cartVO.flag != cartVO.item_option_flag || cartVO.option_display_flag == 'n' || cartVO.display_flag == 'n' || cartVO.item_delete_flag == 'y' ? 'style="opacity:20%"' : ''}/>
    						</td>
    						<td width="25%">
    							<c:if test="${cartVO.seller_discount_flag == 'n'}">
@@ -312,7 +316,7 @@ a {text-decoration:none;}
    						</td>
    						<td>
    							<b>${cartVO.item_name}</b><br>
-	   						<c:if test="${cartVO.option_display_flag != 'n' && cartVO.display_flag != 'n' && cartVO.item_delete_flag == 'n' }">
+	   						<c:if test="${cartVO.flag == cartVO.item_option_flag && cartVO.option_display_flag != 'n' && cartVO.display_flag != 'n' && cartVO.item_delete_flag == 'n' }">
 		   						상품 주문 수량 : <span id="totalQuantity${cartVO.cart_idx}">${cartVO.quantity}</span> 개<br>
 			   					<c:if test="${cartVO.item_option_flag == 'y'}">
 			   						옵션 : ${cartVO.option_name} (+ <span>${cartVO.option_price}</span> x ${cartVO.quantity})
@@ -322,7 +326,7 @@ a {text-decoration:none;}
 										<a onclick="plus(${cartVO.cart_idx})"><i class="fa-solid fa-square-plus" style="font-size:23px"></i></a>
 								</div>
 							</c:if>
-							<c:if test="${cartVO.option_display_flag == 'n' || cartVO.display_flag == 'n' || cartVO.item_delete_flag == 'y'}">
+							<c:if test="${cartVO.flag != cartVO.item_option_flag || cartVO.option_display_flag == 'n' || cartVO.display_flag == 'n' || cartVO.item_delete_flag == 'y'}">
 								<div style="color:tomato">해당 상품은 상품 정보가<br> 변경된 상품입니다.</div>						
 		 					</c:if>
    						</td>
@@ -353,6 +357,7 @@ a {text-decoration:none;}
 					   		<input type="hidden" id="option_price"  value="0">
 				   		</c:if>
 				   		<input type="hidden" id="quantity" value="${cartVO.quantity}">
+				   		<input type="hidden" id="cart_idx" value="${cartVO.cart_idx}">
 					</tr>
    				</c:forEach>
 			</table>
@@ -379,25 +384,26 @@ a {text-decoration:none;}
    		<input type="hidden" name="order_option_price">
    		<input type="hidden" name="order_quantity">
    		<input type="hidden" name="order_total_amount">
+   		<input type="hidden" name="cart_idx">
     	</form>
     	<div class="w3-row" style="text-align:center; margin-top: 30px;" id="sub2">
    			<hr>
     		<div style="font-size:21px;"><b>총 선택 상품 금액</b></div>
     		<div class="total_price" data-total="0"></div>
-    		<div><input type="button" value="주문하기" class="w3-2021-desert-mist btn-lg" style="width:50%"></div>
+    		<div class="mb-4"><input type="button" value="주문하기" class="w3-2021-desert-mist btn-lg" style="width:50%"></div>
     	</div>
     	<c:if test="${cartList.size() == 0}">
-   			<div class="text-center">
-				<span class="w3-tag w3-xxxlarge w3-padding w3-2021-marigold w3-center">
-				    <strong>
-				    The shopping cart<br>
-				    is<br>
-				    empty !
-				    </strong>
-				</span>
-   			</div>
-   			<div class="text-center mt-4">
-				<a href="#" class="w3-btn w3-2021-mint">베스트 상품 보러가기</a>
+    		<div style="margin-left:30px;">
+	   			<div>
+					<span class="w3-tag w3-xxxlarge w3-padding w3-2021-marigold w3-center">
+					    <strong>
+					    The shopping cart is empty !
+					    </strong>
+					</span>
+	   			</div>
+	   			<div class="mt-4">
+					<a href="#" class="w3-btn w3-2021-mint">베스트 상품 보러가기</a>
+	   			</div>
    			</div>
     	</c:if>
 	</div>
