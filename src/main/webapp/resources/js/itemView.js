@@ -6,6 +6,10 @@ let seller_discount_amount = 0;
 let sw = 0;
 let optionIdxArr = [];
 let order_quantity = [];
+let option_name = [];
+let option_price = [];
+let itemJson = new Object();
+let order = new Object();
 
 $(function() {
 	sale_price = $("#sale_price").val();
@@ -13,6 +17,7 @@ $(function() {
 	seller_discount_amount = $("#seller_discount_amount").val();
 	totalAmount = $("#order_min_quantity").val();
 	setTotalPrice();
+	
 	
 });
 
@@ -92,6 +97,8 @@ function optionSelect(ths) {
 		if(optionIdxArr[i] == null) {
 			optionIdxArr[i] = idx;
 			order_quantity[i] = order_min_quantity;
+			option_name[i] = option;
+			option_price[i] = price;
 		}
 	}
 }
@@ -294,91 +301,40 @@ function buyItem() {
 		totalAmount = 1;
 	}
 	
-	/*let data;
-	if($("#item_option_flag").val() == 'y') {
-		data = {
-			item_idx : $("#item_idx").val(),
-			item_option_flag : $("#item_option_flag").val(),
-			optionIdxArr : optionIdxArr,
-			option_quantity : order_quantity,
-			quantity : totalAmount,
-			total_price : totalPrice
-		}
-	}
-	else {
-		data = {
-			item_idx : $("#item_idx").val(),
-			item_option_flag : $("#item_option_flag").val(),
-			optionIdxArr : optionIdxArr,
-			option_quantity : order_quantity,
-			quantity : totalAmount,
-			total_price : totalPrice
-		}
-	}
+	// 옵션 선택 시 해당 옵션을 order 객체에 초기화
+	order.order_item_idx = itemJson.item_idx.toString();
+	order.order_item_name = itemJson.item_name;
+	order.order_item_image = itemJson.item_image;
+	order.order_item_option_flag = itemJson.item_option_flag;
+	order.cart_idx = '0';
+	order.order_option_idx = optionIdxArr;
+	order.order_item_price = totalPrice;
+	order.order_option_name = option_name;
+	order.order_option_price = option_price.map(String);
+	order.order_quantity = order_quantity;
+	order.order_total_amount = totalPrice;
 	
-	$.ajax({
-		type : "post",
-		traditional: true,
-		url : "/javagreenS_ljs/cart/inputCart",
-		data : data,
-		success : function(res) {
-			if(res == '1') {
-				let item_idx = [];
-				let item_name = [];
-				let item_image = [];
-				let item_price = [];
-				let item_option_flag = [];
-				let option_idx = [];
-				let option_name = [];
-				let option_price = [];
-				let order_quantity = [];
-				let cart_idx = [];
-				
-				if($("#item_option_flag").val() == 'y') {
-					for(let i = 0; i < ($(".option_div").length)-1; i++) {
-						item_idx[i] = $("#item_idx").val();
-						item_name[i] = $("#item_name").val();
-						item_image[i] = $("#item_image").val();
-						item_price[i] = Number(totalPrice);
-						item_option_flag[i] = $("#item_option_flag").val();
-						option_idx[i] = optionIdxArr;
-						option_name[i] = $("#option"+i).data("label");
-						option_price[i] = $("#option"+i).data("price");
-						order_quantity[i] = order_quantity;
-						cart_idx[i] = 0;
-					}
-				}
-				else {
-					item_idx[0] = $("#item_idx").val();
-					item_name[0] = $("#item_name").val();
-					item_image[0] = $("#item_image").val();
-					item_price[0] = Number(totalPrice);
-					item_option_flag[0] = $("#item_option_flag").val();
-					option_idx[0] = 0;
-					option_name[0] = '';
-					option_prices[0] = 0;
-					order_quantity[0] = totalAmount;
-					cart_idx[0] = 0;
-				}
-				
-				cartForm.order_item_idx.value = item_idx;
-				cartForm.order_item_name.value = item_name;
-				cartForm.order_item_image.value = item_image;
-				cartForm.order_item_price.value = item_price;
-				cartForm.order_item_option_flag.value = item_option_flag;
-				cartForm.order_option_idx.value = option_idx;
-				cartForm.order_option_name.value = option_name;
-				cartForm.order_option_price.value = option_price;
-				cartForm.order_quantity.value = order_quantity;
-				$("input[name=cart_idx]").val(cart_idx);
-				
-				payForm.submit();
-			}
-		},
-		error : function() {
-			
-		}
-	});
+	const params = new URLSearchParams(order).toString();
+	
+	location.href = '/javagreenS_ljs/order/orderCheck?' + params;
+	
+	/*
+	const formData = new FormData();
+	
+	formData.append('order_item_idx', itemJson.item_idx.toString());
+	formData.append('order_item_name', itemJson.item_name);
+	formData.append('order_item_image', itemJson.item_image);
+	formData.append('order_item_option_flag', itemJson.item_option_flag);
+	formData.append('cart_idx', '0');
+	formData.append('order_option_idx', optionIdxArr);
+	formData.append('order_item_price', totalPrice);
+	formData.append('order_option_name', option_name);
+	formData.append('order_option_price', option_price.map(String));
+	formData.append('order_quantity', order_quantity);
+
+	const request = new XMLHttpRequest();
+	request.open("GET", "/javagreenS_ljs/order/orderCheck");
+	request.send(formData);
 	*/
 }
 

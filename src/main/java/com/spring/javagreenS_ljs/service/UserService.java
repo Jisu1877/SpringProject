@@ -1,5 +1,7 @@
 package com.spring.javagreenS_ljs.service;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.spring.javagreenS_ljs.vo.UserVO;
 
 public interface UserService {
@@ -11,5 +13,17 @@ public interface UserService {
 	public void setUserLoginUpdate(String user_id);
 
 	public void setUserLog(int user_idx, String host_ip);
+
+	public void setUserImageChange(MultipartHttpServletRequest multipart, int user_idx);
+
+	public void setUserNameUpdate(int user_idx, String name);
+
+	public void setUserEmailUpdate(int user_idx, String email);
+
+	public void setUserTelUpdate(int user_idx, String tel);
+
+	public void setUserGenderUpdate(int user_idx, String gender);
+
+	public void setUserPwdUpdate(int user_idx, String encPwd);
 
 }

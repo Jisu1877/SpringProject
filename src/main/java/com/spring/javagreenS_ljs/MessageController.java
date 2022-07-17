@@ -86,6 +86,10 @@ public class MessageController {
 			model.addAttribute("msg", "결제가 완료 되었습니다.");
 			model.addAttribute("url", "order/payResult"); 
 		}
+		else if(msgFlag.equals("userImageChangeOk")) { 
+			model.addAttribute("msg", "프로필 사진이 변경되었습니다.");
+			model.addAttribute("url", "user/myPageOpen"); 
+		}
 		 
 		
 		return "include/message";

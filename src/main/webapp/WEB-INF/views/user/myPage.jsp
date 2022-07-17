@@ -41,9 +41,13 @@
 	         <p class="w3-center">
 	         	<img src="${ctp}/data/user/${userVO.user_image}" class="w3-circle" style="height:106px;width:106px" alt="userImage"><br>
 	         </p>
+	         <form name="userImageForm" method="post" action="${ctp}/user/userImageChange" enctype="multipart/form-data">
 	         <h5 class="w3-center">${userVO.name} 
-	         	<a href="#" title="프로필 사진 변경"><i class="fa-solid fa-gear" style="font-size:13px;"></i></a>
+	         	<a href="javascript:$('#user_image').click()" title="프로필 사진 변경"><i class="fa-solid fa-gear" style="font-size:13px;"></i></a>
+	         	<input type="file" id="user_image" name="user_image" style="display:none" accept=".png, .jpg, .jpeg, .jfif, .gif" onchange="userImageChange();">
+	         	<input type="hidden" name="myPhoto" id="myPhoto">
 	         </h5>
+	         </form>
 	         <h6 class="w3-center">${userVO.user_id} &nbsp; |  &nbsp;
 	         <c:if test="${userVO.level == 1}">
 				Gold
@@ -82,12 +86,10 @@
 	         	</div>
 	         </div>
 	         <hr>
-	         <p><i class="fa-solid fa-at w3-margin-right w3-text-theme"></i> ${userVO.email}</p>
-	         <p><i class="fa-solid fa-mobile-screen-button w3-margin-right w3-text-theme"></i> ${userVO.tel}</p>
 	         <p><i class="fa-solid fa-arrow-pointer w3-margin-right w3-text-theme"></i> 로그인 횟수 : ${userVO.login_count}회</p>
 	         <p><i class="fa-solid fa-credit-card w3-margin-right w3-text-theme"></i> 구매 횟수 : ${userVO.buy_count}회</p>
 	         <p><i class="fa-solid fa-hand-holding-dollar w3-margin-right w3-text-theme"></i> 구매 총 금액 : <fmt:formatNumber value="${userVO.buy_price}"/>원</p>
-		     <p class="text-right" title="회원정보 수정"><a href="#"><i class="fa-solid fa-user-gear"></i></a></p>
+		     <p class="text-right" title="회원정보 수정"><a href="${ctp}/user/userInforUpdate"><i class="fa-solid fa-user-gear"></i>&nbsp;회원정보 수정</a></p>
 	        </div>
 	      </div>
 	      <br>
@@ -169,7 +171,7 @@
 	    
 	      <div class="w3-row-padding">
 	        <div class="w3-quarter text-center">
-	          <div class="w3-card w3-round w3-2019-sweet-corn">
+	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		🧾
@@ -180,7 +182,7 @@
 	          </div>
 	        </div>
 	        <div class="w3-quarter text-center">
-	          <div class="w3-card w3-round w3-2019-sweet-corn">
+	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		🚚
@@ -191,7 +193,7 @@
 	          </div>
 	        </div>
 	        <div class="w3-quarter text-center">
-	          <div class="w3-card w3-round w3-2019-sweet-corn">
+	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		📦
@@ -202,7 +204,7 @@
 	          </div>
 	        </div>
 	        <div class="w3-quarter text-center">
-	          <div class="w3-card w3-round w3-2019-sweet-corn">
+	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		🔙
@@ -260,15 +262,86 @@
 	          </c:if>
 	          <c:if test="${orderListOnlyThisMonth.size() != 0}">
 	          	<c:forEach var="vo" items="${orderListOnlyThisMonth}">
-	          	<div>
-		          <img src="${ctp}/data/item/${vo.item_image}" class="w3-left w3-margin-right" style="width:90px">
-		          <span class="w3-right w3-opacity">${fn:substring(vo.created_date, 0, 19)}</span>
-		          <h5>${vo.item_name}</h5><br>
-		          <hr class="w3-clear">
-		          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-		          <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button> 
-		          <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
-		        </div>
+	          	<div class="w3-row">
+	          		<div class="w3-col m2">
+			          <img src="${ctp}/data/item/${vo.item_image}" class="w3-left w3-margin-right" style="width:100%">
+	          		</div>
+	          		<div class="w3-col m8 pl-2">
+			            <h5>${vo.item_summary}</h5>
+			            <c:if test="${vo.item_option_flag == 'y'}">
+						  <div>옵션 : ${vo.option_name}</div>		          
+			            </c:if>
+					    <div>수량 : ${vo.order_quantity} 개</div>
+					    <div><b><fmt:formatNumber value="${vo.order_total_amount}"/>원</b></div>
+						<hr>
+						<c:if test="${vo.order_status_code == '1'}">
+							<font size="3" color="gray">결제완료</font><br>
+							✔️ 주문 확인 중입니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '2'}">
+							<font size="3" color="gray">확인완료</font><br>
+							✔️ 배송 준비 중입니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '3'}">
+							<font size="3" color="red">취소완료</font><br>
+							✔️ 취소처리가 완료되었습니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '4'}">
+							<font size="3" color="gray">배송중</font><br>
+							<i class="fa-solid fa-truck-bolt"></i> 배송 중입니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '5'}">
+							<font size="3" color="gray">배송완료</font><br>
+							<i class="fa-solid fa-box-check"></i> 배송이 완료되었습니다. 구매확정을 진행해주세요.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '6'}">
+						<font size="3" color="gray">구매완료</font><br>
+							✔️ 구매확정이 완료되었습니다. 리뷰를 작성해주세요.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '7'}">
+						<font size="3" color="red">교환신청 처리 중</font><br>
+							✔️ 교환 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '8'}">
+						<font size="3" color="red">교환승인 완료</font><br>
+							✔️ 상품 수거 처리 중입니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '9'}">
+						<font size="3" color="red">배송중(교환)</font><br>
+							✔️ 교환물품이 배송 중입니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '10'}">
+						<font size="3" color="red">교환거부</font><br>
+							✔ 교환이 거부되었습니다. 자세한 내용은 교환처리 페이지에서 확인해주세요.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '11'}">
+						<font size="3" color="red">환불신청 처리 중</font><br>
+							✔ 환불 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '12'}">
+						<font size="3" color="red">환불승인</font><br>
+							✔ 상품 수거 처리 중입니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '13'}">
+						<font size="3" color="red">환불완료</font><br>
+							✔ 환불이 완료되었습니다.
+						</c:if>					
+						<c:if test="${vo.order_status_code == '14'}">
+						<font size="3" color="red">환불거부</font><br>
+							✔ 환불이 거부되었습니다. 자세한 내용은 환불처리 페이지에서 확인해주세요.
+						</c:if>					
+	          		</div>
+	          		<div class="w3-col m2">
+	          			<div class="mb-2">
+	          				<span class="w3-right w3-opacity">${fn:substring(vo.created_date, 0, 19)}</span>
+	          			</div><br>
+	          			<div style="margin-top: 20px;">
+	          				<c:if test="${vo.order_status_code == '1'}">
+	          					<a class="btn btn-outline-primary btn-sm">주문 취소</a>
+							</c:if>
+	          			</div>
+	          		</div>
+		        </div><br><hr>
 		        </c:forEach>
 	          </c:if>
 	      </div>  

@@ -1,9 +1,7 @@
 package com.spring.javagreenS_ljs;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -25,8 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.spring.javagreenS_ljs.service.ItemService;
 import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
@@ -288,6 +287,7 @@ public class UserController {
 		return "0";
 	}
 	
+	//마이페이지 창 호출
 	@RequestMapping(value = "/myPageOpen", method = RequestMethod.GET)
 	public String myPageOpenGet(HttpSession session, Model model) {
 		String user_id = (String)session.getAttribute("sUser_id");
@@ -312,5 +312,86 @@ public class UserController {
 		model.addAttribute("orderListOnlyThisMonth", orderListOnlyThisMonth);
 		return "user/myPage";
 	}
+	
+	
+	//회원 프로필 사진 변경
+	@RequestMapping(value = "/userImageChange", method = RequestMethod.POST)
+	public String userImageChangePost(MultipartHttpServletRequest multipart, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		
+		userService.setUserImageChange(multipart, user_idx);
+		
+		return "redirect:/msg/userImageChangeOk";
+	}
+	
+	//회원정보 수정창 호출
+	@RequestMapping(value = "/userInforUpdate", method = RequestMethod.GET)
+	public String userInforUpdate(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		model.addAttribute("userVO", userVO);
+		return "user/userInforUpdate";
+	}
+	
+	//회원 이름 수정
+	@ResponseBody
+	@RequestMapping(value = "/nameUpdate", method = RequestMethod.POST)
+	public String nameUpdatePost(String name, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		userService.setUserNameUpdate(user_idx,name);
+		return "1";
+	}
+	
+	//회원 이메일 수정
+	@ResponseBody
+	@RequestMapping(value = "/emailUpdate", method = RequestMethod.POST)
+	public String emailUpdatePost(String email, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		userService.setUserEmailUpdate(user_idx,email);
+		return "1";
+	}
+	
+	//회원 전화번호 수정
+	@ResponseBody
+	@RequestMapping(value = "/telUpdate", method = RequestMethod.POST)
+	public String telUpdatePost(String tel, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		userService.setUserTelUpdate(user_idx,tel);
+		return "1";
+	}
+	
+	//회원 성별 수정
+	@ResponseBody
+	@RequestMapping(value = "/genderUpdate", method = RequestMethod.POST)
+	public String genderUpdatePost(String gender, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		userService.setUserGenderUpdate(user_idx,gender);
+		return "1";
+	}
+	
+	//회원 성별 수정
+	@ResponseBody
+	@RequestMapping(value = "/pwdUpdate", method = RequestMethod.POST)
+	public String pwdUpdatePost(String pwd, String pwdUpdate, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		String user_id = (String)session.getAttribute("sUser_id");
+		
+		//확인을 위해 입력 아이디로 정보 가져오기
+		UserVO vo2 = userService.getUserInfor(user_id);
+		
+		//비밀번호가 일치하지 않을 경우
+		if(!passwordEncoder.matches(pwd, vo2.getUser_pwd())) { 
+			return "0";
+		}
+		
+		//비밀번호 암호화 처리(BCryptPasswordEncoder)
+		String encPwd = passwordEncoder.encode(pwdUpdate);
+		
+		userService.setUserPwdUpdate(user_idx,encPwd);
+		return "1";
+	}
+	
 	
 }

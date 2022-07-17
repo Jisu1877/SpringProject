@@ -2,21 +2,17 @@ package com.spring.javagreenS_ljs;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.spring.javagreenS_ljs.service.CategoryAdminService;
 import com.spring.javagreenS_ljs.service.ItemAdminService;
 import com.spring.javagreenS_ljs.service.ItemService;
-import com.spring.javagreenS_ljs.vo.CartVO;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.CategoryVO;
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
@@ -72,9 +68,14 @@ public class ItemController {
 		ArrayList<ItemImageVO> imageList = itemAdminService.getItemImageInfor(itemVO.getItem_idx());
 		itemVO.setItemImageList(imageList);
 		
+		Gson gson = new Gson();
+		String itemJson = gson.toJson(itemVO);
+		
 		model.addAttribute("category_group_code", code[0]);
 		model.addAttribute("category_idx", code[1]);
 		model.addAttribute("itemVO" ,itemVO);
+		model.addAttribute("itemJson", itemJson);
+		
 		return "item/itemView";
 	}
 	

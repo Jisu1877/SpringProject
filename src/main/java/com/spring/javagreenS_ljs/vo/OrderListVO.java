@@ -27,5 +27,5 @@ public class OrderListVO {
 	private String tel;
 	private int user_delivery_idx;
 	private String order_admin_memo;
-	
+	private String item_summary;
 }

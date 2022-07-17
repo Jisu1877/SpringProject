@@ -12,6 +12,11 @@
 <link rel="icon" href="${ctp}/images/favicon.png">
 <link rel="stylesheet" type="text/css" href="${ctp}/css/itemView.css" />
 <script src="${ctp}/js/itemView.js"></script>
+<script>
+	$(function() {
+		itemJson = ${itemJson};
+	});
+</script>
 </head>
 <body>
 <!-- Nav  -->

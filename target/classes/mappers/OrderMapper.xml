@@ -27,6 +27,8 @@
 		SELECT * FROM ga_order o
 		JOIN ga_order_list ol
 		ON o.order_idx = ol.order_idx
+		JOIN ga_item it
+		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and date(o.created_date) between date(#{firstDate}) and date(#{lastDate}) 
 		order by o.created_date desc
 	</select>
