@@ -15,6 +15,15 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="${ctp}/ckeditor/ckeditor.js"></script>
 <script src="${ctp}/js/myPage.js"></script>
+<script>
+$(document).ready(function() {
+	let date = '${nowDate}';
+	let dateArr = date.split('-');
+	let dateNum = Number(dateArr[1]);
+	let calDate = Number(dateArr[1]) - 1;
+	console.log(calDate);
+});
+</script>
 <style>
 .date {
 	background-color:lavender;
@@ -171,76 +180,81 @@
 	    
 	      <div class="w3-row-padding">
 	        <div class="w3-quarter text-center">
+	          <a href="${ctp}/user/myPageOnlyOrder">
 	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		🧾
 	            	</span>
             		<div style="font-size:20px; margin-top:15px;"><b>주문</b></div>
-            		<div style="font-size:20px; margin-top:15px;">${orderList.size()}</div>
+            		<div style="font-size:20px; margin-top:15px;">${orderListOnlyOrderCnt}</div>
 	            </div>
 	          </div>
+	          </a>
 	        </div>
 	        <div class="w3-quarter text-center">
+	          <a href="${ctp}/user/myPageOnlyDelivery">
 	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		🚚
 	            	</span>
             		<div style="font-size:20px; margin-top:15px;"><b>배송중</b></div>
-            		<div style="font-size:20px; margin-top:15px;">${orderList.size()}</div>
+            		<div style="font-size:20px; margin-top:15px;">${orderListOnlyDeliveryCnt}</div>
 	            </div>
 	          </div>
+	          </a>
 	        </div>
 	        <div class="w3-quarter text-center">
+	          <a href="${ctp}/user/myPageOnlyDeliveryOk">
 	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		📦
 	            	</span>
             		<div style="font-size:20px; margin-top:15px;"><b>배송완료</b></div>
-            		<div style="font-size:20px; margin-top:15px;">${orderList.size()}</div>
+            		<div style="font-size:20px; margin-top:15px;">${orderListOnlyDeliveryOkCnt}</div>
 	            </div>
 	          </div>
+	          </a>
 	        </div>
 	        <div class="w3-quarter text-center">
+	          <a href="${ctp}/user/myPageOnlyReturn">
 	          <div class="w3-card w3-round w3-2019-sweet-corn w3-hover-khaki">
 	            <div class="w3-container w3-padding">
 	            	<span class="w3-badge w3-xlarge w3-padding w3-white">
 	            		🔙
 	            	</span>
             		<div style="font-size:20px; margin-top:15px;"><b>취소/반품/교환</b></div>
-            		<div style="font-size:20px; margin-top:15px;">${orderList.size()}</div>
+            		<div style="font-size:20px; margin-top:15px;">${orderListOnlyReturnCnt}</div>
 	            </div>
 	          </div>
+	          </a>
 	        </div>
 	      </div>
-	      
-         <form>
+         <form name="orderSearchForm" method="get" action="${ctp}/user/orderSearch">
 	      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
 	        <div class="w3-row-padding" style="margin:0 -16px;">
 		          <div class="w3-third w3-margin-bottom">
 		            <label><i class="fa fa-calendar-o"></i>&nbsp; 주문 조회</label>
-		            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="start" id="start" autocomplete="off">
+		            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="start" id="start" value="${start}" autocomplete="off">
 		          </div>
 		          <div class="w3-third">
 		            <label>&nbsp;</label>
-		            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="end" id="end" autocomplete="off">
+		            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="end" id="end" value="${end}" autocomplete="off">
 		          </div>
 		          <div class="w3-third">
 		          	<div class="w3-row">
 		          		<div class="w3-half">
 		          			<label>&nbsp;</label>
 		          			<select name="order_status_code" id="order_status_code" class="w3-select w3-border">
-		          				<option value="0">전체조회</option>
-		          				<option value="1">결제완료</option>
-		          				<option value="2">배송확인</option>
-		          				<option value="3">취소</option>
-		          				<option value="4">배송중</option>
-		          				<option value="5">배송완료</option>
-		          				<option value="6">교환</option>
-		          				<option value="7">환불</option>
-		          				<option value="8">구매완료</option>
+		          				<option value="0" ${code == 0 ? 'selected' : '' }>전체조회</option>
+		          				<option value="1" ${code == 1 ? 'selected' : '' }>결제완료</option>
+		          				<option value="3" ${code == 3 ? 'selected' : '' }>취소</option>
+		          				<option value="4" ${code == 4 ? 'selected' : '' }>배송중</option>
+		          				<option value="5" ${code == 5 ? 'selected' : '' }>배송완료</option>
+		          				<option value="6" ${code == 6 ? 'selected' : '' }>교환</option>
+		          				<option value="7" ${code == 7 ? 'selected' : '' }>환불</option>
 		          			</select>
 		          		</div>
 		          		<div class="w3-half pl-4">
@@ -252,16 +266,33 @@
 	        </div>
 	      </div>
          </form>
+         <div id="basicOrderList">
 	      <div class="w3-container w3-card w3-white w3-round w3-margin">
-	      	  <div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${nowDate}</span></div>
-	      	  <hr>
-	          <c:if test="${orderListOnlyThisMonth.size() == 0}">
+	          <c:if test="${orderListSearch.size() == 0}">
 	          	  <div class="w3-padding-16" style="font-size:16px;">
-					<i class="fa-solid fa-circle-exclamation"></i>&nbsp; 이번 달 주문 내역이 없습니다☺️
+					<i class="fa-solid fa-circle-exclamation"></i>&nbsp; 조회되는 주문 내역이 없습니다☺️
 	          	  </div>
 	          </c:if>
-	          <c:if test="${orderListOnlyThisMonth.size() != 0}">
-	          	<c:forEach var="vo" items="${orderListOnlyThisMonth}">
+	          <c:if test="${orderListSearch.size() != 0}">
+	          	<c:set var="cnt" value="0"/>
+	          	<c:forEach var="vo" items="${orderListSearch}">
+	          	<c:set var="date" value="${fn:split(vo.created_date, '-')}"/>
+	          	<c:set var="date2" value="${fn:split(nowDate, '-')}"/>
+	          	<c:if test="${date[1] == date2[1] && cnt == 0}">
+		          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${nowDate}</span></div>
+		      	  	<hr>
+		      	  	<c:set var="cnt" value="1"/>
+	      	  	</c:if>
+	          	<c:if test="${date[1] != date2[1]}">
+	          		<c:set var="calSub" value="${date2[1] - date[1]}"/>
+	          		<c:set var="calDay" value="${date2[1] - calSub}"/>
+	          		<c:set var="el" value="-"/>
+	          		<c:set var="zero" value="0"/>
+	          		<c:set var="calDate" value="${date[0]}${el}${zero}${calDay}"/>
+		          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${calDate}</span></div>
+		      	  	<hr>
+		      	  	<c:set var="cnt" value="1"/>
+	      	  	</c:if>
 	          	<div class="w3-row">
 	          		<div class="w3-col m2">
 			          <img src="${ctp}/data/item/${vo.item_image}" class="w3-left w3-margin-right" style="width:100%">
@@ -344,20 +375,9 @@
 		        </div><br><hr>
 		        </c:forEach>
 	          </c:if>
-	      </div>  
-	
-	      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-	        <img src="/w3images/avatar6.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-	        <span class="w3-right w3-opacity">32 min</span>
-	        <h4>Angie Jane</h4><br>
-	        <hr class="w3-clear">
-	        <p>Have you seen this?</p>
-	        <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
-	        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-	        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button> 
-	        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> 
+	      </div>
 	      </div> 
-	      
+	
 	    <!-- End Middle Column -->
 	    </div>
 	    

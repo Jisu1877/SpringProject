@@ -42,5 +42,8 @@ public interface ItemAdminService {
 
 	public void setdeleteOption(int item_option_idx);
 
+	public ArrayList<ItemVO> getBestItemAllInforOnlyDisplay();
+
+	public ArrayList<ItemVO> getItemListSearch(int startIndexNo, int pageSize, String part);
 
 }

@@ -35,6 +35,40 @@
 		select * from ga_item where item_idx = #{item_idx}
 	</select>
 	
+	<select id="getBestItemAllInforOnlyDisplay" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item where display_flag = 'y' and item_delete_flag = 'n' order by sale_quantity desc
+	</select>
+	
+	<select id="totRecCnt" resultType="int">
+		<if test="part == '전체'">
+			select count(*) from ga_item where item_delete_flag = 'n'
+		</if>
+		<if test="part == '판매중'">
+			select count(*) from ga_item where sold_out = 0 and display_flag = 'y' and item_delete_flag = 'n'		
+		</if>
+		<if test="part == '전시중지'">
+			select count(*) from ga_item where display_flag = 'n' and item_delete_flag = 'n'		
+		</if>
+		<if test="part == '품절'">
+			select count(*) from ga_item where sold_out = 1 and item_delete_flag = 'n'		
+		</if>
+	</select>
+	
+	<select id="getItemListSearch" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		<if test="part == '전체'">
+			select * from ga_item where item_delete_flag = 'n' order by display_flag desc limit #{startIndexNo}, #{pageSize}
+		</if>
+		<if test="part == '판매중'">
+			select * from ga_item where sold_out = 0 and display_flag = 'y' and item_delete_flag = 'n' limit #{startIndexNo}, #{pageSize}		
+		</if>
+		<if test="part == '전시중지'">
+			select * from ga_item where display_flag = 'n' and item_delete_flag = 'n' limit #{startIndexNo}, #{pageSize}		
+		</if>
+		<if test="part == '품절'">
+			select * from ga_item where sold_out = 1 and item_delete_flag = 'n'	limit #{startIndexNo}, #{pageSize}	
+		</if>
+	</select>
+	
 	<insert id="setItemOption">
 		insert into ga_item_option values (DEFAULT, #{maxIdx}, DEFAULT, #{option_name}, #{option_price}, #{option_stock}, #{option_sold_out}, DEFAULT, DEFAULT)
 	</insert>

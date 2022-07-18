@@ -55,4 +55,11 @@ public interface ItemAdminDAO {
 
 	public void setItemOptionUpdate(@Param("vo") ItemOptionVO vo);
 
+	public ArrayList<ItemVO> getBestItemAllInforOnlyDisplay();
+
+	public int totRecCnt(@Param("part") String part);
+
+	public ArrayList<ItemVO> getItemListSearch(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("part") String part);
+
+
 }

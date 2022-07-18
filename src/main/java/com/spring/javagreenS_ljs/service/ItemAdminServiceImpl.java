@@ -522,5 +522,18 @@ public class ItemAdminServiceImpl implements ItemAdminService {
 	public void setdeleteOption(int item_option_idx) {
 		itemDAO.setdeleteOption(item_option_idx);
 	}
+
+
+	@Override
+	public ArrayList<ItemVO> getBestItemAllInforOnlyDisplay() {
+		return itemDAO.getBestItemAllInforOnlyDisplay();
+	}
+
+
+	@Override
+	public ArrayList<ItemVO> getItemListSearch(int startIndexNo, int pageSize, String part) {
+		return itemDAO.getItemListSearch(startIndexNo,pageSize,part);
+	}
+
 	
 }

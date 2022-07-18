@@ -21,5 +21,15 @@ public interface OrderService {
 
 	public ArrayList<OrderListVO> getOrderList(int user_idx);
 
+	public ArrayList<OrderListVO> getorderListOnlyOrder(int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyDelivery(int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyDeliveryOk(int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyReturn(int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListSearch(int user_idx, String start, String end, String order_status_code);
+
 
 }

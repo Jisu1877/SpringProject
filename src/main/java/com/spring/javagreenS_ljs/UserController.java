@@ -298,8 +298,21 @@ public class UserController {
 		//주문 + 주문 목록 정보 가져오기(이번달 건만)
 		ArrayList<OrderListVO> orderListOnlyThisMonth = orderService.getOrderListOnlyThisMonth(user_idx);
 		
-		//전체 주문 건도 가져오기
-		ArrayList<OrderListVO> orderList = orderService.getOrderList(user_idx);
+		//주문 + 주문 목록 정보 가져오기(결제 완료 건만)
+		ArrayList<OrderListVO> orderListOnlyOrder = orderService.getorderListOnlyOrder(user_idx);
+		int orderListOnlyOrderCnt = orderListOnlyOrder.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송중인 건만)
+		ArrayList<OrderListVO> orderListOnlyDelivery = orderService.getOrderListOnlyDelivery(user_idx);
+		int orderListOnlyDeliveryCnt = orderListOnlyDelivery.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송완료인 건만)
+		ArrayList<OrderListVO> orderListOnlyDeliveryOk = orderService.getOrderListOnlyDeliveryOk(user_idx);
+		int orderListOnlyDeliveryOkCnt = orderListOnlyDeliveryOk.size();
+		
+		//주문 + 주문 목록 정보 가져오기(취소/반품/교환 관련 건만)
+		ArrayList<OrderListVO> orderListOnlyReturn = orderService.getOrderListOnlyReturn(user_idx);
+		int orderListOnlyReturnCnt = orderListOnlyReturn.size();
 		
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
         Date now = new Date();
@@ -308,8 +321,11 @@ public class UserController {
 		
         model.addAttribute("nowDate", nowDate);
 		model.addAttribute("userVO", userVO);
-		model.addAttribute("orderList", orderList);
-		model.addAttribute("orderListOnlyThisMonth", orderListOnlyThisMonth);
+		model.addAttribute("orderListOnlyOrderCnt", orderListOnlyOrderCnt);
+		model.addAttribute("orderListOnlyDeliveryCnt", orderListOnlyDeliveryCnt);
+		model.addAttribute("orderListOnlyDeliveryOkCnt", orderListOnlyDeliveryOkCnt);
+		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
+		model.addAttribute("orderListSearch", orderListOnlyThisMonth);
 		return "user/myPage";
 	}
 	
@@ -322,6 +338,16 @@ public class UserController {
 		userService.setUserImageChange(multipart, user_idx);
 		
 		return "redirect:/msg/userImageChangeOk";
+	}
+	
+	//관리자 프로필 사진 변경
+	@RequestMapping(value = "/adminImageChange", method = RequestMethod.POST)
+	public String adminImageChangePost(MultipartHttpServletRequest multipart, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		
+		userService.setUserImageChange(multipart, user_idx);
+		
+		return "redirect:/msg/adminImageChangeOk";
 	}
 	
 	//회원정보 수정창 호출
@@ -393,5 +419,208 @@ public class UserController {
 		return "1";
 	}
 	
+	//회원별 결제완료 건만 조회하기
+	@RequestMapping(value = "/myPageOnlyOrder", method = RequestMethod.GET)
+	public String myPageOnlyOrderGet(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		//주문 + 주문 목록 정보 가져오기(결제 완료 건만)
+		ArrayList<OrderListVO> orderListOnlyOrder = orderService.getorderListOnlyOrder(user_idx);
+		int orderListOnlyOrderCnt = orderListOnlyOrder.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송중인 건만)
+		ArrayList<OrderListVO> orderListOnlyDelivery = orderService.getOrderListOnlyDelivery(user_idx);
+		int orderListOnlyDeliveryCnt = orderListOnlyDelivery.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송완료인 건만)
+		ArrayList<OrderListVO> orderListOnlyDeliveryOk = orderService.getOrderListOnlyDeliveryOk(user_idx);
+		int orderListOnlyDeliveryOkCnt = orderListOnlyDeliveryOk.size();
+		
+		//주문 + 주문 목록 정보 가져오기(취소/반품/교환 관련 건만)
+		ArrayList<OrderListVO> orderListOnlyReturn = orderService.getOrderListOnlyReturn(user_idx);
+		int orderListOnlyReturnCnt = orderListOnlyReturn.size();
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
+        Date now = new Date();
+        String nowDate = sdf1.format(now);
+		
+		
+        model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("orderListOnlyOrderCnt", orderListOnlyOrderCnt);
+		model.addAttribute("orderListOnlyDeliveryCnt", orderListOnlyDeliveryCnt);
+		model.addAttribute("orderListOnlyDeliveryOkCnt", orderListOnlyDeliveryOkCnt);
+		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
+		model.addAttribute("orderListSearch", orderListOnlyOrder);
+		return "user/myPage";
+	}
 	
+	//회원별 배송중인 건만 조회하기
+	@RequestMapping(value = "/myPageOnlyDelivery", method = RequestMethod.GET)
+	public String myPageOnlyDeliveryGet(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		//주문 + 주문 목록 정보 가져오기(결제 완료 건만)
+		ArrayList<OrderListVO> orderListOnlyOrder = orderService.getorderListOnlyOrder(user_idx);
+		int orderListOnlyOrderCnt = orderListOnlyOrder.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송중인 건만)
+		ArrayList<OrderListVO> orderListOnlyDelivery = orderService.getOrderListOnlyDelivery(user_idx);
+		int orderListOnlyDeliveryCnt = orderListOnlyDelivery.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송완료인 건만)
+		ArrayList<OrderListVO> orderListOnlyDeliveryOk = orderService.getOrderListOnlyDeliveryOk(user_idx);
+		int orderListOnlyDeliveryOkCnt = orderListOnlyDeliveryOk.size();
+		
+		//주문 + 주문 목록 정보 가져오기(취소/반품/교환 관련 건만)
+		ArrayList<OrderListVO> orderListOnlyReturn = orderService.getOrderListOnlyReturn(user_idx);
+		int orderListOnlyReturnCnt = orderListOnlyReturn.size();
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
+		Date now = new Date();
+		String nowDate = sdf1.format(now);
+		
+		
+		model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("orderListOnlyOrderCnt", orderListOnlyOrderCnt);
+		model.addAttribute("orderListOnlyDeliveryCnt", orderListOnlyDeliveryCnt);
+		model.addAttribute("orderListOnlyDeliveryOkCnt", orderListOnlyDeliveryOkCnt);
+		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
+		model.addAttribute("orderListSearch", orderListOnlyDelivery);
+		return "user/myPage";
+	}
+	
+	//회원별 배송완료 건만 조회하기
+	@RequestMapping(value = "/myPageOnlyDeliveryOk", method = RequestMethod.GET)
+	public String myPageOnlyDeliveryOkGet(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		//주문 + 주문 목록 정보 가져오기(결제 완료 건만)
+		ArrayList<OrderListVO> orderListOnlyOrder = orderService.getorderListOnlyOrder(user_idx);
+		int orderListOnlyOrderCnt = orderListOnlyOrder.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송중인 건만)
+		ArrayList<OrderListVO> orderListOnlyDelivery = orderService.getOrderListOnlyDelivery(user_idx);
+		int orderListOnlyDeliveryCnt = orderListOnlyDelivery.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송완료인 건만)
+		ArrayList<OrderListVO> orderListOnlyDeliveryOk = orderService.getOrderListOnlyDeliveryOk(user_idx);
+		int orderListOnlyDeliveryOkCnt = orderListOnlyDeliveryOk.size();
+		
+		//주문 + 주문 목록 정보 가져오기(취소/반품/교환 관련 건만)
+		ArrayList<OrderListVO> orderListOnlyReturn = orderService.getOrderListOnlyReturn(user_idx);
+		int orderListOnlyReturnCnt = orderListOnlyReturn.size();
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
+		Date now = new Date();
+		String nowDate = sdf1.format(now);
+		
+		
+		model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("orderListOnlyOrderCnt", orderListOnlyOrderCnt);
+		model.addAttribute("orderListOnlyDeliveryCnt", orderListOnlyDeliveryCnt);
+		model.addAttribute("orderListOnlyDeliveryOkCnt", orderListOnlyDeliveryOkCnt);
+		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
+		model.addAttribute("orderListSearch", orderListOnlyDeliveryOk);
+		return "user/myPage";
+	}
+	
+	//회원별 취소 관련 건만 조회하기
+	@RequestMapping(value = "/myPageOnlyReturn", method = RequestMethod.GET)
+	public String myPageOnlyReturnGet(HttpSession session, Model model) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		//주문 + 주문 목록 정보 가져오기(결제 완료 건만)
+		ArrayList<OrderListVO> orderListOnlyOrder = orderService.getorderListOnlyOrder(user_idx);
+		int orderListOnlyOrderCnt = orderListOnlyOrder.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송중인 건만)
+		ArrayList<OrderListVO> orderListOnlyDelivery = orderService.getOrderListOnlyDelivery(user_idx);
+		int orderListOnlyDeliveryCnt = orderListOnlyDelivery.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송완료인 건만)
+		ArrayList<OrderListVO> orderListOnlyDeliveryOk = orderService.getOrderListOnlyDeliveryOk(user_idx);
+		int orderListOnlyDeliveryOkCnt = orderListOnlyDeliveryOk.size();
+		
+		//주문 + 주문 목록 정보 가져오기(취소/반품/교환 관련 건만)
+		ArrayList<OrderListVO> orderListOnlyReturn = orderService.getOrderListOnlyReturn(user_idx);
+		int orderListOnlyReturnCnt = orderListOnlyReturn.size();
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
+		Date now = new Date();
+		String nowDate = sdf1.format(now);
+		
+		
+		model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("orderListOnlyOrderCnt", orderListOnlyOrderCnt);
+		model.addAttribute("orderListOnlyDeliveryCnt", orderListOnlyDeliveryCnt);
+		model.addAttribute("orderListOnlyDeliveryOkCnt", orderListOnlyDeliveryOkCnt);
+		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
+		model.addAttribute("orderListSearch", orderListOnlyReturn);
+		return "user/myPage";
+	}
+	
+	
+	//주문건 날짜와 조건으로 검색하기(마이페이지)
+	@RequestMapping(value = "/orderSearch", method = RequestMethod.GET)
+	public String orderSearchGet(HttpSession session, Model model,
+			@RequestParam(name ="start", defaultValue = "", required = false) String start,
+			@RequestParam(name ="end", defaultValue = "", required = false) String end,
+			@RequestParam(name ="order_status_code", defaultValue = "", required = false) String order_status_code
+			) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		//주문 + 주문 목록 정보 가져오기(결제 완료 건만)
+		ArrayList<OrderListVO> orderListOnlyOrder = orderService.getorderListOnlyOrder(user_idx);
+		int orderListOnlyOrderCnt = orderListOnlyOrder.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송중인 건만)
+		ArrayList<OrderListVO> orderListOnlyDelivery = orderService.getOrderListOnlyDelivery(user_idx);
+		int orderListOnlyDeliveryCnt = orderListOnlyDelivery.size();
+		
+		//주문 + 주문 목록 정보 가져오기(배송완료인 건만)
+		ArrayList<OrderListVO> orderListOnlyDeliveryOk = orderService.getOrderListOnlyDeliveryOk(user_idx);
+		int orderListOnlyDeliveryOkCnt = orderListOnlyDeliveryOk.size();
+		
+		//주문 + 주문 목록 정보 가져오기(취소/반품/교환 관련 건만)
+		ArrayList<OrderListVO> orderListOnlyReturn = orderService.getOrderListOnlyReturn(user_idx);
+		int orderListOnlyReturnCnt = orderListOnlyReturn.size();
+		
+		//조건으로 검색하기
+		ArrayList<OrderListVO> orderListSearch = orderService.getOrderListSearch(user_idx, start, end, order_status_code);
+		
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
+		Date now = new Date();
+		String nowDate = sdf1.format(now);
+		
+		model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("orderListOnlyOrderCnt", orderListOnlyOrderCnt);
+		model.addAttribute("orderListOnlyDeliveryCnt", orderListOnlyDeliveryCnt);
+		model.addAttribute("orderListOnlyDeliveryOkCnt", orderListOnlyDeliveryOkCnt);
+		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
+		model.addAttribute("orderListSearch", orderListSearch);
+		model.addAttribute("start", start);
+		model.addAttribute("end", end);
+		model.addAttribute("code", order_status_code);
+		return "user/myPage";
+	}
 }

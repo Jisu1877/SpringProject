@@ -27,5 +27,24 @@ public interface OrderDAO {
 
 	public ArrayList<OrderListVO> getOrderList(@Param("user_idx") int user_idx);
 
+	public ArrayList<OrderListVO> getorderListOnlyOrder(@Param("user_idx") int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyDelivery(@Param("user_idx") int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyDeliveryOk(@Param("user_idx") int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyReturn(@Param("user_idx") int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListSearch(@Param("user_idx")int user_idx, @Param("start") String start, @Param("end") String end);
+
+	public ArrayList<OrderListVO> getorderListOnlyOrderSearch(@Param("user_idx")int user_idx, @Param("start") String start, @Param("end") String end);
+
+	public ArrayList<OrderListVO> getorderListOnlySearch(@Param("user_idx") int user_idx, @Param("start") String start, @Param("end") String end, @Param("code") String order_status_code);
+
+	public ArrayList<OrderListVO> getorderListOnlyChangeOkSearch(@Param("user_idx")int user_idx, @Param("start") String start, @Param("end") String end);
+
+	public ArrayList<OrderListVO> getorderListOnlyReturnOkSearch(@Param("user_idx")int user_idx, @Param("start") String start, @Param("end") String end);
+
+
 
 }

@@ -148,6 +148,9 @@
 						</div>
 					</div>
 					<div style="margin:30px;">
+						<c:if test="${itemVO.item_return_flag == 'n'}">
+							<div style="color:navy">※ 반품불가 상품입니다. 신중히 구매 부탁드립니다.</div>
+						</c:if>
 						<hr>
 					</div>
 					<%-- <div style="margin-left:30px;">남은 재고 수량 : ${itemVO.stock_quantity}</div> --%>
@@ -204,7 +207,15 @@
 						</div>
 					</div>
 					<div style="margin:30px;">
-						<a class="w3-button w3-2021-marigold form-control btn-lg" style="font-family: 'Montserrat', sans-serif" onclick="buyItem()">구매하기</a>
+						<c:if test="${itemVO.sold_out == 0}">
+							<a class="w3-button w3-2021-marigold form-control btn-lg" style="font-family: 'Montserrat', sans-serif" onclick="buyItem()">바로구매</a>
+						</c:if>
+						<c:if test="${itemVO.sold_out == 1}">
+							<c:if test="${itemVO.stock_schedule_date != ''}">
+								<div class="mb-2" style="color:tomato">※ 재입고 예정일 : ${itemVO.stock_schedule_date} </div>
+							</c:if>
+							<button class="w3-button w3-2020-flame-scarlet form-control btn-lg" style="font-family: 'Montserrat', sans-serif" disabled="disabled">품절</button>
+						</c:if>
 					</div>
 					<div class="w3-row w3-center" style="margin:30px; font-family: 'Montserrat', sans-serif">
 						<div class="w3-third">

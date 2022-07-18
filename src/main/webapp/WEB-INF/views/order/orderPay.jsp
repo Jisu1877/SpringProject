@@ -300,7 +300,7 @@
 		    		혜택 적용
 		    	</div>
 		    	<div class="w3-padding" style="margin-bottom: 20px;">
-    				<div><i class="fa-solid fa-won-sign"></i>&nbsp; 포인트 사용</div>
+    				<div><i class="fa-solid fa-won-sign"></i>&nbsp; 포인트 사용 (<span>보유 포인트 : <fmt:formatNumber value="${userVO.point}"/>Point</span>)</div>
 	    			<table class="w3-table">
 	    				<tr>
 	    					<td>

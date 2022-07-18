@@ -16,17 +16,17 @@ $(document).ready(function(){
 		  showAnim: 'slideDown'
 		  //beforeShowDay: disableSelectedDates
     });
-   /*let today = new Date();
-   today.setDate(today.getDate() + 1);*/
+   let today = new Date();
+   today.setDate(today.getDate());
    
    //$('#start').datepicker("option", "minDate", today);
-   $('#start').datepicker("option", "maxDate", $("#end").val());
    $('#start').datepicker("option", "onClose", function (selectedDate){
-       $("#end").datepicker( "option", "minDate", selectedDate );
-       });
+	   $("#end").datepicker( "option", "minDate", selectedDate );
+	   });
    
    $('#end').datepicker();
    $('#end').datepicker("option", "minDate", $("#start").val());
+   $('#end').datepicker("option", "maxDate", today);
    $('#end').datepicker("option", "onClose", function (selectedDate){
        $("#start").datepicker( "option", "maxDate", selectedDate );
       });
@@ -83,4 +83,16 @@ function userImageChange() {
 	$("#myPhoto").val(user_image);
 	
 	userImageForm.submit();
+}
+
+
+function searchCheck() {
+	let start = $("#start").val();
+	let end = $("#end").val();
+	
+	if(start == "" || end == "") {
+		alert("조회 날짜를 선택하세요.");
+		return false;
+	}
+	orderSearchForm.submit();
 }

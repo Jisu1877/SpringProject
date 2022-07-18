@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.javagreenS_ljs.service.AdminService;
 import com.spring.javagreenS_ljs.service.CategoryAdminService;
 import com.spring.javagreenS_ljs.service.ItemAdminService;
+import com.spring.javagreenS_ljs.service.UserService;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.CategoryVO;
 import com.spring.javagreenS_ljs.vo.ItemVO;
+import com.spring.javagreenS_ljs.vo.UserVO;
 
 @Controller
 @RequestMapping("/admin/category")
@@ -29,11 +33,21 @@ public class CategoryAdminController {
 	@Autowired
 	ItemAdminService itemAdminService;
 	
+	@Autowired
+	UserService userService;
+	
 	//카테고리 화면 호출
 	@RequestMapping(value = "/categoryHome", method = RequestMethod.GET)
-	public String categoryHomeGet(Model model) {
+	public String categoryHomeGet(Model model, HttpSession session) {
 		ArrayList<CategoryGroupVO> vos = categoryAdminService.getCategoryGroupInfor();
 		model.addAttribute("vos", vos);
+		
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		model.addAttribute("userVO", userVO);
+	    
 		return "admin/item/categoryHome";
 	}
 	

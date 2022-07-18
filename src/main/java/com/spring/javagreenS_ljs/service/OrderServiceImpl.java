@@ -209,5 +209,49 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.getOrderList(user_idx);
 	}
 
+	@Override
+	public ArrayList<OrderListVO> getorderListOnlyOrder(int user_idx) {
+		return orderDAO.getorderListOnlyOrder(user_idx);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListOnlyDelivery(int user_idx) {
+		return orderDAO.getOrderListOnlyDelivery(user_idx);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListOnlyDeliveryOk(int user_idx) {
+		return orderDAO.getOrderListOnlyDeliveryOk(user_idx);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListOnlyReturn(int user_idx) {
+		return orderDAO.getOrderListOnlyReturn(user_idx);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListSearch(int user_idx, String start, String end, String order_status_code) {
+		//상태 코드에 따라 return 이 달라진다.
+		//전체조회
+		if(order_status_code.equals("0")) {
+			return orderDAO.getOrderListSearch(user_idx, start, end);
+		}
+		//결제완료
+		else if(order_status_code.equals("1")) {
+			return orderDAO.getorderListOnlyOrderSearch(user_idx, start, end);
+		}
+		//취소 or 배송중 or 배송완료
+		else if(order_status_code.equals("3") || order_status_code.equals("4") || order_status_code.equals("5")) {
+			return orderDAO.getorderListOnlySearch(user_idx, start, end, order_status_code);
+		}
+		//교환 관련 건
+		else if(order_status_code.equals("6")) {
+			return orderDAO.getorderListOnlyChangeOkSearch(user_idx, start, end);
+		}
+		else {
+			return orderDAO.getorderListOnlyReturnOkSearch(user_idx, start, end);
+		}
+	}
+
 
 }

@@ -90,6 +90,10 @@ public class MessageController {
 			model.addAttribute("msg", "프로필 사진이 변경되었습니다.");
 			model.addAttribute("url", "user/myPageOpen"); 
 		}
+		else if(msgFlag.equals("adminImageChangeOk")) { 
+			model.addAttribute("msg", "프로필 사진이 변경되었습니다.");
+			model.addAttribute("url", "admin/mainHome"); 
+		}
 		 
 		
 		return "include/message";

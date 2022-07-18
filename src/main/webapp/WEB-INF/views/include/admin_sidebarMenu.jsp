@@ -26,6 +26,38 @@ function sidebarMenuopen() {
 function sidebarMenuClose() {
   document.getElementById("mySidebar").style.display = "none";
 }
+
+function userImageChange() {
+	
+	let user_image = document.getElementById("user_image").value;
+	
+	let maxSize = 1024 * 1024 * 20;
+	let fileSize = 0;
+	
+	if (user_image.indexOf(" ") != -1) { // 혹시 파일명에 공백이 있으면~~~
+		alert("업로드 파일명에 공백을 포함할 수 없습니다.");
+		return false;
+	}
+	else if (user_image != "") {
+		let ext = user_image.substring(user_image.lastIndexOf(".") + 1);
+		let uExt = ext.toUpperCase();
+		fileSize += document.getElementById("user_image").files[0].size; //파일 선택이 1개밖에 안되기 때문에 0번 배열에만 파일이 있는 상태이다.
+
+		if (uExt != "JPG" && uExt != "GIF" && uExt != "PNG" && uExt != "JPEG" && uExt != "JFIF") {
+			alert("업로드 가능한 파일은 'JPG/GIF/PNG/JPEG/JFIF' 입니다.");
+			return false;
+		}
+	}
+
+	if (fileSize > maxSize) {
+		alert("업로드할 파일의 총 최대 용량은 20MByte 입니다.");
+		return false;
+	}
+	
+	$("#myPhoto").val(user_image);
+	
+	userImageForm.submit();
+}
 </script>
 <!-- Sidebar -->
 <nav class="w3-sidebar w3-black w3-animate-top w3-large" style="display:none;padding-top:150px" id="mySidebar">
@@ -46,15 +78,15 @@ function sidebarMenuClose() {
   <div class="w3-container w3-row">
     <div class="w3-col s12 w3-bar w3-center">
       <p class="w3-center" style="margin-top: 20px;">
-      	<%-- <img src="${ctp}/data/member/${vo.save_file_name}" class="w3-circle" style="height:106px;width:106px"> --%>
-      	<img src="${ctp}/images/noimage.jpg" class="w3-circle" style="height:100px;width:100px">
+      	<img src="${ctp}/data/user/${userVO.user_image}" class="w3-circle" style="height:100px;width:100px">
+      	<form name="userImageForm" method="post" action="${ctp}/user/adminImageChange" enctype="multipart/form-data">
+         	<a href="javascript:$('#user_image').click()" title="프로필 사진 변경" style="font-size:13px;">프로필 사진 변경</a>
+         	<input type="file" id="user_image" name="user_image" style="display:none" accept=".png, .jpg, .jpeg, .jfif, .gif" onchange="userImageChange();">
+         	<input type="hidden" name="myPhoto" id="myPhoto">
+         </h5>
+         </form>
       </p>
       <span>Welcome, <strong> ${sUser_id}</strong></span><br>
-      <!-- 
-  	  <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
-       -->
     </div>
   </div>
   <hr>
@@ -65,8 +97,7 @@ function sidebarMenuClose() {
 	  <div id="Demo1" class="w3-bar-block w3-2020-ash" style="display: none">
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/category/categoryHome">카테고리 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/item/itemInsert">상품 등록</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/item/itemList">상품 조회/수정</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">사진 보관함</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/item/itemList">상품 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">배송정보 관리</a></button>
 	  </div>
 	</div>
@@ -74,8 +105,7 @@ function sidebarMenuClose() {
 	  <button onclick="slideDown(2)" class="w3-2019-brown-granite menu"><strong>일반판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo2" class="w3-bar-block w3-2020-ash" style="display: none">
-	    <!-- <button class="w3-bar-item w3-2019-brown-granite"><a href="">주문통합검색</a></button> -->
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">배송현황 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderList">주문 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">취소 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 관리</a></button>

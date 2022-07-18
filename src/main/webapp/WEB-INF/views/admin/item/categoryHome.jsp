@@ -388,14 +388,16 @@
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
-    <!-- Header -->
-	<header class="w3-container" style="padding-top:22px;">
-		<p style="margin-top:20px; font-size:23px;">카테고리 관리</p>
-	</header>
  	
  	<!-- content  -->
  	<div class="w3-row-padding w3-margin-bottom">
  		<div class="w3-col s11">
+	    <!-- Header -->
+		<header style="padding-top:22px;">
+			<div class="w3-bottombar w3-light-grey w3-padding" style="margin-bottom: 20px; font-size:23px;">
+		    	카테고리 관리
+		    </div>
+		</header>
  		<form name="myForm">
  			<div class="box w3-border">
 				<div class="w3-white w3-padding">

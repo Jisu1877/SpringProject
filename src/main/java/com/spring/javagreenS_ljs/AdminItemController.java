@@ -15,13 +15,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.gson.Gson;
+import com.spring.javagreenS_ljs.pagination.PageVO;
+import com.spring.javagreenS_ljs.pagination.PagingProcess;
 import com.spring.javagreenS_ljs.service.CategoryAdminService;
 import com.spring.javagreenS_ljs.service.ItemAdminService;
+import com.spring.javagreenS_ljs.service.UserService;
 import com.spring.javagreenS_ljs.vo.CategoryGroupVO;
 import com.spring.javagreenS_ljs.vo.CategoryVO;
 import com.spring.javagreenS_ljs.vo.ItemImageVO;
 import com.spring.javagreenS_ljs.vo.ItemOptionVO;
 import com.spring.javagreenS_ljs.vo.ItemVO;
+import com.spring.javagreenS_ljs.vo.UserVO;
 
 @Controller
 @RequestMapping("/admin/item")
@@ -33,8 +37,18 @@ public class AdminItemController {
 	@Autowired
 	CategoryAdminService categoryAdminService;
 	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	PagingProcess pagingProcess;
+	
 	@RequestMapping(value = "/itemInsert", method = RequestMethod.GET)
-	public String itemInsertGet(Model model) {
+	public String itemInsertGet(Model model, HttpSession session) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		model.addAttribute("userVO", userVO);
 		//대분류 카테고리 가져오기
 		ArrayList<CategoryGroupVO> categoryGroupVOS = categoryAdminService.getCategoryGroupInforOnlyUse();
 		
@@ -79,15 +93,30 @@ public class AdminItemController {
 	}
 	
 	@RequestMapping(value = "/itemList", method = RequestMethod.GET)
-	public String itemListGet(Model model) {
-		ArrayList<ItemVO> vos = itemAdminService.getItemList();
+	public String itemListGet(Model model, HttpSession session,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
+			@RequestParam(name="part", defaultValue = "전체", required = false) String part
+			) {
+		String user_id = (String)session.getAttribute("sUser_id");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		model.addAttribute("userVO", userVO);
+		
+		//페이징처리
+		PageVO pageVo = pagingProcess.pageProcess2(pag, pageSize,"adminItem", part , "");
+		
+		//상품 목록 불러오기
+		ArrayList<ItemVO> vos = itemAdminService.getItemListSearch(pageVo.getStartIndexNo(), pageVo.getPageSize(), part);
+		
+		model.addAttribute("pageVo", pageVo);
 		model.addAttribute("vos", vos);
 		return "admin/item/itemList";
 	}
 	
 	//상품 조회 창 호출
 	@RequestMapping(value = "/itemInquire", method = RequestMethod.GET)
-	public String itemInquireGet(Model model, @RequestParam(name="item_code", defaultValue = "NO", required = false) String item_code) {
+	public String itemInquireGet(Model model, @RequestParam(name="item_code", defaultValue = "NO", required = false) String item_code, HttpSession session) {
 		if(item_code.equals("NO")) {
 			return "redirect:/msg/itemInquireNo";
 		}
@@ -118,13 +147,19 @@ public class AdminItemController {
 		ArrayList<ItemImageVO> imageList = itemAdminService.getItemImageInfor(itemVO.getItem_idx());
 		itemVO.setItemImageList(imageList);
 		
+		String user_id = (String)session.getAttribute("sUser_id");
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		model.addAttribute("userVO", userVO);
+		
 		model.addAttribute("itemVO" ,itemVO);
 		return "admin/item/itemInquire";
 	}
 	
 	//상품 수정 창 호출
 	@RequestMapping(value = "/itemUpdate", method = RequestMethod.GET)
-	public String itemUpdateGet(Model model, @RequestParam(name="item_code", defaultValue = "NO", required = false) String item_code) {
+	public String itemUpdateGet(Model model, @RequestParam(name="item_code", defaultValue = "NO", required = false) String item_code, HttpSession session) {
 		if(item_code.equals("NO")) {
 			return "redirect:/msg/itemUpdateNo";
 		}
@@ -159,6 +194,12 @@ public class AdminItemController {
 		//이미지정보 가져와서 Set 
 		ArrayList<ItemImageVO> imageList = itemAdminService.getItemImageInfor(itemVO.getItem_idx());
 	    itemVO.setItemImageList(imageList);
+	    
+
+		String user_id = (String)session.getAttribute("sUser_id");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+		model.addAttribute("userVO", userVO);
 	    
 	    model.addAttribute("itemVO" ,itemVO);
 		return "admin/item/itemUpdate";

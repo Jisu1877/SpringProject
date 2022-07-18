@@ -33,6 +33,11 @@ public class MainController {
 		//상품 가져오기
 		ArrayList<ItemVO> itemVOS =  itemAdminService.getItemAllInforOnlyDisplay();
 		model.addAttribute("itemVOS", itemVOS);
+		
+		//주간 베스트 상품 가져오기
+		ArrayList<ItemVO> itemBestList = itemAdminService.getBestItemAllInforOnlyDisplay();
+		model.addAttribute("itemBestList", itemBestList);
+		
 		return "main/home";
 	}
 	
