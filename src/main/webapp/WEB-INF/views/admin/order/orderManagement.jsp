@@ -10,6 +10,7 @@
     <title>상품 조회/수정</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
+    <script src="${ctp}/js/orderManagement.js"></script>
     <style>
 		body,h1 {font-family: "Montserrat", sans-serif}
 		a {
@@ -19,10 +20,6 @@
 			color : black;
 			text-decoration: none;	
 		}
-		.box {
-	   		box-shadow: 0 16px 18px -20px rgba(0, 0, 0, 0.7);
-	   		margin-right: 10px;
-		}
 		.tableStyle {
 	  		width:100%;
 	  		overflow-x : auto;
@@ -30,79 +27,28 @@
 	  		border-radius: 15px;
 	  		background-color: white;
 	  	}
-	  	.switch {
-		  position: relative;
-		  display: inline-block;
-		  width: 60px;
-		  height: 34px;
-		}
-		
-		.switch input { 
-		  opacity: 0;
-		  width: 0;
-		  height: 0;
-		}
-		
-		.slider {
-		  position: absolute;
-		  cursor: pointer;
-		  top: 0;
-		  left: 0;
-		  right: 0;
-		  bottom: 0;
-		  background-color: #ccc;
-		  -webkit-transition: .4s;
-		  transition: .4s;
-		}
-		
-		.slider:before {
-		  position: absolute;
-		  content: "";
-		  height: 26px;
-		  width: 26px;
-		  left: 4px;
-		  bottom: 4px;
-		  background-color: white;
-		  -webkit-transition: .4s;
-		  transition: .4s;
-		}
-			  	
-	  	input:checked + .slider {
-		  background-color: #2196F3;
-		}
-		
-		input:focus + .slider {
-		  box-shadow: 0 0 1px #2196F3;
-		}
-		
-		input:checked + .slider:before {
-		  -webkit-transform: translateX(26px);
-		  -ms-transform: translateX(26px);
-		  transform: translateX(26px);
-		}
-		
-		/* Rounded sliders */
-		.slider.round {
-		  border-radius: 34px;
-		}
-		
-		.slider.round:before {
-		  border-radius: 50%;
-		}
-		
 	</style>
 	<script>
 		//페이지사이즈 검색
-	  	function pageCheck() {
+		function pageCheck() {
 			let pageSize = $("#pageSize").val();
 			location.href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pag}&pageSize="+pageSize;
 		}
-		
-	  	//분류별 검색
+	
+		//분류별 검색
 		function partCheck() {
 			let part = $("select[name=part]").val();
 			let pageSize = $("#pageSize").val();
 			location.href="${ctp}/admin/item/itemList?part="+part+"&pag=${pag}&pageSize="+pageSize;
+		}
+		
+		function orderCancelInfor(listIdx) {
+			let url = "/javagreenS_ljs/order/orderCancelInfor?listIdx=" + listIdx;
+			let winX = 500;
+		    let winY = 650;
+		    let x = (window.screen.width/2) - (winX/2);
+		    let y = (window.screen.height/2) - (winY/2)
+			window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 		}
 	</script>
 </head>
@@ -190,22 +136,27 @@
     	  </div>
         </div>
 		<div class="w3-responsive tableStyle">
-			<table class="w3-table w3-striped table-bordered" style="border-collapse:separate;">
-	        	<tr class="w3-2019-princess-blue">
-	        		<th class="text-center">주문번호</th>
-	        		<th class="text-center">상품번호</th>
-	        		<th class="text-center">상품명</th>
-	        		<th class="text-center">옵션명</th>
-	        		<th class="text-center">수량</th>
-	        		<th class="text-center">결제금액</th>
-	        		<th class="text-center">주문일시</th>
-	        		<th class="text-center">주문상태</th>
-	        		<th class="text-center">상세정보</th>
-	        		<th class="text-center">처리</th>
-	        	</tr>
+			<table class="w3-table table-bordered" style="border-collapse:separate;">
+				<thead>
+		        	<tr class="w3-2019-princess-blue">
+		        		<th class="text-center">구매자 아이디</th>
+		        		<th class="text-center">주문번호</th>
+		        		<th class="text-center">상품번호</th>
+		        		<th class="text-center">상품명</th>
+		        		<th class="text-center">옵션명</th>
+		        		<th class="text-center">수량</th>
+		        		<th class="text-center">결제금액</th>
+		        		<th class="text-center">주문일시</th>
+		        		<th class="text-center">상세정보</th>
+		        		<th class="text-center">주문상태</th>
+		        		<th class="text-center">처리</th>
+		        	</tr>
+				</thead>
+				<tbody>
 	        	<c:forEach var="vo" items="${orderList}">
-	        		<tr>
-	        			<td width="5%" class="text-center">${vo.order_idx}</td>
+	        		<tr data-idx="${vo.order_idx}">
+	        			<td width="9%"class="text-center id_${vo.order_idx}" style="vertical-align: middle;">${vo.user_id}</td>
+	        			<td width="5%" class="text-center idx_${vo.order_idx}" style="vertical-align: middle;">${vo.order_idx}</td>
 	        			<td width="5%" class="text-center">${vo.item_idx}</td>
 	        			<td>${vo.item_name}</td>
 	        			<td width="8%">${vo.option_name}</td>
@@ -213,15 +164,18 @@
 	        			<td class="text-center">
 	        				<fmt:formatNumber value="${vo.item_price}"/> 원	
 	        			</td>
-	        			<td class="text-center">
+	        			<td class="text-center" style="vertical-align: middle;">
 	        				${fn:substring(vo.created_date, 0, 19)}
+	        			</td>
+	        			<td class="text-center infor_${vo.order_idx}" style="vertical-align: middle;">
+	        				<a onclick="orderListInfor(${vo.order_idx})">조회</a>
 	        			</td>
 	        			<td class="text-center">
 	        				<c:if test="${vo.order_status_code == '1'}">
 								<font size="3" color="gray">결제완료</font><br>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '2'}">
-								<font size="3" color="gray">확인완료</font><br>
+								<font size="3" color="gray">주문확인(배송준비)</font><br>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '3'}">
 								<font size="3" color="red">취소완료</font><br>
@@ -261,17 +215,14 @@
 							</c:if>
 	        			</td>
 	        			<td class="text-center">
-	        				<a href="orderListInfor(${vo.order_idx})">조회</a>
-	        			</td>
-	        			<td class="text-center">
 	        				<c:if test="${vo.order_status_code == '1'}">
-								<input type="button" value="주문확인" class="btn btn-sm w3-2020-navy-blazer"/>
+								<input type="button" value="주문확인" class="btn btn-sm w3-2020-navy-blazer" onclick="orderCodeChange1(${vo.order_list_idx})"/>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '2'}">
-								<font size="3" color="gray">확인완료</font><br>
+								<a onclick="" class="btn w3-2021-mint btn-sm">송장 입력</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '3'}">
-								<font size="3" color="red">취소완료</font><br>
+								<a onclick="orderCancelInfor(${vo.order_list_idx})" class="btn w3-yellow btn-sm">내용 확인</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '4'}">
 								<font size="3" color="gray">배송중</font><br>
@@ -309,17 +260,19 @@
 	        			</td>
 	        		</tr>
 	        	</c:forEach>
+	        	</tbody>
 	        </table>
 	    </div>
 	    <!-- 블록 페이징 처리 -->
 	  <div class="w3-center w3-padding-32">
+	 	 <div class="mb-2"><b>${pageVo.pag} Page</b></div>
 	    <div class="w3-bar w3-white">
 	      <c:if test="${pageVo.pag > 1}">
 		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=1&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-button w3-hover-black">«</a>
 	      </c:if>
-	      <c:if test="${pageVo.curBlock > 0}">
+	    <%--   <c:if test="${pageVo.curBlock > 0}">
 		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-black w3-button">◁</a>
-	      </c:if>
+	      </c:if> --%>
 	      <c:forEach var="i" begin="${(pageVo.curBlock*pageVo.blockSize)+1}" end="${(pageVo.curBlock*pageVo.blockSize)+pageVo.blockSize}">
 	      	<c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
 		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${i}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
@@ -328,9 +281,9 @@
 		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${i}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 	      </c:forEach>
-	      <c:if test="${pageVo.curBlock < pageVo.lastBlock}">
+	     <%--  <c:if test="${pageVo.curBlock < pageVo.lastBlock}">
 		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&pageSize=${pageVo.pageSize}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-button w3-hover-black">▷</a>
-		  </c:if>
+		  </c:if> --%>
 		  <c:if test="${pageVo.pag != pageVo.totPage}">
 		  	<a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-button w3-hover-black">»</a>
 		  </c:if>

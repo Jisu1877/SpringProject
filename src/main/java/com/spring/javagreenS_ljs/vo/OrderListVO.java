@@ -16,6 +16,7 @@ public class OrderListVO {
 	private String option_price;
 	private int order_quantity;
 	private String order_status_code;
+	private String update_date;
 	private String created_date;
 	
 	private int user_idx;
@@ -28,4 +29,6 @@ public class OrderListVO {
 	private int user_delivery_idx;
 	private String order_admin_memo;
 	private String item_summary;
+	private String user_id;
+	private UserDeliveryVO deliveryVO;
 }

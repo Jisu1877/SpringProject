@@ -79,7 +79,7 @@ $(document).ready(function() {
 					- 구매 총 가격 30만원 이상
 					<hr>
 					Gold 레벨의 혜택은?<br>
-					- 식물 경매 참여 가능
+					- 적립 포인트 2배 적립
 			    </div>
 			 </span>
 	         </h6>
@@ -96,7 +96,12 @@ $(document).ready(function() {
 	         </div>
 	         <hr>
 	         <p><i class="fa-solid fa-arrow-pointer w3-margin-right w3-text-theme"></i> 로그인 횟수 : ${userVO.login_count}회</p>
-	         <p><i class="fa-solid fa-credit-card w3-margin-right w3-text-theme"></i> 구매 횟수 : ${userVO.buy_count}회</p>
+	         <p><i class="fa-solid fa-credit-card w3-margin-right w3-text-theme"></i> 구매 횟수 : ${userVO.buy_count}회
+	         	<a onclick="myFunction3()"><i class="fa-solid fa-circle-question"></i></a>
+				<div id="demo" class="w3-dropdown-content w3-bar-block w3-border montserrat" style="padding:10px; font-size: 12px;">
+					구매 횟수와 구매 총금액은 상품 구매확정 시 누적됩니다.
+			    </div>
+	         </p>
 	         <p><i class="fa-solid fa-hand-holding-dollar w3-margin-right w3-text-theme"></i> 구매 총 금액 : <fmt:formatNumber value="${userVO.buy_price}"/>원</p>
 		     <p class="text-right" title="회원정보 수정"><a href="${ctp}/user/userInforUpdate"><i class="fa-solid fa-user-gear"></i>&nbsp;회원정보 수정</a></p>
 	        </div>
@@ -366,9 +371,15 @@ $(document).ready(function() {
 	          			<div class="mb-2">
 	          				<span class="w3-right w3-opacity">${fn:substring(vo.created_date, 0, 19)}</span>
 	          			</div><br>
-	          			<div style="margin-top: 20px;">
+	          			<div style="margin-top: 20px;" class="w3-right">
 	          				<c:if test="${vo.order_status_code == '1'}">
-	          					<a class="btn btn-outline-primary btn-sm">주문 취소</a>
+	          					<a onclick="orderCancel(${vo.order_list_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
+							</c:if>
+	          				<c:if test="${vo.order_status_code == '2'}">
+	          					<a onclick="orderCancelRequest(${vo.order_list_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
+							</c:if>
+	          				<c:if test="${vo.order_status_code == '3'}">
+	          					<a onclick="orderCancelInfor(${vo.order_list_idx})" class="btn btn-outline-warning btn-sm">내용 확인</a>
 							</c:if>
 	          			</div>
 	          		</div>
@@ -389,6 +400,14 @@ $(document).ready(function() {
 <script>
 function myFunction2() {
   var x = document.getElementById("pointDemo");
+  if (x.className.indexOf("w3-show") == -1) { 
+    x.className += " w3-show";
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+function myFunction3() {
+  var x = document.getElementById("demo");
   if (x.className.indexOf("w3-show") == -1) { 
     x.className += " w3-show";
   } else {

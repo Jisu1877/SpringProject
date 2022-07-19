@@ -48,12 +48,12 @@
    					<div id="elevate">
 		    			<img class="mySlides" id="elevate_zoom" src="${ctp}/data/item/${itemVO.item_image}" data-zoom-image="${ctp}/data/item/${itemVO.item_image}" style="width:510px;">
 						 <div class="w3-row-padding w3-section" id="image_list">
-						     <a data-image="${ctp}/data/item/${itemVO.item_image}" data-zoom-image="${ctp}/data/item/${itemVO.item_image}">
+						     <a data-image="${ctp}/data/item/${itemVO.item_image}" data-zoom-image="${ctp}/data/item/${itemVO.item_image}" onclick="resetEzPlus(this)">
 					  		 	<img class="w3-opacity w3-hover-opacity-off" src="${ctp}/data/item/${itemVO.item_image}" style="width:52px;cursor:pointer">
 						     </a>
 							 <c:forEach var="vo" items="${itemVO.itemImageList}" varStatus="st">
 							 	<c:if test="${itemVO.item_image != vo.image_name}">
-							 		<a data-image="${ctp}/data/item/${vo.image_name}" data-zoom-image="${ctp}/data/item/${vo.image_name}" onclick="resetEzPlus()">
+							 		<a data-image="${ctp}/data/item/${vo.image_name}" data-zoom-image="${ctp}/data/item/${vo.image_name}" onclick="resetEzPlus(this)">
 							  			<img class="w3-opacity w3-hover-opacity-off" src="${ctp}/data/item/${vo.image_name}" style="width:52px;cursor:pointer">
 							 		</a>
 							  	</c:if>
@@ -149,7 +149,7 @@
 					</div>
 					<div style="margin:30px;">
 						<c:if test="${itemVO.item_return_flag == 'n'}">
-							<div style="color:navy">※ 반품불가 상품입니다. 신중히 구매 부탁드립니다.</div>
+							<div style="color:navy">※ 단순변심 반품불가 상품입니다. 신중히 구매 부탁드립니다.</div>
 						</c:if>
 						<hr>
 					</div>
@@ -358,11 +358,11 @@
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 <script>
  $(function() {
-	//initEzPlus();
+	initEzPlus();
 	document.getElementById("infor").style.display = "block";
 });
 
-/* function initEzPlus() {
+ function initEzPlus() {
 	$('#elevate_zoom').ezPlus({
 	    gallery: 'image_list',
 	    cursor: 'pointer',
@@ -380,21 +380,24 @@
 	});
 }
 
-function resetEzPlus() {
-	$('#elevate_zoom').ezPlus({
-	    cursor: 'pointer',
-	    loadingIcon: 'http://www.elevateweb.co.uk/spinner.gif',
-	    scrollZoom: true,
-	    zoomLevel: 0.5,
-	    borderSize : 1,
-	    zoomWindowWidth: 510,
-	    zoomWindowHeight: 510,
-	    responsive: true,
-	    zoomWindowPosition: 1,
-	    zoomWindowOffsetX: 10
-	});
+function resetEzPlus(img) {
+// 	$('#elevate_zoom').attr('src', img.src);
+// 	$('#elevate_zoom').ezPlus({
+// 		gallery: 'image_list',
+// 	    cursor: 'pointer',
+// 	    galleryActiveClass: 'active',
+// 	    loadingIcon: 'http://www.elevateweb.co.uk/spinner.gif',
+// 	    scrollZoom: true,
+// 	    zoomLevel: 0.5,
+// 	    borderSize : 1,
+// 	    zoomWindowWidth: 510,
+// 	    zoomWindowHeight: 510,
+// 	    responsive: true,
+// 	    zoomWindowPosition: 1,
+// 	    zoomWindowOffsetX: 10
+// 	});
 }
- */
+
  
 function currentDiv(n) {
   showDivs(slideIndex = n);

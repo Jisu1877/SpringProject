@@ -13,6 +13,27 @@
 		ON o.order_idx = ol.order_idx
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
+		JOIN ga_user us
+		ON o.user_idx = us.user_idx
 		order by o.created_date desc limit #{startIndexNo}, #{pageSize}
 	</select>
+	
+	<select id="getOrderInfor" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		SELECT * FROM ga_order o
+		JOIN ga_order_list ol
+		ON o.order_idx = ol.order_idx
+		JOIN ga_item it
+		ON ol.item_idx = it.item_idx
+		JOIN ga_user us
+		ON o.user_idx = us.user_idx
+		where o.order_idx = #{idx}
+	</select>
+	
+	<update id="setOrderAdminMemo">
+		update ga_order set order_admin_memo = #{memo} where order_idx = #{idx}
+	</update>
+	
+	<update id="setOrderCodeChange">
+		update ga_order_list set order_status_code = #{code}, update_date = now() where order_list_idx = #{idx}
+	</update>
 </mapper>

@@ -1,7 +1,5 @@
 package com.spring.javagreenS_ljs.service;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +20,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Override
 	public void setDeliveryInfor(UserDeliveryVO vo) {
 		deliveryDAO.setDeliveryInfor(vo);
+	}
+
+	@Override
+	public UserDeliveryVO getUserDeliveryInfor(int delivery_idx) {
+		return deliveryDAO.getUserDeliveryInfor(delivery_idx);
 	}
 
 }

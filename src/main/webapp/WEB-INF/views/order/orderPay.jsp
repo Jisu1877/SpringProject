@@ -215,24 +215,24 @@
 	    	</div>
 	    	<div style="margin-bottom: 30px;">
 	    		<table class="w3-table" style="font-size:17px;">
-   				<c:forEach var="i" begin="0" end="${fn:length(orderVO.order_item_name) - 1}" varStatus="st">
+   				<c:forEach var="orderVO" items="${orderListTemp}" varStatus="st">
    					<tr>
    						<td>
    							<b>${st.count}.</b>
    						</td>
    						<td>
-   							<img src="${ctp}/data/item/${orderVO.order_item_image[i]}" width="150px;"/>
+   							<img src="${ctp}/data/item/${orderVO.item_image}" width="150px;"/>
    						</td>
    						<td>
-   							<b>${orderVO.order_item_name[i]}</b><br>
-	   						상품 주문 수량 : <span>${orderVO.order_quantity[i]}</span> 개<br>
-		   					<c:if test="${orderVO.order_item_option_flag[i] == 'y'}">
-		   						옵션 : ${orderVO.order_option_name[i]}<br>
+   							<b>${orderVO.item_name}</b><br>
+	   						상품 주문 수량 : <span>${orderVO.order_quantity}</span> 개<br>
+		   					<c:if test="${orderVO.item_option_flag == 'y'}">
+		   						옵션 : ${orderVO.option_name}<br>
 		   					</c:if>
    						</td>
 						<td>
 							<b>상품 금액</b><br>
-							<fmt:formatNumber value="${orderVO.order_item_price[i]}"/>원</span></b>
+							<fmt:formatNumber value="${orderVO.item_price}"/>원</span></b>
 						</td>
 					</tr>
    				</c:forEach>

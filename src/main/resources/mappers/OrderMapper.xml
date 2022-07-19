@@ -12,7 +12,11 @@
 	</insert>
 	
 	<insert id="setOrderListHistory">
-		insert into ga_order_list values (DEFAULT, #{vo.order_idx}, #{vo.item_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT, DEFAULT);
+		insert into ga_order_list values (DEFAULT, #{vo.order_idx}, #{vo.item_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT, NULL, DEFAULT);
+	</insert>
+	
+	<insert id="setOrderCancelHistory">
+		insert into ga_order_cancel values (DEFAULT, #{vo.user_idx}, #{vo.order_list_idx}, #{vo.cancel_reason}, #{vo.return_price}, #{vo.return_bank_name}, #{vo.return_bank_user_name}, #{vo.return_bank_number}, DEFAULT);
 	</insert>
 	
 	<select id="getOrderListTempList" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
@@ -135,6 +139,14 @@
 		WHERE o.user_idx = #{user_idx} and date(o.created_date) between date(#{start}) and date(#{end})
 		and  ol.order_status_code = #{code}
 		order by o.created_date desc
+	</select>
+	
+	<select id="getOrderListInfor" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		select * from ga_order_list where order_list_idx = #{listIdx}
+	</select>
+	
+	<select id="getorderCancelInfor" resultType="com.spring.javagreenS_ljs.vo.OrderCancelVO">
+		select * from ga_order_cancel where order_list_idx = #{listIdx}
 	</select>
 	
 	<delete id="setOrderListTempDelete">

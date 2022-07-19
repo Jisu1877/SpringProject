@@ -8,6 +8,7 @@ let optionIdxArr = [];
 let order_quantity = [];
 let option_name = [];
 let option_price = [];
+let item_price = [];
 let itemJson = new Object();
 let order = new Object();
 
@@ -177,6 +178,12 @@ function plus(ths) {
 	for(let i = 0; i < ($(".option_div").length)-1; i++) {
 		if(optionIdxArr[i] == idx) {
 			order_quantity[i] = Number(order_quantity[i]) + 1;
+			if(seller_discount_flag == 'y') {
+				item_Price[i] = ((Number(sale_price) - Number(seller_discount_amount)) * order_quantity[i]) + price;
+			}
+			else {
+				item_price[i] = Number(sale_price) * order_quantity[i] + price;
+			}
 		}
 	}
 	
@@ -273,46 +280,38 @@ function buyItem() {
 		return false;
 	}
 	
-	//로그인 상태인지 확인
-	$.ajax({
-		type : "post",
-		url : "/javagreenS_ljs/user/loginCheck",
-		success : function(data) {
-			if(data == '0') {
-				alert("로그인이 필요한 서비스입니다.");
-				let url = "/javagreenS_ljs/user/userLoginOther";
-	      		let winX = 1300;
-	            let winY = 700;
-	            let x = (window.screen.width/2) - (winX/2);
-	            let y = (window.screen.height/2) - (winY/2)
-	   			window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
-	   			setInterval(function(){
-					$("#navBar").load(location.href+" #navBar>*","");
-				}, 2000);
-			}
-		},
-		error : function() {
-			alert("전송오류.");
-		}
-	});
-	
 	//주문/결제 창으로 넘어가기 준비
 	if(totalAmount == 0) {
 		totalAmount = 1;
 	}
+	if(order_quantity.length == 0) {
+		order_quantity[0] = totalAmount;
+	}
+	if(option_name.length == 0) {
+		option_name[0] = " ";
+	}
+	if(option_price.length == 0) {
+		option_price[0] = " ";
+	}
 	
 	// 옵션 선택 시 해당 옵션을 order 객체에 초기화
-	order.order_item_idx = itemJson.item_idx.toString();
-	order.order_item_name = itemJson.item_name;
-	order.order_item_image = itemJson.item_image;
-	order.order_item_option_flag = itemJson.item_option_flag;
-	order.cart_idx = '0';
 	order.order_option_idx = optionIdxArr;
-	order.order_item_price = totalPrice;
+	//order.order_item_price = totalPrice;
 	order.order_option_name = option_name;
 	order.order_option_price = option_price.map(String);
 	order.order_quantity = order_quantity;
 	order.order_total_amount = totalPrice;
+	//상품 가격을 배열로 각각 담아야 한다.(옵션 선택시)
+	order.order_item_price = item_price.length == 0 ? totalPrice : item_price;
+	
+	let length = order.order_option_idx.length;
+	length = length == 0 ? 1 : length;
+	
+	order.order_item_idx = Array(length).fill(itemJson.item_idx.toString());
+	order.order_item_name = Array(length).fill(itemJson.item_name);
+	order.order_item_image = Array(length).fill(itemJson.item_image);
+	order.order_item_option_flag = Array(length).fill(itemJson.item_option_flag);
+	order.cart_idx = Array(length).fill('0');
 	
 	const params = new URLSearchParams(order).toString();
 	
@@ -377,7 +376,7 @@ function inputCart() {
 			}
 		},
 		error : function() {
-			alert("전송오류.");
+			/*alert("전송오류.");*/
 		}
 	});
 	
@@ -412,7 +411,7 @@ function inputCart() {
 			}
 		},
 		error : function() {
-			alert("전송오류.");
+			/*alert("전송오류.");*/
 		}
 	});
 	

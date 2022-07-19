@@ -278,7 +278,7 @@ public class UserController {
 	
 	// 로그인되어 있는지 확인
 	@ResponseBody
-	@RequestMapping(value = "/loginCheck", method=RequestMethod.POST)
+	@RequestMapping(value = "/loginCheck", method = RequestMethod.POST)
 	public String loginCheckPost(HttpSession session) {
 		String user_id = (String)session.getAttribute("sUser_id");
 		if(user_id != null) {
@@ -317,7 +317,6 @@ public class UserController {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");        
         Date now = new Date();
         String nowDate = sdf1.format(now);
-		
 		
         model.addAttribute("nowDate", nowDate);
 		model.addAttribute("userVO", userVO);

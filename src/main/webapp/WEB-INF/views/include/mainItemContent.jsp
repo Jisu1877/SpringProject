@@ -196,7 +196,7 @@
 					</c:if>
 				</div>
 	  		</a>
-			<div class="text-left mb-4">
+			<div class="text-left pb-4">
 				<c:set var="keywords" value="${fn:split(itemVO.item_keyword,'/')}" />
 				<c:forEach var="keyword" items="${keywords}" varStatus="g">
 					<c:if test="${keyword != ''}">

@@ -96,3 +96,36 @@ function searchCheck() {
 	}
 	orderSearchForm.submit();
 }
+
+function orderCancel(listIdx) {
+	let ans = confirm("해당 주문을 취소하시겠습니까? \n사용한 포인트는 재적립되지 않습니다.");
+	if(!ans) return false;
+	
+	let url = "/javagreenS_ljs/order/orderCancel?listIdx=" + listIdx;
+	let winX = 500;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}
+
+function orderCancelInfor(listIdx) {
+	let url = "/javagreenS_ljs/order/orderCancelInfor?listIdx=" + listIdx;
+	let winX = 500;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}
+
+function orderCancelRequest() {
+	let ans = confirm("해당 주문을 취소하시겠습니까? \n사용한 포인트는 재적립되지 않습니다.");
+	if(!ans) return false;
+	
+	let url = "/javagreenS_ljs/order/orderCancelRequest?listIdx=" + listIdx;
+	let winX = 500;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}

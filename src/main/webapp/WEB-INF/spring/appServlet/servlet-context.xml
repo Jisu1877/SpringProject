@@ -80,5 +80,4 @@
 	<!-- 트랜잭션을 어노테이션으로 처리하기위해 클래스를 등록해준다. -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
-	
 </beans:beans>

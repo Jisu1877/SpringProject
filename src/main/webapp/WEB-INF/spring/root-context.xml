@@ -43,7 +43,7 @@
 	</bean>
     <!-- 트랜잭션이 필요한 상황에서 어노테이션을 이용하여 추가하기 위해 설정 -->
 	<tx:annotation-driven/>
-	
+
 	<!-- 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
 	 -->

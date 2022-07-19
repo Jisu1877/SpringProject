@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 
@@ -45,6 +46,11 @@ public interface OrderDAO {
 
 	public ArrayList<OrderListVO> getorderListOnlyReturnOkSearch(@Param("user_idx")int user_idx, @Param("start") String start, @Param("end") String end);
 
+	public OrderListVO getOrderListInfor(@Param("listIdx") int listIdx);
+
+	public void setOrderCancelHistory(@Param("vo") OrderCancelVO vo);
+
+	public OrderCancelVO getorderCancelInfor(@Param("listIdx") int listIdx);
 
 
 }

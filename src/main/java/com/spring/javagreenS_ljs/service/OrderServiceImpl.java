@@ -15,6 +15,7 @@ import com.spring.javagreenS_ljs.dao.ItemDAO;
 import com.spring.javagreenS_ljs.dao.OrderDAO;
 import com.spring.javagreenS_ljs.dao.PointDAO;
 import com.spring.javagreenS_ljs.dao.UserDAO;
+import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 import com.spring.javagreenS_ljs.vo.PointVO;
@@ -43,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
 	ItemDAO itemDAO;
 	
 	@Override
-	public void setOrderListTempInsert(OrderVO orderVO, int user_idx) {
+	public void setOrderListTempInsert(OrderVO orderVO, int user_idx) { 
 		String[] order_item_idx = orderVO.getOrder_item_idx();
 		String[] order_item_name = orderVO.getOrder_item_name();
  		String[] order_item_image = orderVO.getOrder_item_image();
@@ -55,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 		String[] order_quantity = orderVO.getOrder_quantity();
 		String[] strCart_idx = orderVO.getCart_idx();
 		
-		for(int i = 0; i < order_item_idx.length; i++) {
+		for(int i = 0; i < order_item_idx.length; i++) { //여기가 문제다 문제 ㅠㅠ 바로구매하면 옵션2개를 선택해도 1개만 들어간당..
 			OrderListVO vo = new OrderListVO();
 			
 			vo.setUser_idx(user_idx);
@@ -81,6 +82,56 @@ public class OrderServiceImpl implements OrderService {
 			vo.setOption_price(order_option_price[i]);
 			vo.setOrder_quantity(quantity);
 			vo.setCart_idx(cart_idx);
+			
+			orderDAO.setOrderListTempInsert(vo);
+		}
+	}
+	
+	@Override
+	public void setOrderListTempInsertForBuyNow(OrderVO orderVO, int user_idx) {
+		String[] order_item_idx = orderVO.getOrder_item_idx();
+		String[] order_item_name = orderVO.getOrder_item_name();
+ 		String[] order_item_image = orderVO.getOrder_item_image();
+		int[] order_item_price = orderVO.getOrder_item_price();
+		String[] order_item_option_flag = orderVO.getOrder_item_option_flag();
+		String[] order_option_idx = orderVO.getOrder_option_idx();
+		String[] order_option_name = orderVO.getOrder_option_name();
+		String[] order_option_price = orderVO.getOrder_option_price();
+		String[] order_quantity = orderVO.getOrder_quantity();
+		String[] strCart_idx = orderVO.getCart_idx();
+		
+		for(int i = 0; i < order_item_idx.length; i++) { //여기가 문제다 문제 ㅠㅠ 바로구매하면 옵션2개를 선택해도 1개만 들어간당..
+			OrderListVO vo = new OrderListVO();
+			
+			vo.setUser_idx(user_idx);
+			
+			int item_idx = Integer.parseInt(order_item_idx[i]);
+			int cart_idx = Integer.parseInt(strCart_idx[i]);
+			int option_idx = 0;
+			
+			if(order_option_idx.length > 0) {
+				if(!order_option_idx[i].equals("")) {
+					option_idx = Integer.parseInt(order_option_idx[i]);
+				}
+			}
+			
+			int quantity = Integer.parseInt(order_quantity[i]);
+			vo.setItem_idx(item_idx);
+			vo.setItem_name(order_item_name[i]);
+			vo.setItem_image(order_item_image[i]);
+			vo.setItem_option_flag(order_item_option_flag[i]);
+			vo.setOption_idx(option_idx);
+			vo.setOption_name(order_option_name[i]);
+			vo.setOption_price(order_option_price[i]);
+			vo.setOrder_quantity(quantity);
+			vo.setCart_idx(cart_idx);
+			
+			if(order_option_idx.length == 1)  {
+				vo.setItem_price(order_item_price[0]);
+			}
+			else {
+				vo.setItem_price(order_item_price[0]);
+			}
 			
 			orderDAO.setOrderListTempInsert(vo);
 		}
@@ -180,7 +231,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		//회원 정보 수정(구매 횟수 추가 / 구매 총가격 누적 업데이트)
-		userDAO.setOrderUpdate(user_idx,total_amount);
+		//userDAO.setOrderUpdate(user_idx,total_amount); //구매확정 시 추가해주는 것으로 변경
 		
 		//임시 DB 삭제
 		orderDAO.setOrderListTempDelete(user_idx);
@@ -253,5 +304,19 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
+	@Override
+	public OrderListVO getOrderListInfor(int listIdx) {
+		return orderDAO.getOrderListInfor(listIdx);
+	}
+
+	@Override
+	public void setOrderCancelHistory(OrderCancelVO vo) {
+		orderDAO.setOrderCancelHistory(vo);
+	}
+
+	@Override
+	public OrderCancelVO getorderCancelInfor(int listIdx) {
+		return orderDAO.getorderCancelInfor(listIdx);
+	}
 
 }

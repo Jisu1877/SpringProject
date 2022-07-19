@@ -10,11 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javagreenS_ljs.service.DeliveryService;
 import com.spring.javagreenS_ljs.service.ItemService;
+import com.spring.javagreenS_ljs.service.OrderAdminService;
 import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
+import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 import com.spring.javagreenS_ljs.vo.PayMentVO;
@@ -36,6 +40,9 @@ public class OrderController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	OrderAdminService orderAdminService;
 	
 	//주문,결제 확인 창 호출
 	@RequestMapping(value = "/orderCheck", method = RequestMethod.GET)
@@ -88,7 +95,12 @@ public class OrderController {
 		}
 		
 		//임시 주문 목록 DB에 저장
-		orderService.setOrderListTempInsert(orderVO, user_idx);
+		String[] cartIdx = orderVO.getCart_idx();
+		if (cartIdx.length == 1 && "0".equals(cartIdx[0])) {
+			orderService.setOrderListTempInsertForBuyNow(orderVO, user_idx);
+		} else {
+			orderService.setOrderListTempInsert(orderVO, user_idx);			
+		}
 		
 		//등록한 배송정보 가져오기
 		UserDeliveryVO deliveryVO = deliveryService.getDeliveryList(user_idx);
@@ -103,10 +115,14 @@ public class OrderController {
 		//회원정보 가져오기
 		UserVO userVO = userService.getUserInfor(user_id);
 		
+		//등록한 임시 DB 가져오기
+		ArrayList<OrderListVO> orderListTemp = orderService.getOrderListTempList(user_idx);
+		
 		model.addAttribute("deliveryFlag", deliveryFlag);
 		model.addAttribute("deliveryVO", deliveryVO);
 		model.addAttribute("userVO", userVO);
 		model.addAttribute("orderVO", orderVO);
+		model.addAttribute("orderListTemp", orderListTemp);
 		return "order/orderPay";
 	}
 	
@@ -222,4 +238,53 @@ public class OrderController {
 		return "order/payResult";
 	}
 	
+	
+	//주문 취소 처리 창 호출
+	@RequestMapping(value = "/orderCancel", method = RequestMethod.GET)
+	public String orderCancelGet(@RequestParam(name="listIdx") int listIdx, Model model) {
+		//취소하고자하는 주문 내용 가져오기
+		OrderListVO vo = orderService.getOrderListInfor(listIdx);
+		model.addAttribute("vo", vo);
+		return "order/orderCancel";
+	}
+	
+	
+	//주문 취소 처리
+	@ResponseBody
+	@RequestMapping(value = "/orderCancelOk", method = RequestMethod.POST)
+	public String orderCancelPost(OrderCancelVO vo, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		vo.setUser_idx(user_idx);
+		
+		//환불 금액 알아오기
+		OrderListVO listVO = orderService.getOrderListInfor(vo.getOrder_list_idx());
+		vo.setReturn_price(listVO.getItem_price());
+		
+		//주문 취소 테이블에 저장
+		orderService.setOrderCancelHistory(vo);
+		
+		//주문 목록 상태값 변경
+		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "3");
+		
+		return "1";
+	}
+	
+	//취소 내용 확인
+	@RequestMapping(value = "/orderCancelInfor", method = RequestMethod.GET)
+	public String orderCancelInforGet(@RequestParam(name="listIdx") int listIdx, Model model) {
+		//취소 내용 가져오기
+		OrderCancelVO vo = orderService.getorderCancelInfor(listIdx);
+		
+		model.addAttribute("vo", vo);
+		return "order/orderCancelInfor";
+	}
+	
+	//취소 요청 창 호출
+	@RequestMapping(value = "/orderCancelRequest", method = RequestMethod.GET)
+	public String orderCancelRequestGet(@RequestParam(name="listIdx") int listIdx, Model model) {
+		//취소하고자하는 주문 내용 가져오기
+		OrderListVO vo = orderService.getOrderListInfor(listIdx);
+		model.addAttribute("vo", vo);
+		return "order/orderCancelRequest";
+	}
 }

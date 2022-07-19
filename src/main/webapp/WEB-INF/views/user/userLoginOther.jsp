@@ -34,6 +34,7 @@
 			}
 			else {
 				myForm.submit();
+				window.close();
 			}
 		}
     </script>

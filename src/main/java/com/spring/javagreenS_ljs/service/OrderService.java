@@ -2,12 +2,15 @@ package com.spring.javagreenS_ljs.service;
 
 import java.util.ArrayList;
 
+import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 
 public interface OrderService {
 
 	public void setOrderListTempInsert(OrderVO orderVO, int user_idx);
+	
+	public void setOrderListTempInsertForBuyNow(OrderVO orderVO, int user_idx);
 
 	public ArrayList<OrderListVO> getOrderListTempList(int user_idx);
 
@@ -30,6 +33,12 @@ public interface OrderService {
 	public ArrayList<OrderListVO> getOrderListOnlyReturn(int user_idx);
 
 	public ArrayList<OrderListVO> getOrderListSearch(int user_idx, String start, String end, String order_status_code);
+
+	public OrderListVO getOrderListInfor(int listIdx);
+
+	public void setOrderCancelHistory(OrderCancelVO vo);
+
+	public OrderCancelVO getorderCancelInfor(int listIdx);
 
 
 }
