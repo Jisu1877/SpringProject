@@ -10,14 +10,16 @@
     <title>주문 취소</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
     	th {
     		width:30%;
     	}
     </style>
     <script>
-    	function orderCancel(idx,price) {
-			let cancel_reason = $("select[name=reason]").val();
+    	'use strict';
+    	function orderCancel(ilstIdx,price,point,orderIdx) {
+			let cancel_reason = $("select[name=cancel_reason]").val();
 			let return_bank_name = $("select[name=return_bank_name]").val();
 			let return_bank_user_name = $("#return_bank_user_name").val();
 			let return_bank_number = $("#return_bank_number").val();
@@ -39,8 +41,7 @@
 				return false;
 			}
 			
-			let num1 = Number(return_bank_number);
-			let num2 = Number(price);
+			let num1 = Number(price);
 			
 			$.ajax({
 				type : "post",
@@ -50,8 +51,11 @@
 					cancel_reason : cancel_reason,
 					return_bank_name : return_bank_name,
 					return_bank_user_name : return_bank_user_name,
-					return_bank_number : num1,
-					order_list_idx : idx
+					return_bank_number : return_bank_number,
+					order_list_idx : ilstIdx,
+					return_price : num1,
+					use_point : point,
+					order_idx : orderIdx
 				},
 				success : function(data) {
 					if(data == "1") {
@@ -78,15 +82,31 @@
 		<div class="w3-row-padding w3-padding-16">
 			<div class="w3-col m1 w3-margin-bottom"></div>
 			<div class="w3-col m10 w3-margin-bottom">
-				<label class="w3-yellow"><b>주문 정보</b></label>
+				<div>
+					※ 부분 취소의 경우 포인트 혹은 쿠폰 사용으로 할인을 받았다면, <font color="tomato">가장 먼저 취소하는 상품에서 차감</font>되어 환불됩니다.
+				</div>
+				<label class="w3-yellow mt-3"><b>주문 정보</b></label>
 				<table class="table w3-bordered">
+					<tr>
+						<th>주문 번호</th>
+						<td>${vo.order_number}</td>
+					</tr>
 					<tr>
 						<th>주문 목록 번호</th>
 						<td>${vo.order_list_idx}</td>
 					</tr>
 					<tr>
-						<th>환불금액</th>
+						<th>상품금액</th>
 						<td><fmt:formatNumber value="${vo.item_price}"/>원</td>
+					</tr>
+					<tr>
+						<th>차감금액</th>
+						<td><fmt:formatNumber value="${vo.use_point}"/>원</td>
+					</tr>
+					<tr>
+						<th>최종 환불금액</th>
+						<c:set var="refund" value="${vo.item_price - vo.use_point}"/>
+						<td><fmt:formatNumber value="${refund}"/>원</td>
 					</tr>
 				</table>
 				<br>
@@ -95,7 +115,7 @@
 					<tr>
 						<th>취소사유</th>
 						<td>
-							<select name="reason" id="reason" class="w3-select w3-border">
+							<select name="cancel_reason" id="reason" class="w3-select w3-border">
 							    <option value="" selected>취소 사유를 선택하세요</option>
 							    <option value="단순변심">단순변심</option>
 							    <option value="주문내용변경">주문내용변경</option>
@@ -152,7 +172,7 @@
 					</tr>
 				</table>
 				<div class="text-center">
-					<input type="button" value="주문 취소" class="w3-btn w3-2019-princess-blue" onclick="orderCancel(${vo.order_list_idx},${vo.item_price})"/>&nbsp;
+					<input type="button" value="주문 취소" class="w3-btn w3-2019-princess-blue" onclick="orderCancel(${vo.order_list_idx},${refund},${vo.use_point},${vo.order_idx})"/>&nbsp;
 					<input type="button" value="닫기" class="w3-btn w3-2021-illuminating" onclick="window.close();"/>
 				</div>
 		    </div>

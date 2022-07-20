@@ -5,12 +5,14 @@ import lombok.Data;
 @Data
 public class OrderVO {
 	private int order_idx;
+	private String order_number;
 	private int user_idx;
 	private int order_total_amount;
 	private String email;
 	private String tel;
 	private int user_delivery_idx;
 	private String order_admin_memo;
+	private int use_point;
 	private String created_date;
 	
 	private String[] order_item_idx;

@@ -6,5 +6,7 @@ public interface ItemService {
 
 	public int getOptionStockquantity(int option_idx);
 
+	public void setStockQuantityUpdate(int item_idx, int order_quantity);
+
 
 }

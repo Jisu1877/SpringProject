@@ -241,7 +241,9 @@ $(document).ready(function() {
 	      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
 	        <div class="w3-row-padding" style="margin:0 -16px;">
 		          <div class="w3-third w3-margin-bottom">
-		            <label><i class="fa fa-calendar-o"></i>&nbsp; 주문 조회</label>
+		            <label>
+		            	<i class="fa fa-calendar-o"></i>&nbsp; 주문 조회 &nbsp;
+		            </label>
 		            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="start" id="start" value="${start}" autocomplete="off">
 		          </div>
 		          <div class="w3-third">
@@ -279,10 +281,11 @@ $(document).ready(function() {
 	          	  </div>
 	          </c:if>
 	          <c:if test="${orderListSearch.size() != 0}">
-	          	<c:set var="cnt" value="0"/>
-	          	<c:forEach var="vo" items="${orderListSearch}">
-	          	<c:set var="date" value="${fn:split(vo.created_date, '-')}"/>
-	          	<c:set var="date2" value="${fn:split(nowDate, '-')}"/>
+          	  <c:set var="cnt" value="0"/>
+	          <c:set var="idx" value="0"/>
+	          <c:forEach var="vo" items="${orderListSearch}">
+          		<c:set var="date" value="${fn:split(vo.created_date, '-')}"/>
+          		<c:set var="date2" value="${fn:split(nowDate, '-')}"/>
 	          	<c:if test="${date[1] == date2[1] && cnt == 0}">
 		          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${nowDate}</span></div>
 		      	  	<hr>
@@ -299,6 +302,14 @@ $(document).ready(function() {
 		      	  	<c:set var="cnt" value="1"/>
 	      	  	</c:if>
 	          	<div class="w3-row">
+	          		<c:if test="${idx != vo.order_idx}">
+	          			<div class="w3-bottombar w3-2019-sweet-corn w3-padding" style="margin-bottom: 20px;">
+					    	<div>
+					    		<span>주문번호 <b>${vo.order_number}</b></span> &nbsp; | &nbsp;
+					    		총 결제금액 : <b><fmt:formatNumber value="${vo.order_total_amount}"/>원</b>
+					    	</div>
+					    </div>
+	          		</c:if>
 	          		<div class="w3-col m2">
 			          <img src="${ctp}/data/item/${vo.item_image}" class="w3-left w3-margin-right" style="width:100%">
 	          		</div>
@@ -308,7 +319,7 @@ $(document).ready(function() {
 						  <div>옵션 : ${vo.option_name}</div>		          
 			            </c:if>
 					    <div>수량 : ${vo.order_quantity} 개</div>
-					    <div><b><fmt:formatNumber value="${vo.order_total_amount}"/>원</b></div>
+					    <div>상품 금액 : <fmt:formatNumber value="${vo.item_price}"/>원</div>
 						<hr>
 						<c:if test="${vo.order_status_code == '1'}">
 							<font size="3" color="gray">결제완료</font><br>
@@ -366,6 +377,10 @@ $(document).ready(function() {
 						<font size="3" color="red">환불거부</font><br>
 							✔ 환불이 거부되었습니다. 자세한 내용은 환불처리 페이지에서 확인해주세요.
 						</c:if>					
+						<c:if test="${vo.order_status_code == '15'}">
+						<font size="3" color="red">취소 요청 중</font><br>
+							✔ 취소 요청을 검토중입니다. 기다려주세요.
+						</c:if>					
 	          		</div>
 	          		<div class="w3-col m2">
 	          			<div class="mb-2">
@@ -373,18 +388,19 @@ $(document).ready(function() {
 	          			</div><br>
 	          			<div style="margin-top: 20px;" class="w3-right">
 	          				<c:if test="${vo.order_status_code == '1'}">
-	          					<a onclick="orderCancel(${vo.order_list_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
+	          					<a onclick="orderCancel(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
 							</c:if>
 	          				<c:if test="${vo.order_status_code == '2'}">
-	          					<a onclick="orderCancelRequest(${vo.order_list_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
+	          					<a onclick="orderCancelRequest(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-success btn-sm">취소 요청</a>
 							</c:if>
 	          				<c:if test="${vo.order_status_code == '3'}">
-	          					<a onclick="orderCancelInfor(${vo.order_list_idx})" class="btn btn-outline-warning btn-sm">내용 확인</a>
+	          					<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-warning btn-sm">취소 내역 확인</a>
 							</c:if>
 	          			</div>
 	          		</div>
 		        </div><br><hr>
-		        </c:forEach>
+		        <c:set var="idx" value="${vo.order_idx}"/>
+		      </c:forEach>
 	          </c:if>
 	      </div>
 	      </div> 

@@ -105,7 +105,7 @@ function userImageChange() {
 	  <button onclick="slideDown(2)" class="w3-2019-brown-granite menu"><strong>일반판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo2" class="w3-bar-block w3-2020-ash" style="display: none">
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderList">주문 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderList">통합 주문 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">취소 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 관리</a></button>

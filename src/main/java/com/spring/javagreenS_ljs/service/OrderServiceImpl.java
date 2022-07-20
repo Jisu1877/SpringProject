@@ -18,6 +18,7 @@ import com.spring.javagreenS_ljs.dao.UserDAO;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
+import com.spring.javagreenS_ljs.vo.PayMentVO;
 import com.spring.javagreenS_ljs.vo.PointVO;
 import com.spring.javagreenS_ljs.vo.UserDeliveryVO;
 import com.spring.javagreenS_ljs.vo.UserVO;
@@ -155,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Transactional(rollbackFor = Exception.class) //트랜잭션 처리 
 	@Override
-	public void setOrderProcess(String user_id, int user_idx) {
+	public void setOrderProcess(String user_id, int user_idx, PayMentVO payMentVO) {
 		//임시 주문 목록 정보 가져오기
 		ArrayList<OrderListVO> orderListTemp = orderDAO.getOrderListTempList(user_idx);
 		
@@ -165,7 +166,6 @@ public class OrderServiceImpl implements OrderService {
 		//회원 선택 배송지 정보 가져오기
 		UserDeliveryVO deliveryVO = diDeliveryDAO.getDeliveryList(user_idx);
 		
-		// 주문 테이블 저장
 		// 필요한 정보 vo set
 		OrderVO orderVO = new OrderVO();
 		
@@ -177,6 +177,18 @@ public class OrderServiceImpl implements OrderService {
 		orderVO.setTel(userVO.getTel());
 		orderVO.setUser_delivery_idx(deliveryVO.getUser_delivery_idx());
 		
+		//사용 포인트
+		int point = orderListTemp.get(0).getUse_point();
+		orderVO.setUse_point(point);
+		
+		//주문번호 만들기
+		String applyNum = payMentVO.getApply_num();
+		//주문 테이블 최대 idx 알아오기
+		int orderMaxIdx = (orderDAO.getOrderMaxIdx() + 1);
+		String order_number = applyNum + "_" + orderMaxIdx;
+		orderVO.setOrder_number(order_number);
+		
+		// 주문 테이블 저장
 		orderDAO.setOrderHistory(orderVO);
 		
 		//방금 저장한 order_idx 알아오기
@@ -218,7 +230,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		//포인트 사용 시 포인트 사용 내용 저장
-		int point = orderListTemp.get(0).getUse_point();
 		if(point != 0) {
 			PointVO pointVO = new PointVO();
 			pointVO.setUser_idx(user_idx);
@@ -266,11 +277,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public ArrayList<OrderListVO> getOrderListOnlyDelivery(int user_idx) {
-		return orderDAO.getOrderListOnlyDelivery(user_idx);
-	}
-
-	@Override
 	public ArrayList<OrderListVO> getOrderListOnlyDeliveryOk(int user_idx) {
 		return orderDAO.getOrderListOnlyDeliveryOk(user_idx);
 	}
@@ -305,8 +311,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public OrderListVO getOrderListInfor(int listIdx) {
-		return orderDAO.getOrderListInfor(listIdx);
+	public OrderListVO getOrderListInfor(int listIdx, int orderIdx) {
+		return orderDAO.getOrderListInfor(listIdx, orderIdx);
 	}
 
 	@Override
@@ -317,6 +323,36 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public OrderCancelVO getorderCancelInfor(int listIdx) {
 		return orderDAO.getorderCancelInfor(listIdx);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListOnlyChoice(int user_idx, String order_status_code) {
+		return orderDAO.getOrderListOnlyChoice(user_idx, order_status_code);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListOnlyChangeReturn(int user_idx) {
+		return orderDAO.getOrderListOnlyChangeReturn(user_idx);
+	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListOnlyRefund(int user_idx) {
+		return orderDAO.getOrderListOnlyRefund(user_idx);
+	}
+
+	@Override
+	public void setOrderCancelRequsetHistory(OrderCancelVO vo) {
+		orderDAO.setOrderCancelRequsetHistory(vo);
+	}
+
+	@Override
+	public OrderListVO getorderListInfor2(int order_list_idx) {
+		return orderDAO.getorderListInfor2(order_list_idx);
+	}
+
+	@Override
+	public void setUsePointSub(int order_idx, int use_point) {
+		orderDAO.setUsePointSub(order_idx, use_point);
 	}
 
 }

@@ -24,6 +24,7 @@ public class OrderListVO {
 	private int cart_idx;
 	private int use_point;
 	
+	private String order_number;
 	private String email;
 	private String tel;
 	private int user_delivery_idx;

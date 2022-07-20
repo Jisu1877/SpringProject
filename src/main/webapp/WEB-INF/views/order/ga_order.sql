@@ -65,3 +65,21 @@ CREATE TABLE ga_order_cancel(
     foreign key(user_idx) references ga_user(user_idx),
 	foreign key(order_list_idx) references ga_order_list(order_list_idx)
 );
+
+CREATE TABLE ga_order_cancel_request(
+	order_cancel_request_idx		INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_idx				INT NOT NULL,
+    order_list_idx	 		INT NOT NULL,
+    cancel_reason			VARCHAR(255) NOT NULL,
+    return_price			INT NOT NULL,
+    return_bank_name		VARCHAR(255) NOT NULL,
+    return_bank_user_name	VARCHAR(255) NOT NULL,
+    return_bank_number		INT NOT NULL,
+    request_answer			VARCHAR(1),
+    cancel_admin_memo		TEXT,
+    created_date 			DATETIME NOT NULL DEFAULT now(),
+    foreign key(user_idx) references ga_user(user_idx),
+	foreign key(order_list_idx) references ga_order_list(order_list_idx)
+);
+
+drop table ga_order_cancel_request;

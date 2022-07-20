@@ -78,10 +78,7 @@ public class UserServiceImpl implements UserService {
 		fos.close();
 	}
 	
-	
-
 	public void setItemImage(MultipartHttpServletRequest multipart, int user_idx) {
-		
 		try {
 			List<MultipartFile> fileList = multipart.getFiles("user_image");
 			
@@ -91,7 +88,6 @@ public class UserServiceImpl implements UserService {
 				}
 				String oFileName = file.getOriginalFilename();
 				String sFileName = saveFileName(oFileName); //서버에 저장될 파일명을 결정해준다.
-				
 				//서버에 파일 저장처리하기
 				writeFile(file, sFileName);
 				

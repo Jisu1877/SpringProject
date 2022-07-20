@@ -19,8 +19,8 @@
 <body>
 <!-- !PAGE CONTENT! -->
 <div id="pageContent" class="w3-content" style="max-width:1500px">
-   	<div class="w3-bar w3-border w3-2019-galaxy-blue">
-	  <span class="w3-bar-item w3-padding-16" style="font-size:18px;">주문 취소</span>
+   	<div class="w3-bar w3-border w3-yellow">
+	  <span class="w3-bar-item w3-padding-16" style="font-size:18px;">주문 취소 내역</span>
 	</div>
 	<div style="margin-top:10px; padding:10px;">
 		<div class="w3-row-padding w3-padding-16">
@@ -29,12 +29,25 @@
 				<label class="w3-yellow"><b>주문 정보</b></label>
 				<table class="table w3-bordered">
 					<tr>
+						<th>주문 번호</th>
+						<td>${orderVO.order_number}</td>
+					</tr>
+					<tr>
 						<th>주문 목록 번호</th>
 						<td>${vo.order_list_idx}</td>
 					</tr>
 					<tr>
-						<th>환불금액</th>
-						<td><fmt:formatNumber value="${vo.return_price}"/>원</td>
+						<th>상품금액</th>
+						<td><fmt:formatNumber value="${orderVO.item_price}"/>원</td>
+					</tr>
+					<tr>
+						<th>차감금액</th>
+						<td><fmt:formatNumber value="${orderVO.use_point}"/>원</td>
+					</tr>
+					<tr>
+						<th>최종 환불금액</th>
+						<c:set var="refund" value="${orderVO.item_price - orderVO.use_point}"/>
+						<td><fmt:formatNumber value="${refund}"/>원</td>
 					</tr>
 				</table>
 				<br>

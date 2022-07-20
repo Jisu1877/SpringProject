@@ -11,12 +11,14 @@ let option_price = [];
 let item_price = [];
 let itemJson = new Object();
 let order = new Object();
+let strprice;
 
 $(function() {
 	sale_price = $("#sale_price").val();
 	seller_discount_flag = $("#seller_discount_flag").val();
 	seller_discount_amount = $("#seller_discount_amount").val();
-	totalAmount = $("#order_min_quantity").val();
+	//totalAmount = $("#order_min_quantity").val();
+	totalAmount = 0;
 	setTotalPrice();
 	
 	
@@ -35,10 +37,10 @@ function setTotalPrice() {
 function optionSelect(ths) {
 	const idx = $(ths).val();
 	const option = $(ths).find('option:selected').data('label');
-	const price = $(ths).find('option:selected').data('price');
-	const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
+	strprice = $(ths).find('option:selected').data('price');
 	let order_min_quantity = $("#order_min_quantity").val();
-	let stock_quantity = $("#stock_quantity").val();
+	const price1 = (Number(strprice) * Number(order_min_quantity));
+	const price2 = Math.floor(price1).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	
 	if(option == "") {
 		return false;
@@ -46,15 +48,8 @@ function optionSelect(ths) {
 	else if($("#option_"+idx).length > 0){
 		alert("이미 선택한 옵션입니다.");
 		$("#optionSelect").val("").prop("selected", true);
-		totalAmount--;
 		return false;
 	}
-/*	else if(stock_quantity < totalAmount) {
-		alert("현재 남은 재고 수량은 "+stock_quantity+"개 입니다.");
-		$("#optionSelect").val("").prop("selected", true);
-		totalAmount--;
-		return false;
-	}*/
 	
 	let optionDiv = $("#option_tmp_div").clone();
 	
@@ -63,30 +58,28 @@ function optionSelect(ths) {
 	optionDiv.find(".option").html(option);
 	optionDiv.find(".option_cnt").html(order_min_quantity);
 	optionDiv.find(".option_cnt").attr("data-idx", idx);
+	optionDiv.find(".option_cnt").attr("data-cnt", order_min_quantity);
 	optionDiv.find(".option_cnt").attr("id", "option_cnt_"+idx);
-	optionDiv.find(".option_price").html("+&nbsp;" + price2 + "원");
-	optionDiv.find(".option_price").attr("data-price", price);
+	if(price1 > 0) {
+		optionDiv.find(".option_price").html("+&nbsp;" + price2 + "원" + "("+ strprice +"원 x "+order_min_quantity+")");
+	}
+	
+	optionDiv.find(".option_price").attr("data-price", strprice);
+	
 	
 	$("#optonDemo").append(optionDiv);
-	let optionLength = $(".option_div").length;
-	/*if(optionLength > (Number(order_max_quantity) + 1)) {
-		$("#optionSelect").val("").prop("selected", true);
-		alert("최대 구매 수량은 " +order_max_quantity+ "개 입니다. 선택한 옵션을 삭제하고 추가하세요.");
-		$( 'div' ).remove( '#option_'+idx);
-	}*/
 	
 	$("#optionSelect").val("").prop("selected", true);
 	
-	totalPrice += price;
+	totalPrice += (Number(strprice) * Number(order_min_quantity));
 	
-	if($(".option_div").length > 2) {
- 		if(seller_discount_flag == 'y') {
-	 		totalPrice += realPrice;
- 		}
- 		else {
- 			totalPrice += Number(sale_price);
- 		}
+	if(seller_discount_flag == 'y') {
+ 		totalPrice += (Number(realPrice) * Number(order_min_quantity));
 	}
+	else {
+		totalPrice += (Number(sale_price) * Number(order_min_quantity));
+	}
+	totalAmount = (Number(totalAmount) + Number(order_min_quantity));
 	
 	let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	$("#totalCnt").html(totalAmount);
@@ -99,14 +92,15 @@ function optionSelect(ths) {
 			optionIdxArr[i] = idx;
 			order_quantity[i] = order_min_quantity;
 			option_name[i] = option;
-			option_price[i] = price;
+			option_price[i] = strprice;
 		}
 	}
 }
 
 function minus(ths) {
 	const id = $(ths).parents("div.option_div").attr("id");
-	let amount = $(ths).siblings("span.option_cnt").html();
+	let arr = id.split("_");
+	let amount = $(ths).parents().find("#"+id).find("#option_cnt_"+arr[1]).attr('data-cnt');
 	let order_min_quantity = $("#order_min_quantity").val();		
 	amount--;
 	
@@ -120,7 +114,9 @@ function minus(ths) {
 	let price = $("#"+id).find(".option_price").data('price');
 	let price2 = price * Number(amount);
 	let price3 = Math.floor(price2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
-	$("#"+id).find(".option_price").html("+&nbsp;" +price3 + "원");
+	if(price2 > 0) {
+		$("#"+id).find(".option_price").html("+&nbsp;" +price3 + "원" + "("+ strprice +"원 x "+amount+")");
+	}
 	$(ths).siblings("span.option_cnt").html(amount);
 	totalPrice -= price;
 	if(seller_discount_flag == 'y') {
@@ -129,10 +125,11 @@ function minus(ths) {
 	else {
 		totalPrice -= Number(sale_price);
 	}
+	$(ths).siblings("span.option_cnt").attr("data-cnt", amount);
+	
 	let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	$("#totalCnt").html(totalAmount);
 	$("#totalPrice").html(total);
-	
 	
 	let idx = $("#"+id).find(".option_cnt").data('idx');
 	//옵션 수량 수정
@@ -145,20 +142,13 @@ function minus(ths) {
 
 function plus(ths) {
 	const id = $(ths).parents("div.option_div").attr("id");
-	let amount = $(ths).siblings("span.option_cnt").html();
+	let arr = id.split("_");
+	let amount = $(ths).parents().find("#"+id).find("#option_cnt_"+arr[1]).attr('data-cnt');
 	const price = ($("#"+id).find(".option_price").data('price')) * (Number(amount) + 1);
-	let stock_quantity = $("#stock_quantity").val();
 	const price2 = Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	amount++;
 	totalAmount++;
-	
-/*	if(stock_quantity < totalAmount) {
-		alert("현재 남은 재고 수량은 "+stock_quantity+"개 입니다.");
-		$("#optionSelect").val("").prop("selected", true);
-		totalAmount--;
-		return false;
-	}*/
-	
+
 	$(ths).siblings("span.option_cnt").html(amount);
 	
 	totalPrice += $("#"+id).find(".option_price").data('price');
@@ -168,10 +158,13 @@ function plus(ths) {
 	else {
 		totalPrice += Number(sale_price);
 	}
-	$("#"+id).find(".option_price").html("+&nbsp;" +price2 + "원");
+	if(price > 0) {
+		$("#"+id).find(".option_price").html("+&nbsp;" + price2 + "원" + "("+ strprice +"원 x "+amount+")");
+	}
 	let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
 	$("#totalCnt").html(totalAmount);
 	$("#totalPrice").html(total);
+	$(ths).siblings("span.option_cnt").attr("data-cnt", amount);
 	
 	let idx = $("#"+id).find(".option_cnt").data('idx');
 	//옵션 수량 수정
@@ -190,10 +183,11 @@ function plus(ths) {
 }
 
 function deleteOption(ths) {
-	let amount = $(ths).parents().find(".option_cnt").html();
+	const id = $(ths).parents("div.option_div").attr("id");
+	let arr = id.split("_");
+	let amount = $(ths).parents().find("#"+id).find("#option_cnt_"+arr[1]).attr('data-cnt');
 	amount = Number(amount);
 	totalAmount -= amount;
-	const id = $(ths).parents("div.option_div").attr("id");
 	let price = $("#"+id).find(".option_price").data('price');
 	let price2 = Number(price) * Number(amount);
 	
@@ -211,10 +205,10 @@ function deleteOption(ths) {
 	totalPrice -= price2;
 	
 	if(seller_discount_flag == 'y') {
- 		totalPrice -= realPrice;
+ 		totalPrice -= (realPrice * amount);
 	}
 	else {
-		totalPrice -= Number(sale_price);
+		totalPrice -= (Number(sale_price) * amount);
 	}
 	
 	let total = Math.floor(totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
@@ -253,12 +247,24 @@ function minus2(ths) {
 
 function plus2(ths) {
 	let amount = $(ths).siblings("span.option_cnt").html();
-	let stock_quantity = $("#stock_quantity").val();
+	let order_min_quantity = $("#order_min_quantity").val();	
 	amount++;
+	if(totalAmount == 0) {
+		totalAmount += order_min_quantity;
+	}
 	totalAmount++;
 	
 	$(ths).siblings("span.option_cnt").html(amount);
-	
+
+	if(totalPrice == 0) {
+		if(seller_discount_flag == 'y') {
+ 			totalPrice += realPrice;
+		}
+		else {
+			totalPrice += Number(sale_price);
+		}
+	}
+		
 	if(seller_discount_flag == 'y') {
  		totalPrice += realPrice;
 	}
@@ -293,6 +299,14 @@ function buyItem() {
 	if(option_price.length == 0) {
 		option_price[0] = " ";
 	}
+	if(totalPrice == 0) {
+		if(seller_discount_flag == 'y') {
+ 			totalPrice += realPrice;
+		}
+		else {
+			totalPrice += Number(sale_price);
+		}
+	}
 	
 	// 옵션 선택 시 해당 옵션을 order 객체에 초기화
 	order.order_option_idx = optionIdxArr;
@@ -301,7 +315,18 @@ function buyItem() {
 	order.order_option_price = option_price.map(String);
 	order.order_quantity = order_quantity;
 	order.order_total_amount = totalPrice;
+	
 	//상품 가격을 배열로 각각 담아야 한다.(옵션 선택시)
+	if(itemJson.item_option_flag == 'y')
+	for(let i=0; i<optionIdxArr.length; i++) {
+		if(seller_discount_flag == 'y') {
+			item_price[i] = ((Number(sale_price) - Number(seller_discount_amount)) * order_quantity[i]) + option_price[i];
+		}
+		else {
+			item_price[i] = (Number(sale_price) * order_quantity[i]) + option_price[i];
+		}
+	}
+	
 	order.order_item_price = item_price.length == 0 ? totalPrice : item_price;
 	
 	let length = order.order_option_idx.length;

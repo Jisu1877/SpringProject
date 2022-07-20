@@ -18,4 +18,8 @@
 	<update id="setSoldOutUpdate">
 		update ga_item set sold_out = #{sold_out} where item_idx = #{item_idx}
 	</update>
+	
+	<update id="setStockQuantityUpdate">
+		update ga_item set stock_quantity = stock_quantity + #{order_quantity} where item_idx = #{item_idx}
+	</update>
 </mapper>

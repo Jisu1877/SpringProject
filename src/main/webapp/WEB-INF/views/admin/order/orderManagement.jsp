@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>상품 조회/수정</title>
+    <title>통합 주문 관리</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
     <script src="${ctp}/js/orderManagement.js"></script>
@@ -41,9 +41,10 @@
 			let pageSize = $("#pageSize").val();
 			location.href="${ctp}/admin/item/itemList?part="+part+"&pag=${pag}&pageSize="+pageSize;
 		}
-		
-		function orderCancelInfor(listIdx) {
-			let url = "/javagreenS_ljs/order/orderCancelInfor?listIdx=" + listIdx;
+
+		/* 취소 내용 확인  */
+		function orderCancelInfor(listIdx, orderIdx) {
+			let url = "/javagreenS_ljs/order/orderCancelInfor?orderIdx="+orderIdx+"&listIdx=" + listIdx;
 			let winX = 500;
 		    let winY = 650;
 		    let x = (window.screen.width/2) - (winX/2);
@@ -65,7 +66,7 @@
 	    <!-- Header -->
 		<header style="padding-top:22px;">
 			<div class="w3-bottombar w3-light-grey w3-padding" style="margin-bottom: 20px; font-size:23px;">
-		    	주문관리
+		    	통합 주문 관리
 		    </div>
 		</header>
  		<div class="w3-row-padding" style="margin:0 -16px;">
@@ -139,7 +140,7 @@
 			<table class="w3-table table-bordered" style="border-collapse:separate;">
 				<thead>
 		        	<tr class="w3-2019-princess-blue">
-		        		<th class="text-center">구매자 아이디</th>
+		        		<th class="text-center">회원ID</th>
 		        		<th class="text-center">주문번호</th>
 		        		<th class="text-center">상품번호</th>
 		        		<th class="text-center">상품명</th>
@@ -155,10 +156,15 @@
 				<tbody>
 	        	<c:forEach var="vo" items="${orderList}">
 	        		<tr data-idx="${vo.order_idx}">
-	        			<td width="9%"class="text-center id_${vo.order_idx}" style="vertical-align: middle;">${vo.user_id}</td>
+	        			<td width="7%"class="text-center id_${vo.order_idx}" style="vertical-align: middle;">${vo.user_id}</td>
 	        			<td width="5%" class="text-center idx_${vo.order_idx}" style="vertical-align: middle;">${vo.order_idx}</td>
 	        			<td width="5%" class="text-center">${vo.item_idx}</td>
-	        			<td>${vo.item_name}</td>
+	        			<td>
+	        				 ${fn:substring(vo.item_name, 0, 10)}
+						    <c:if test="${fn:length(vo.item_name) > 9}">
+						    ...
+						    </c:if>
+	        			</td>
 	        			<td width="8%">${vo.option_name}</td>
 	        			<td class="text-center">${vo.order_quantity} 개</td>
 	        			<td class="text-center">
@@ -170,48 +176,51 @@
 	        			<td class="text-center infor_${vo.order_idx}" style="vertical-align: middle;">
 	        				<a onclick="orderListInfor(${vo.order_idx})">조회</a>
 	        			</td>
-	        			<td class="text-center">
+	        			<td class="text-center" width="7%">
 	        				<c:if test="${vo.order_status_code == '1'}">
-								<font size="3" color="gray">결제완료</font><br>
+								<font size="3" color="gray">결제완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '2'}">
-								<font size="3" color="gray">주문확인(배송준비)</font><br>
+								<font size="3" color="gray">주문확인</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '3'}">
-								<font size="3" color="red">취소완료</font><br>
+								<font size="3" color="red">취소완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '4'}">
-								<font size="3" color="gray">배송중</font><br>
+								<font size="3" color="gray">배송중</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '5'}">
-								<font size="3" color="gray">배송완료</font><br>
+								<font size="3" color="gray">배송완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '6'}">
-								<font size="3" color="gray">구매완료</font><br>
+								<font size="3" color="gray">구매완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '7'}">
-								<font size="3" color="red">교환신청 처리 중</font><br>
+								<font size="3" color="red">교환신청 처리 중</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '8'}">
-								<font size="3" color="red">교환승인 완료</font><br>
+								<font size="3" color="red">교환승인 완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '9'}">
-								<font size="3" color="red">배송중(교환)</font><br>
+								<font size="3" color="red">배송중(교환)</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '10'}">
-								<font size="3" color="red">교환거부</font><br>
+								<font size="3" color="red">교환거부</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '11'}">
-								<font size="3" color="red">환불신청 처리 중</font><br>
+								<font size="3" color="red">환불신청 처리 중</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '12'}">
-								<font size="3" color="red">환불승인</font><br>
+								<font size="3" color="red">환불승인</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '13'}">
-								<font size="3" color="red">환불완료</font><br>
+								<font size="3" color="red">환불완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '14'}">
-								<font size="3" color="red">환불거부</font><br>
+								<font size="3" color="red">환불거부</font>
+							</c:if>
+							<c:if test="${vo.order_status_code == '15'}">
+								<font size="3" color="blue">취소 요청</font>
 							</c:if>
 	        			</td>
 	        			<td class="text-center">
@@ -222,10 +231,10 @@
 								<a onclick="" class="btn w3-2021-mint btn-sm">송장 입력</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '3'}">
-								<a onclick="orderCancelInfor(${vo.order_list_idx})" class="btn w3-yellow btn-sm">내용 확인</a>
+								<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">취소 내역</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '4'}">
-								<font size="3" color="gray">배송중</font><br>
+								<font size="3" color="gray">배송중</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '5'}">
 								<font size="3" color="gray">배송완료</font><br>

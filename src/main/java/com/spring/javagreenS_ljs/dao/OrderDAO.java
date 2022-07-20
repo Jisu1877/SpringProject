@@ -30,8 +30,6 @@ public interface OrderDAO {
 
 	public ArrayList<OrderListVO> getorderListOnlyOrder(@Param("user_idx") int user_idx);
 
-	public ArrayList<OrderListVO> getOrderListOnlyDelivery(@Param("user_idx") int user_idx);
-
 	public ArrayList<OrderListVO> getOrderListOnlyDeliveryOk(@Param("user_idx") int user_idx);
 
 	public ArrayList<OrderListVO> getOrderListOnlyReturn(@Param("user_idx") int user_idx);
@@ -46,11 +44,24 @@ public interface OrderDAO {
 
 	public ArrayList<OrderListVO> getorderListOnlyReturnOkSearch(@Param("user_idx")int user_idx, @Param("start") String start, @Param("end") String end);
 
-	public OrderListVO getOrderListInfor(@Param("listIdx") int listIdx);
+	public OrderListVO getOrderListInfor(@Param("listIdx") int listIdx,@Param("orderIdx") int orderIdx);
 
 	public void setOrderCancelHistory(@Param("vo") OrderCancelVO vo);
 
 	public OrderCancelVO getorderCancelInfor(@Param("listIdx") int listIdx);
 
+	public ArrayList<OrderListVO> getOrderListOnlyChoice(@Param("user_idx") int user_idx, @Param("order_status_code") String order_status_code);
+
+	public ArrayList<OrderListVO> getOrderListOnlyChangeReturn(@Param("user_idx") int user_idx);
+
+	public ArrayList<OrderListVO> getOrderListOnlyRefund(@Param("user_idx") int user_idx);
+
+	public void setOrderCancelRequsetHistory(@Param("vo") OrderCancelVO vo);
+
+	public int getOrderMaxIdx();
+
+	public OrderListVO getorderListInfor2(@Param("order_list_idx") int order_list_idx);
+
+	public void setUsePointSub(@Param("order_idx") int order_idx,@Param("use_point") int use_point);
 
 }

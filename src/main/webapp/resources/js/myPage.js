@@ -90,18 +90,32 @@ function searchCheck() {
 	let start = $("#start").val();
 	let end = $("#end").val();
 	
-	if(start == "" || end == "") {
-		alert("조회 날짜를 선택하세요.");
+	if(start != "" && end == "") {
+		alert("조회 날짜는 2개 모두 선택해야 합니다.");
 		return false;
 	}
+	if(start == "" && end != "") {
+		alert("조회 날짜는 2개 모두 선택해야 합니다.");
+		return false;
+	}
+	
 	orderSearchForm.submit();
 }
 
-function orderCancel(listIdx) {
+function orderCancel(listIdx,orderIdx) {
 	let ans = confirm("해당 주문을 취소하시겠습니까? \n사용한 포인트는 재적립되지 않습니다.");
 	if(!ans) return false;
 	
-	let url = "/javagreenS_ljs/order/orderCancel?listIdx=" + listIdx;
+	let url = "/javagreenS_ljs/order/orderCancel?orderIdx="+orderIdx+"&listIdx=" + listIdx;
+	let winX = 520;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}
+
+function orderCancelInfor(listIdx,orderIdx) {
+	let url = "/javagreenS_ljs/order/orderCancelInfor?orderIdx="+orderIdx+"&listIdx=" + listIdx;
 	let winX = 500;
     let winY = 650;
     let x = (window.screen.width/2) - (winX/2);
@@ -109,21 +123,12 @@ function orderCancel(listIdx) {
 	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }
 
-function orderCancelInfor(listIdx) {
-	let url = "/javagreenS_ljs/order/orderCancelInfor?listIdx=" + listIdx;
-	let winX = 500;
-    let winY = 650;
-    let x = (window.screen.width/2) - (winX/2);
-    let y = (window.screen.height/2) - (winY/2)
-	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
-}
-
-function orderCancelRequest() {
-	let ans = confirm("해당 주문을 취소하시겠습니까? \n사용한 포인트는 재적립되지 않습니다.");
+function orderCancelRequest(listIdx,orderIdx) {
+	let ans = confirm("해당 주문을 취소요청 하시겠습니까? \n취소 시 사용한 포인트는 재적립되지 않습니다.");
 	if(!ans) return false;
 	
-	let url = "/javagreenS_ljs/order/orderCancelRequest?listIdx=" + listIdx;
-	let winX = 500;
+	let url = "/javagreenS_ljs/order/orderCancelRequest?orderIdx="+orderIdx+"&listIdx=" + listIdx;
+	let winX = 520;
     let winY = 650;
     let x = (window.screen.width/2) - (winX/2);
     let y = (window.screen.height/2) - (winY/2)

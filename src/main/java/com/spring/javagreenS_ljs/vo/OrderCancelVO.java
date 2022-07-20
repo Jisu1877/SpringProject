@@ -11,6 +11,11 @@ public class OrderCancelVO {
 	private int return_price;
 	private String return_bank_name;
 	private String return_bank_user_name;
-	private int return_bank_number;
+	private String return_bank_number;
 	private String created_date;
+	
+	private String request_answer;
+	private String cancel_admin_memo;
+	private int use_point;
+	private int order_idx;
 }

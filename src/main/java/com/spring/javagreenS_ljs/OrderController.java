@@ -222,7 +222,7 @@ public class OrderController {
 		int user_idx = (int) session.getAttribute("sUser_idx");
 		
 		//결제가 완료된 이후에 진행 처리
-		orderService.setOrderProcess(user_id, user_idx);
+		orderService.setOrderProcess(user_id, user_idx, payMentVO);
 		
 		session.setAttribute("payMentVO", payMentVO);
 		
@@ -241,24 +241,24 @@ public class OrderController {
 	
 	//주문 취소 처리 창 호출
 	@RequestMapping(value = "/orderCancel", method = RequestMethod.GET)
-	public String orderCancelGet(@RequestParam(name="listIdx") int listIdx, Model model) {
+	public String orderCancelGet(
+			@RequestParam(name="listIdx") int listIdx,
+			@RequestParam(name="orderIdx") int orderIdx, Model model) {
+		
 		//취소하고자하는 주문 내용 가져오기
-		OrderListVO vo = orderService.getOrderListInfor(listIdx);
+		OrderListVO vo = orderService.getOrderListInfor(listIdx,orderIdx);
 		model.addAttribute("vo", vo);
 		return "order/orderCancel";
 	}
 	
 	
 	//주문 취소 처리
+	@Transactional(rollbackFor = Exception.class) //트랜잭션 처리 
 	@ResponseBody
 	@RequestMapping(value = "/orderCancelOk", method = RequestMethod.POST)
-	public String orderCancelPost(OrderCancelVO vo, HttpSession session) {
+	public String orderCancelOkPost(OrderCancelVO vo, HttpSession session) {
 		int user_idx = (int) session.getAttribute("sUser_idx");
 		vo.setUser_idx(user_idx);
-		
-		//환불 금액 알아오기
-		OrderListVO listVO = orderService.getOrderListInfor(vo.getOrder_list_idx());
-		vo.setReturn_price(listVO.getItem_price());
 		
 		//주문 취소 테이블에 저장
 		orderService.setOrderCancelHistory(vo);
@@ -266,25 +266,71 @@ public class OrderController {
 		//주문 목록 상태값 변경
 		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "3");
 		
+		//주문 목록 정보 가져오기
+		OrderListVO orderListVO = orderService.getorderListInfor2(vo.getOrder_list_idx());
+		
+		//상품 재고 수량 재 업데이트
+		int item_idx = orderListVO.getItem_idx();
+		int order_quantity = orderListVO.getOrder_quantity();
+		itemService.setStockQuantityUpdate(item_idx, order_quantity);
+		
+		//주문 테이블의 사용 포인트 차감
+		if(vo.getUse_point() != 0) {
+			orderService.setUsePointSub(vo.getOrder_idx(), vo.getUse_point());
+		}
+		// 나중에 여기에 쿠폰 사용 할인 금액도 차감 추가 필요
+		
 		return "1";
 	}
 	
 	//취소 내용 확인
 	@RequestMapping(value = "/orderCancelInfor", method = RequestMethod.GET)
-	public String orderCancelInforGet(@RequestParam(name="listIdx") int listIdx, Model model) {
+	public String orderCancelInforGet(@RequestParam(name="listIdx") int listIdx,
+			@RequestParam(name="orderIdx") int orderIdx, Model model) {
+		
 		//취소 내용 가져오기
 		OrderCancelVO vo = orderService.getorderCancelInfor(listIdx);
-		
 		model.addAttribute("vo", vo);
+		
+		//취소하고자하는 주문 내용 가져오기
+		OrderListVO orderVO = orderService.getOrderListInfor(listIdx,orderIdx);
+		model.addAttribute("orderVO", orderVO);
+		
 		return "order/orderCancelInfor";
 	}
 	
 	//취소 요청 창 호출
 	@RequestMapping(value = "/orderCancelRequest", method = RequestMethod.GET)
-	public String orderCancelRequestGet(@RequestParam(name="listIdx") int listIdx, Model model) {
+	public String orderCancelRequestGet(		
+			@RequestParam(name="listIdx") int listIdx,
+			@RequestParam(name="orderIdx") int orderIdx, Model model) {
 		//취소하고자하는 주문 내용 가져오기
-		OrderListVO vo = orderService.getOrderListInfor(listIdx);
+		OrderListVO vo = orderService.getOrderListInfor(listIdx,orderIdx);
 		model.addAttribute("vo", vo);
 		return "order/orderCancelRequest";
+	}
+	
+	
+	//취소 요청 처리
+	@Transactional(rollbackFor = Exception.class) //트랜잭션 처리 
+	@ResponseBody
+	@RequestMapping(value = "/orderCancelRequestOk", method  = RequestMethod.POST)
+	public String orderCancelRequestOkPost(OrderCancelVO vo, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		vo.setUser_idx(user_idx);
+	
+		//주문 취소 요청 테이블에 저장
+		orderService.setOrderCancelRequsetHistory(vo);
+		
+		//주문 목록 상태값 변경
+		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "15");
+		
+		//주문 테이블의 사용 포인트 차감(**반려 시 다시 돌려놓아야 함..)
+		if(vo.getUse_point() != 0) {
+			orderService.setUsePointSub(vo.getOrder_idx(), vo.getUse_point());
+		}
+		// 나중에 여기에 쿠폰 사용 할인 금액도 차감 추가 필요
+		
+		return "1";
 	}
 }

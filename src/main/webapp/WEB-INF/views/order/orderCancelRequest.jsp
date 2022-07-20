@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>주문 취소</title>
+    <title>주문 취소 요청</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
     <style>
@@ -16,8 +16,8 @@
     	}
     </style>
     <script>
-    	function orderCancel(idx,price) {
-			let cancel_reason = $("select[name=reason]").val();
+    	function orderCancelRequest(ilstIdx,price,point,orderIdx) {
+			let cancel_reason = $("select[name=cancel_reason]").val();
 			let return_bank_name = $("select[name=return_bank_name]").val();
 			let return_bank_user_name = $("#return_bank_user_name").val();
 			let return_bank_number = $("#return_bank_number").val();
@@ -39,22 +39,24 @@
 				return false;
 			}
 			
-			let num1 = Number(return_bank_number);
-			let num2 = Number(price);
+			let num1 = Number(price);
 			
 			$.ajax({
 				type : "post",
-				url : "${ctp}/order/orderCancelOk",
+				url : "/javagreenS_ljs/order/orderCancelRequestOk",
 				data : {
-					cancel_reason : cancel_reason,
+ 					cancel_reason : cancel_reason,
 					return_bank_name : return_bank_name,
 					return_bank_user_name : return_bank_user_name,
-					return_bank_number : num1,
-					order_list_idx : idx
+					return_bank_number : return_bank_number,
+					order_list_idx : ilstIdx,
+					return_price : num1,
+					use_point : point,
+					order_idx : orderIdx
 				},
 				success : function(data) {
 					if(data == "1") {
-						alert("주문 취소처리가 완료되었습니다.");
+						alert("주문 취소요청이 완료되었습니다.");
 						window.opener.location.reload();
 						window.close();
 					}
@@ -70,22 +72,41 @@
 <body>
 <!-- !PAGE CONTENT! -->
 <div id="pageContent" class="w3-content" style="max-width:1500px">
-   	<div class="w3-bar w3-border w3-2019-galaxy-blue">
-	  <span class="w3-bar-item w3-padding-16" style="font-size:18px;">주문 취소</span>
+   	<div class="w3-bar w3-border w3-2021-mint">
+	  <span class="w3-bar-item w3-padding-16" style="font-size:18px;">주문 취소 요청</span>
 	</div>
 	<div style="margin-top:10px; padding:10px;">
 		<div class="w3-row-padding w3-padding-16">
 			<div class="w3-col m1 w3-margin-bottom"></div>
 			<div class="w3-col m10 w3-margin-bottom">
-				<label class="w3-yellow"><b>주문 정보</b></label>
+				<div class="mb-2">
+					※ 주문 확인이 진행된 상품은 즉시 취소가 불가능합니다.<br> 취소 요청이 반려될 수 있음을 알려드립니다.
+				</div>
+				<div>
+					※ 부분 취소의 경우 포인트 혹은 쿠폰 사용으로 할인을 받았다면, <font color="tomato">가장 먼저 취소하는 상품에서 차감</font>되어 환불됩니다.
+				</div>
+				<label class="w3-yellow mt-3"><b>주문 정보</b></label>
 				<table class="table w3-bordered">
+					<tr>
+						<th>주문 번호</th>
+						<td>${vo.order_number}</td>
+					</tr>
 					<tr>
 						<th>주문 목록 번호</th>
 						<td>${vo.order_list_idx}</td>
 					</tr>
 					<tr>
-						<th>환불금액</th>
+						<th>상품금액</th>
 						<td><fmt:formatNumber value="${vo.item_price}"/>원</td>
+					</tr>
+					<tr>
+						<th>차감금액</th>
+						<td><fmt:formatNumber value="${vo.use_point}"/>원</td>
+					</tr>
+					<tr>
+						<th>최종 환불금액</th>
+						<c:set var="refund" value="${vo.item_price - vo.use_point}"/>
+						<td><fmt:formatNumber value="${refund}"/>원</td>
 					</tr>
 				</table>
 				<br>
@@ -94,7 +115,7 @@
 					<tr>
 						<th>취소사유</th>
 						<td>
-							<select name="reason" id="reason" class="w3-select w3-border">
+							<select name="cancel_reason" id="reason" class="w3-select w3-border">
 							    <option value="" selected>취소 사유를 선택하세요</option>
 							    <option value="단순변심">단순변심</option>
 							    <option value="주문내용변경">주문내용변경</option>
@@ -151,8 +172,8 @@
 					</tr>
 				</table>
 				<div class="text-center">
-					<input type="button" value="주문 취소" class="w3-btn w3-2019-princess-blue" onclick="orderCancel(${vo.order_list_idx},${vo.item_price})"/>&nbsp;
-					<input type="button" value="닫기" class="w3-btn w3-2021-illuminating" onclick="window.close();"/>
+					<a class="w3-btn w3-2021-mint" onclick="orderCancelRequest(${vo.order_list_idx},${refund},${vo.use_point},${vo.order_idx})">취소 요청</a>&nbsp;
+					<a class="w3-btn w3-2021-illuminating" onclick="window.close();">닫기</a>
 				</div>
 		    </div>
 		    <div class="w3-col m1 w3-margin-bottom">

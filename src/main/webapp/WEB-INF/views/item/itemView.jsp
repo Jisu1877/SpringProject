@@ -11,6 +11,7 @@
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 <link rel="icon" href="${ctp}/images/favicon.png">
 <link rel="stylesheet" type="text/css" href="${ctp}/css/itemView.css" />
+<script src="https://cdn.rawgit.com/igorlino/elevatezoom-plus/1.1.6/src/jquery.ez-plus.js"></script>
 <script src="${ctp}/js/itemView.js"></script>
 <script>
 	$(function() {
