@@ -30,4 +30,6 @@ public interface UserDAO {
 
 	public void setUserPwdUpdate(@Param("user_idx") int user_idx,@Param("encPwd") String encPwd);
 
+	public UserVO getUserInforIdx(@Param("user_idx") int user_idx);
+
 }

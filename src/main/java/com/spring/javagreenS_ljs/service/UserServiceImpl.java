@@ -129,4 +129,9 @@ public class UserServiceImpl implements UserService {
 		userDAO.setUserPwdUpdate(user_idx,encPwd);
 	}
 
+	@Override
+	public UserVO getUserInforIdx(int user_idx) {
+		return userDAO.getUserInforIdx(user_idx);
+	}
+
 }

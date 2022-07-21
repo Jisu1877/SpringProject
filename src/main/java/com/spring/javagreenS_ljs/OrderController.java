@@ -333,4 +333,17 @@ public class OrderController {
 		
 		return "1";
 	}
+	
+	
+	//취소 반려 내용 확인
+	@RequestMapping(value = "/orderCancelRequestInfor", method = RequestMethod.GET)
+	public String orderCancelRequestInforGet(
+			@RequestParam(name="listIdx") int listIdx,
+			@RequestParam(name="orderIdx") int orderIdx, Model model) {
+		
+		//취소 요청 처리 내용 가져오기
+		OrderCancelVO vo = orderAdminService.getOrderCancelRequestInfor(listIdx, orderIdx);
+		model.addAttribute("vo", vo);
+		return "order/orderCancelRequestInfor";
+	}
 }

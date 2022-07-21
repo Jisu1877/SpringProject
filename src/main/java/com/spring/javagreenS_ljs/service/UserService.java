@@ -26,4 +26,6 @@ public interface UserService {
 
 	public void setUserPwdUpdate(int user_idx, String encPwd);
 
+	public UserVO getUserInforIdx(int user_idx);
+
 }

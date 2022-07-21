@@ -199,4 +199,8 @@
 	<update id="setUsePointSub">
 		update ga_order set use_point = use_point - #{use_point} where order_idx = #{order_idx}
 	</update>
+	
+	<update id="setUsePointPlus">
+		update ga_order set use_point = use_point + #{use_point} where order_idx = #{order_idx}a
+	</update>
 </mapper>

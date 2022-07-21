@@ -355,4 +355,9 @@ public class OrderServiceImpl implements OrderService {
 		orderDAO.setUsePointSub(order_idx, use_point);
 	}
 
+	@Override
+	public void setUsePointPlus(int order_idx, int use_point) {
+		orderDAO.setUsePointPlus(order_idx,use_point);
+	}
+
 }

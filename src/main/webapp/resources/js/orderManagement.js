@@ -1,3 +1,38 @@
+$(document).ready(function(){       
+   $( "#start, #end" ).datepicker({
+	      dateFormat: 'yy-mm-dd',
+		  prevText: '이전 달',
+		  nextText: '다음 달',
+		  monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+		  monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+		  dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+		  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+		  dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+		  showMonthAfterYear: true,
+		  showButtonPanel: true,
+		  currentText: '오늘 날짜로 이동',
+		  yearSuffix: '년',
+		  closeText: '닫기',
+		  showAnim: 'slideDown'
+		  //beforeShowDay: disableSelectedDates
+    });
+   let today = new Date();
+   today.setDate(today.getDate());
+   
+   //$('#start').datepicker("option", "minDate", today);
+   $('#start').datepicker("option", "onClose", function (selectedDate){
+	   $("#end").datepicker( "option", "minDate", selectedDate );
+	   });
+   
+   $('#end').datepicker();
+   $('#end').datepicker("option", "minDate", $("#start").val());
+   $('#end').datepicker("option", "maxDate", today);
+   $('#end').datepicker("option", "onClose", function (selectedDate){
+       $("#start").datepicker( "option", "maxDate", selectedDate );
+      });
+});
+
+
 $(function() {
 	init();
 });
@@ -88,4 +123,24 @@ function orderCodeChange1(idx) {
 			alert("전송오류.");
 		}
 	});
+}
+
+/* 취소 요청 처리 */
+function orderCancelRequest(ilstIdx,orderIdx) {
+	let url = "/javagreenS_ljs/admin/order/orderCancelRequest?orderIdx="+orderIdx+"&listIdx=" + ilstIdx;
+	let winX = 700;
+    let winY = 700;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}
+
+/* 취소 내용 확인  */
+function orderCancelInfor(listIdx, orderIdx) {
+	let url = "/javagreenS_ljs/order/orderCancelInfor?orderIdx="+orderIdx+"&listIdx=" + listIdx;
+	let winX = 500;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }

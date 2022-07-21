@@ -62,6 +62,8 @@ public interface OrderDAO {
 
 	public OrderListVO getorderListInfor2(@Param("order_list_idx") int order_list_idx);
 
-	public void setUsePointSub(@Param("order_idx") int order_idx,@Param("use_point") int use_point);
+	public void setUsePointSub(@Param("order_idx") int order_idx, @Param("use_point") int use_point);
+
+	public void setUsePointPlus(@Param("order_idx") int order_idx, @Param("use_point") int use_point);
 
 }

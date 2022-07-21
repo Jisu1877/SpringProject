@@ -51,5 +51,6 @@ public interface OrderService {
 
 	public void setUsePointSub(int order_idx, int use_point);
 
+	public void setUsePointPlus(int order_idx, int use_point);
 
 }

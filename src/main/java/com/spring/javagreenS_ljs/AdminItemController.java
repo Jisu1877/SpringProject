@@ -104,7 +104,7 @@ public class AdminItemController {
 		model.addAttribute("userVO", userVO);
 		
 		//페이징처리
-		PageVO pageVo = pagingProcess.pageProcess2(pag, pageSize,"adminItem", part , "");
+		PageVO pageVo = pagingProcess.pageProcess2(pag, pageSize,"adminItem", part , "", "", "", "");
 		
 		//상품 목록 불러오기
 		ArrayList<ItemVO> vos = itemAdminService.getItemListSearch(pageVo.getStartIndexNo(), pageVo.getPageSize(), part);

@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>통합 주문 관리</title>
+    <title>배송 관리</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -106,6 +106,7 @@
 		function reset() {
 			location.href="${ctp}/admin/order/orderList";
 		}
+		
 	</script>
 </head>
 <body class="w3-light-grey">
@@ -120,21 +121,9 @@
 	    <!-- Header -->
 		<header style="padding-top:22px;">
 			<div class="w3-bottombar w3-light-gray w3-padding" style="margin-bottom: 20px;">
-		    	<span style="font-size:23px;">통합 주문 관리</span>
+		    	<span style="font-size:23px;">배송 관리</span>
 		    </div>
 		</header>
- 		<div class="w3-row-padding" style="margin:0 -16px;">
-          <div class="w3-third w3-margin-bottom">
-            <label><i class="fa fa-calendar-o"></i>&nbsp; 조회 기간&nbsp; <span style="font-size:14px;">※ 모든 조건을 각각 조회할 수 있습니다.</span></label>
-            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="start" id="start" value="${start}" autocomplete="off">
-          </div>
-          <div class="w3-third">
-            <label>&nbsp;</label>
-            <input class="w3-input w3-border" type="text" placeholder="YYYY-DD-MM" name="end" id="end" value="${end}" autocomplete="off">
-          </div>
-          <div class="w3-third">
-          </div>
-        </div>
         <div class="w3-row-padding" style="margin:0 -16px;">
           <div class="w3-third w3-margin-bottom">
             <label><i class="fa-solid fa-circle-info"></i>&nbsp; 상세 조건</label>
@@ -198,24 +187,23 @@
 		<div class="w3-responsive tableStyle">
 			<table class="w3-table table-bordered" style="border-collapse:separate;">
 				<thead>
-		        	<tr class="w3-2019-princess-blue">
-		        		<th class="text-center">회원ID</th>
+		        	<tr class="w3-2021-mint">
 		        		<th class="text-center">주문번호</th>
 		        		<th class="text-center">상품번호</th>
 		        		<th class="text-center">상품명</th>
-		        		<th class="text-center">옵션명</th>
 		        		<th class="text-center">수량</th>
 		        		<th class="text-center">결제금액</th>
 		        		<th class="text-center">주문일시</th>
 		        		<th class="text-center">상세정보</th>
 		        		<th class="text-center">주문상태</th>
+		        		<th class="text-center">택배사</th>
+		        		<th class="text-center">송장번호</th>
 		        		<th class="text-center">처리</th>
 		        	</tr>
 				</thead>
 				<tbody>
 	        	<c:forEach var="vo" items="${orderList}">
 	        		<tr data-idx="${vo.order_idx}">
-	        			<td width="7%"class="text-center id_${vo.order_idx}" style="vertical-align: middle;">${vo.user_id}</td>
 	        			<td width="5%" class="text-center idx_${vo.order_idx}" style="vertical-align: middle;">${vo.order_number}</td>
 	        			<td width="5%" class="text-center" style="padding:0px; vertical-align: middle;">${vo.item_idx}</td>
 	        			<td>
@@ -224,20 +212,12 @@
 						    ...
 						    </c:if>
 	        			</td>
-	        			<td width="8%" class="text-center">
-	        				<c:if test="${vo.option_name != ''}">
-		        				${vo.option_name}
-	        				</c:if>
-	        				<c:if test="${vo.option_name == ''}">
-	        					-
-	        				</c:if>
-	        			</td>
 	        			<td class="text-center">${vo.order_quantity} 개</td>
 	        			<td class="text-center">
 	        				<fmt:formatNumber value="${vo.item_price}"/> 원	
 	        			</td>
 	        			<td class="text-center" style="vertical-align: middle;">
-	        				${fn:substring(vo.created_date, 0, 19)}
+	        				${fn:substring(vo.created_date, 0, 10)}
 	        			</td>
 	        			<td class="text-center infor_${vo.order_idx}" style="vertical-align: middle;">
 	        				<a onclick="orderListInfor(${vo.order_idx})">조회</a>
@@ -292,52 +272,22 @@
 								<font size="3" color="gray">취소 반려</font>
 							</c:if>
 	        			</td>
+	        			<td width="10%">
+	        				<select name="pageSize" id="pageSize" onchange="pageCheck()" class="select w3-left">
+								<option value="CJ대한통운" selected>CJ대한통운</option>
+								<option value="롯데택배">롯데택배</option>
+								<option value="우체국택배">우체국택배</option>
+								<option value="로젠택배">로젠택배</option>
+								<option value="한진택배">한진택배</option>
+								<option value="경동택배">경동택배</option>
+								<option value="대신택배">대신택배</option>
+							</select>
+	        			</td>
+	        			<td width="7%">
+	        				<input type="text" class="input" id="order_delivery_number">
+	        			</td>
 	        			<td class="text-center">
-	        				<c:if test="${vo.order_status_code == '1'}">
-								<input type="button" value="주문확인" class="btn btn-sm w3-2020-navy-blazer" onclick="orderCodeChange1(${vo.order_list_idx})"/>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '2' || vo.order_status_code == '16'}">
-								<a onclick="" class="btn w3-2021-mint btn-sm">배송 관리</a>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '3'}">
-								<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">내역 확인</a>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '4'}">
-								<font size="3" color="gray">배송중</font>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '5'}">
-								<font size="3" color="gray">배송완료</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '6'}">
-							<font size="3" color="gray">구매완료</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '7'}">
-							<font size="3" color="red">교환신청 처리 중</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '8'}">
-							<font size="3" color="red">교환승인 완료</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '9'}">
-							<font size="3" color="red">배송중(교환)</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '10'}">
-							<font size="3" color="red">교환거부</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '11'}">
-							<font size="3" color="red">환불신청 처리 중</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '12'}">
-							<font size="3" color="red">환불승인</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '13'}">
-							<font size="3" color="red">환불완료</font><br>
-							</c:if>					
-							<c:if test="${vo.order_status_code == '14'}">
-							<font size="3" color="red">환불거부</font><br>
-							</c:if>
-							<c:if test="${vo.order_status_code == '15'}">
-								<a onclick="orderCancelRequest(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2020-mosaic-blue btn-sm">요청 처리</a>
-							</c:if>
+							<a onclick="" class="btn w3-2021-mint btn-sm">입력</a>
 	        			</td>
 	        		</tr>
 	        	</c:forEach>

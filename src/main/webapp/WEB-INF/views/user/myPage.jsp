@@ -381,6 +381,10 @@ $(document).ready(function() {
 						<font size="3" color="red">취소 요청 중</font><br>
 							✔ 취소 요청을 검토중입니다. 기다려주세요.
 						</c:if>					
+						<c:if test="${vo.order_status_code == '16'}">
+						<font size="3" color="red">취소 요청 반려</font><br>
+							✔ 취소 요청이 반려되었습니다. 처리 내용을 확인해주세요.
+						</c:if>					
 	          		</div>
 	          		<div class="w3-col m2">
 	          			<div class="mb-2">
@@ -394,7 +398,10 @@ $(document).ready(function() {
 	          					<a onclick="orderCancelRequest(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-success btn-sm">취소 요청</a>
 							</c:if>
 	          				<c:if test="${vo.order_status_code == '3'}">
-	          					<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-warning btn-sm">취소 내역 확인</a>
+	          					<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">취소 내역 확인</a>
+							</c:if>
+	          				<c:if test="${vo.order_status_code == '16'}">
+	          					<a onclick="orderCancelRequestInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2020-mosaic-blue btn-sm">처리 내용 확인</a>
 							</c:if>
 	          			</div>
 	          		</div>

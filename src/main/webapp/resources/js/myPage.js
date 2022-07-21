@@ -32,26 +32,6 @@ $(document).ready(function(){
       });
 });
 		
-function searchCheck() {
-	let start = document.getElementById("start").value;
-	let end = document.getElementById("end").value;
-	
-	let regDate = /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/;
-	
-	if(start != "" && end != "") {
-		if(!regDate.test(start)) {
-			alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
-			document.getElementById("start").focus();
-			return false;
-		}
-		else if(!regDate.test(end)) {
-			alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
-			document.getElementById("end").focus();
-			return false;
-		}
-	}
-}
-
 
 function userImageChange() {
 	
@@ -85,10 +65,10 @@ function userImageChange() {
 	userImageForm.submit();
 }
 
-
 function searchCheck() {
 	let start = $("#start").val();
 	let end = $("#end").val();
+	let regDate = /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/;
 	
 	if(start != "" && end == "") {
 		alert("조회 날짜는 2개 모두 선택해야 합니다.");
@@ -99,9 +79,20 @@ function searchCheck() {
 		return false;
 	}
 	
+	if(!regDate.test(start)) {
+		alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
+		document.getElementById("start").focus();
+		return false;
+	}
+	else if(!regDate.test(end)) {
+		alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
+		document.getElementById("end").focus();
+		return false;
+	}
+	
 	orderSearchForm.submit();
 }
-
+/* 주문 취소 */
 function orderCancel(listIdx,orderIdx) {
 	let ans = confirm("해당 주문을 취소하시겠습니까? \n사용한 포인트는 재적립되지 않습니다.");
 	if(!ans) return false;
@@ -113,7 +104,7 @@ function orderCancel(listIdx,orderIdx) {
     let y = (window.screen.height/2) - (winY/2)
 	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }
-
+/* 주문 취소 내역 확인 */
 function orderCancelInfor(listIdx,orderIdx) {
 	let url = "/javagreenS_ljs/order/orderCancelInfor?orderIdx="+orderIdx+"&listIdx=" + listIdx;
 	let winX = 500;
@@ -123,11 +114,22 @@ function orderCancelInfor(listIdx,orderIdx) {
 	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }
 
+/* 주문 취소 요청 */
 function orderCancelRequest(listIdx,orderIdx) {
 	let ans = confirm("해당 주문을 취소요청 하시겠습니까? \n취소 시 사용한 포인트는 재적립되지 않습니다.");
 	if(!ans) return false;
 	
 	let url = "/javagreenS_ljs/order/orderCancelRequest?orderIdx="+orderIdx+"&listIdx=" + listIdx;
+	let winX = 520;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}
+
+/* 취소 반려 내용 확인 */
+function orderCancelRequestInfor(listIdx,orderIdx) {
+	let url = "/javagreenS_ljs/order/orderCancelRequestInfor?orderIdx="+orderIdx+"&listIdx=" + listIdx;
 	let winX = 520;
     let winY = 650;
     let x = (window.screen.width/2) - (winX/2);
