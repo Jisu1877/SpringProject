@@ -19,4 +19,6 @@ public interface OrderAdminService {
 
 	public void setOrderCancelRequestAnswer(OrderCancelVO vo);
 
+	public ArrayList<OrderListVO> getOrderListWithDelivery();
+
 }

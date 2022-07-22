@@ -79,4 +79,9 @@ public class OrderAdminServiceImpl implements OrderAdminService {
 	public void setOrderCancelRequestAnswer(OrderCancelVO vo) {
 		orderAdminDAO.setOrderCancelRequestAnswer(vo);
 	}
+
+	@Override
+	public ArrayList<OrderListVO> getOrderListWithDelivery() {
+		return orderAdminDAO.getOrderListWithDelivery();
+	}
 }

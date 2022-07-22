@@ -335,27 +335,7 @@
 		JOIN ga_user_delivery ud
 		ON o.user_idx = ud.user_idx
 		<where>
-		<if test="search == 'delivery_name'">
-			ud.delivery_name like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'delivery_tel'">
-			ud.delivery_tel like concat('%', #{searchValue},'%')
-		</if>
-	 	<if test="search == 'name'">
-			us.name like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'tel'">
-			us.tel like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'user_id'">
-			us.user_id like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'order_number'">
-			o.order_number like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'item_idx'">
-			it.item_idx like concat('%', #{searchValue},'%')
-		</if>
+		<include refid="orderAdminWhere"></include>
 		</where>
 		order by ol.created_date desc limit #{startIndexNo}, #{pageSize}
 	</select>
@@ -383,27 +363,7 @@
 		JOIN ga_user_delivery ud
 		ON o.user_idx = ud.user_idx
 		<where>	
-		<if test="search == 'delivery_name'">
-			ud.delivery_name like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'delivery_tel'">
-			ud.delivery_tel like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'name'">
-			us.name like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'tel'">
-			us.tel like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'user_id'">
-			us.user_id like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'order_number'">
-			o.order_number like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'item_idx'">
-			it.item_idx like concat('%', #{searchValue},'%')
-		</if>
+		<include refid="orderAdminWhere"></include>
 		and date(ol.created_date) between date(#{start}) and date(#{end})
 		</where>
 		order by ol.created_date desc limit #{startIndexNo}, #{pageSize}
@@ -422,10 +382,7 @@
 		<where>
 		<include refid="orderAdminWhere"></include>
 		<if test="code != '0'">
-			and ol.order_status_code in 
-			<foreach collection="partArray" item="item" index="index" open="(" close=")" separator=",">
-			    #{code}
-			</foreach>	
+			and ol.order_status_code = #{code}
 		</if>
 		</where>
 		order by ol.created_date desc limit #{startIndexNo}, #{pageSize}
@@ -455,33 +412,26 @@
 		JOIN ga_user_delivery ud
 		ON o.user_idx = ud.user_idx
 		<where>
-		<if test="search == 'delivery_name'">
-			ud.delivery_name like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'delivery_tel'">
-			ud.delivery_tel like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'name'">
-			us.name like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'tel'">
-			us.tel like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'user_id'">
-			us.user_id like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'order_number'">
-			o.order_number like concat('%', #{searchValue},'%')
-		</if>
-		<if test="search == 'item_idx'">
-			it.item_idx like concat('%', #{searchValue},'%')
-		</if>
+		<include refid="orderAdminWhere"></include>
 		<if test="code != '0'">
 			and ol.order_status_code = #{code}
 		</if>
 			and date(ol.created_date) between date(#{start}) and date(#{end})
 		</where>
 		order by o.created_date desc limit #{startIndexNo}, #{pageSize}
+	</select>
+	
+	<select id="getOrderListWithDelivery" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		SELECT * FROM ga_order o
+		JOIN ga_order_list ol
+		ON o.order_idx = ol.order_idx
+		JOIN ga_item it
+		ON ol.item_idx = it.item_idx
+		JOIN ga_user us
+		ON o.user_idx = us.user_idx
+		JOIN ga_user_delivery ud
+		ON o.user_idx = ud.user_idx
+		where ud.default_flag = 'y' and ol.order_status_code = '2'
 	</select>
 	
 	<update id="setOrderAdminMemo">

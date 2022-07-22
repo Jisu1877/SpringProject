@@ -105,7 +105,7 @@ function userImageChange() {
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo2" class="w3-bar-block w3-2020-ash" style="display: none">
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderList">통합 주문 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderDelivery">배송 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderDelivery">송장 입력</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 요청 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">교환 요청 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>

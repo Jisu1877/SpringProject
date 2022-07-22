@@ -27,6 +27,13 @@ public class OrderListVO {
 	private String order_number;
 	private String email;
 	private String tel;
+	private String delivery_name;
+	private String delivery_tel;
+	private String postcode;
+	private String roadAddress;
+	private String detailAddress;
+	private String extraAddress;
+	private String message;
 	private int user_delivery_idx;
 	private String order_admin_memo;
 	private String item_summary;

@@ -297,7 +297,7 @@
 								<input type="button" value="주문확인" class="btn btn-sm w3-2020-navy-blazer" onclick="orderCodeChange1(${vo.order_list_idx})"/>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '2' || vo.order_status_code == '16'}">
-								<a onclick="" class="btn w3-2021-mint btn-sm">배송 관리</a>
+								<a onclick="location.href='${ctp}/admin/order/orderDelivery'" class="btn w3-2021-mint btn-sm">송장 입력</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '3'}">
 								<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">내역 확인</a>

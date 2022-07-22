@@ -7,13 +7,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>배송 관리</title>
+    <title>송장 입력</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="${ctp}/js/orderManagement.js"></script>
+    <script src="${ctp}/js/orderDelivery.js"></script>
     <style>
 		body,h1 {font-family: "Montserrat", sans-serif}
 		a {
@@ -38,57 +35,17 @@
 		//페이지사이즈 검색
 		function pageCheck() {
 			let pageSize = $("#pageSize").val();
-			let part = $("select[name=part]").val();
 			let search = $("select[name=search]").val();
 			let searchValue = $("#searchValue").val();
-			let start = $("#start").val();
-			let end = $("#end").val();
 			
-			location.href="${ctp}/admin/order/orderList?part="+part+"&pag=${pag}&pageSize="+pageSize+"&search="+search+"&searchValue="+searchValue+"&start="+start+"&end="+end;
+			location.href="${ctp}/admin/order/orderDelivery?part=2&pag=${pag}&pageSize="+pageSize+"&search="+search+"&searchValue="+searchValue;
 		}
 	
-		//분류별 검색
-		function codeCheck() {
-			let part = $("select[name=part]").val();
-			let pageSize = $("#pageSize").val();
-			let search = $("select[name=search]").val();
-			let searchValue = $("#searchValue").val();
-			let start = $("#start").val();
-			let end = $("#end").val();
-			
-			location.href="${ctp}/admin/order/orderList?part="+part+"&pag=${pag}&pageSize="+pageSize+"&search="+search+"&searchValue="+searchValue+"&start="+start+"&end="+end;
-		}
-		
 		/* 상세 검색*/
 		function searchCheck() {
-			let start = $("#start").val();
-			let end = $("#end").val();
-			let regDate = /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/;
 			let search = $("select[name=search]").val();
 			let searchValue = $("#searchValue").val();
 			let pageSize = $("#pageSize").val();
-			let part = $("select[name=part]").val();
-			
-			if(start != "" && end == "") {
-				alert("조회 날짜는 2개 모두 선택해야 합니다.");
-				return false;
-			}
-			if(start == "" && end != "") {
-				alert("조회 날짜는 2개 모두 선택해야 합니다.");
-				return false;
-			}
-			if(start != "" && end != "") {
-				if(!regDate.test(start)) {
-					alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
-					document.getElementById("start").focus();
-					return false;
-				}
-				else if(!regDate.test(end)) {
-					alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
-					document.getElementById("end").focus();
-					return false;
-				}
-			}	
 			
 			if(search != "" && searchValue == "") {
 				alert("상세 조건을 선택하세요.");
@@ -99,12 +56,12 @@
 				return false;
 			}
 			
-			location.href="${ctp}/admin/order/orderList?part="+part+"&pag=${pag}&pageSize="+pageSize+"&search="+search+"&searchValue="+searchValue+"&start="+start+"&end="+end;
+			location.href="${ctp}/admin/order/orderDelivery?part=2&pag=${pag}&pageSize="+pageSize+"&search="+search+"&searchValue="+searchValue;
 		}
 		
 		/* 리셋 */
 		function reset() {
-			location.href="${ctp}/admin/order/orderList";
+			location.href="${ctp}/admin/order/orderDelivery";
 		}
 		
 	</script>
@@ -121,11 +78,12 @@
 	    <!-- Header -->
 		<header style="padding-top:22px;">
 			<div class="w3-bottombar w3-light-gray w3-padding" style="margin-bottom: 20px;">
-		    	<span style="font-size:23px;">배송 관리</span>
+		    	<span style="font-size:23px;">송장 입력</span>
 		    </div>
 		</header>
         <div class="w3-row-padding" style="margin:0 -16px;">
           <div class="w3-third w3-margin-bottom">
+          	<div><span style="font-size:14px;"></span></div>
             <label><i class="fa-solid fa-circle-info"></i>&nbsp; 상세 조건</label>
             <select name="search" id="search" class="w3-select w3-border">
    				<option value="">상세 조건 선택</option>
@@ -146,30 +104,12 @@
           <div class="w3-third w3-margin-bottom">
           	<label>&nbsp;</label><br>
      		<a class="w3-button w3-2019-soybean" onclick="searchCheck()"><i class="fa fa-search w3-margin-right"></i> Search</a>
+     		<label>&nbsp;</label>
+       			<a class="w3-button w3-2019-terrarium-moss w3-right mr-3" onclick="reset()"><i class="fa-solid fa-arrows-rotate w3-margin-right"></i>Search Reset</a>
     	  </div>
         </div>
    	    <div class="w3-row-padding">
        		<div class="w3-third w3-margin-bottom" style="margin-left:0px; padding-left:0px;">
-       			<label>&nbsp;</label>
-       			<select name="part" id="order_status_code" onchange="codeCheck()" class="w3-select w3-left mr-3" style="width:30%">
-	       			<option value="0" ${code == 0 ? 'selected' : '' }>전체조회</option>
-	   				<option value="1" ${code == 1 ? 'selected' : '' }>결제완료</option>
-	   				<option value="2" ${code == 2 ? 'selected' : '' }>주문확인</option>
-	   				<option value="3" ${code == 3 ? 'selected' : '' }>취소</option>
-	   				<option value="4" ${code == 4 ? 'selected' : '' }>배송중</option>
-	   				<option value="5" ${code == 5 ? 'selected' : '' }>배송완료</option>
-	   				<option value="6" ${code == 6 ? 'selected' : '' }>구매확정완료</option>
-	   				<option value="7" ${code == 7 ? 'selected' : '' }>교환신청</option>
-	   				<option value="8" ${code == 8 ? 'selected' : '' }>교환승인</option>
-	   				<option value="9" ${code == 9 ? 'selected' : '' }>배송중(교환)</option>
-	   				<option value="10" ${code == 10 ? 'selected' : '' }>교환거부</option>
-	   				<option value="11" ${code == 11 ? 'selected' : '' }>환불신청</option>
-	   				<option value="12" ${code == 12 ? 'selected' : '' }>환불승인</option>
-	   				<option value="13" ${code == 13 ? 'selected' : '' }>환불완료</option>
-	   				<option value="14" ${code == 14 ? 'selected' : '' }>환불거부</option>
-	   				<option value="14" ${code == 15 ? 'selected' : '' }>취소요청</option>
-	   				<option value="14" ${code == 16 ? 'selected' : '' }>취소반려</option>
-       			</select>
        			<label>&nbsp;</label>
 	     		<select name="pageSize" id="pageSize" onchange="pageCheck()" class="w3-select w3-left" style="width:20%">
 					<option value="5" ${pageVo.pageSize == 5 ? 'selected' : '' }>5건</option>
@@ -180,10 +120,35 @@
        		</div>
    	  		<div class="w3-third w3-margin-bottom"></div>
        		<div class="w3-third w3-margin-bottom">
-       			<label>&nbsp;</label>
-       			<a class="w3-button w3-2021-french-blue w3-right" onclick="reset()"><i class="fa-solid fa-arrows-rotate w3-margin-right"></i>Search Reset</a>
        		</div>
         </div>
+        <div class="w3-margin-bottom">
+        	<div>
+		    	<form name="excelDownForm" action="${ctp}/excel/deliveryDownload" method="get">
+					<a class="w3-button w3-2020-ultramarine-green w3-left w3-small" onclick="excelDown()">
+						<span class="iconify" data-icon="icomoon-free:file-excel"></span> 엑셀 다운로드
+					</a>
+					<input type="hidden" name="company" id="company"/>
+				</form>
+			</div>
+			<div>
+				&nbsp;&nbsp;택배사 일괄 변경 : 
+				<select name="courier_company_choice" onchange="courier_company_change()" class="w3-select" style="width:15%">
+					<option value="CJ대한통운" selected>CJ대한통운</option>
+					<option value="롯데택배">롯데택배</option>
+					<option value="우체국택배">우체국택배</option>
+					<option value="로젠택배">로젠택배</option>
+					<option value="한진택배">한진택배</option>
+					<option value="경동택배">경동택배</option>
+					<option value="대신택배">대신택배</option>
+				</select>
+			</div>
+			<div>
+				<a class="w3-button w3-2019-eden w3-small" onclick="sendProcess()">
+					<span class="iconify" data-icon="icomoon-free:file-excel"></span> 엑셀 일괄 발송처리
+				</a>
+			</div>
+	    </div>
 		<div class="w3-responsive tableStyle">
 			<table class="w3-table table-bordered" style="border-collapse:separate;">
 				<thead>
@@ -273,7 +238,7 @@
 							</c:if>
 	        			</td>
 	        			<td width="10%">
-	        				<select name="pageSize" id="pageSize" onchange="pageCheck()" class="select w3-left">
+	        				<select name="courier_company" id="courier_company" class="select w3-left">
 								<option value="CJ대한통운" selected>CJ대한통운</option>
 								<option value="롯데택배">롯데택배</option>
 								<option value="우체국택배">우체국택배</option>
@@ -299,24 +264,18 @@
 	 	 <div class="mb-2"><b>${pageVo.pag} Page</b></div>
 	    <div class="w3-bar w3-white">
 	      <c:if test="${pageVo.pag > 1}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">«</a>
+		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">«</a>
 	      </c:if>
-	    <%--   <c:if test="${pageVo.curBlock > 0}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-black w3-button">◁</a>
-	      </c:if> --%>
 	      <c:forEach var="i" begin="${(pageVo.curBlock*pageVo.blockSize)+1}" end="${(pageVo.curBlock*pageVo.blockSize)+pageVo.blockSize}">
 	      	<c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 		    <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 	      </c:forEach>
-	     <%--  <c:if test="${pageVo.curBlock < pageVo.lastBlock}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${(pageVo.curBlock+1)*pageVo.blockSize + 1}&pageSize=${pageVo.pageSize}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-button w3-hover-black">▷</a>
-		  </c:if> --%>
 		  <c:if test="${pageVo.pag != pageVo.totPage}">
-		  	<a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">»</a>
+		  	<a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">»</a>
 		  </c:if>
 	    </div>
 	  </div>	

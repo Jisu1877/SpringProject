@@ -38,7 +38,7 @@ public interface OrderAdminDAO {
 
 	public int totTermRecCnt2(@Param("start") String start,@Param("end") String end,@Param("code") String code);
 
-	public int totALLRecCnt2(@Param("search") String search,@Param("searchValue") String searchValue,@Param("start") String start,@Param("end") String end,@Param("code") String code);
+	public int totALLRecCnt2(@Param("search") String search,@Param("searchValue") String searchValue,@Param("start") String start,@Param("end") String end, @Param("code") String code);
 
 	public ArrayList<OrderListVO> getOrderListSearch1(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize,@Param("search") String search,
 			@Param("searchValue") String searchValue);
@@ -56,5 +56,7 @@ public interface OrderAdminDAO {
 
 	public ArrayList<OrderListVO> getOrderListALL2(@Param("startIndexNo") int startIndexNo,@Param("pageSize") int pageSize,@Param("search") String search,@Param("searchValue") String searchValue,
 			@Param("start") String start,@Param("end") String end, @Param("code") String code);
+
+	public ArrayList<OrderListVO> getOrderListWithDelivery();
 
 }

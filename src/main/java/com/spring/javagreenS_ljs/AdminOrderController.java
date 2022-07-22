@@ -68,10 +68,6 @@ public class AdminOrderController {
 		
 		//주문내역 리스트 가져오기(페이징 처리)
 		PageVO pageVo = pagingProcess.pageProcess2(pag, pageSize,"adminOrder", part , search, searchValue, start, end);
-		
-		ArrayList<String> partArray = new ArrayList<String>();
-		partArray.add(part);
-		
 		ArrayList<OrderListVO> orderList = orderAdminService.getOrderList(pageVo.getStartIndexNo(), pageVo.getPageSize(), part, search, searchValue, start, end);
 		
 		model.addAttribute("code", part);
@@ -208,4 +204,9 @@ public class AdminOrderController {
 		return "admin/order/orderDelivery";
 	} 
     
+    //엑셀 읽어오기 창 호출
+    @RequestMapping(value = "/sendProcess", method = RequestMethod.GET)
+    public String sendProcessGet() {
+    	return "admin/order/sendProcess";
+    }
 }
