@@ -17,6 +17,7 @@ public class OrderCancelVO {
 	private String request_answer;
 	private String cancel_admin_memo;
 	private int use_point;
+	private int coupon_amount;
 	private int order_idx;
 	private int order_cancel_request_idx;
 	

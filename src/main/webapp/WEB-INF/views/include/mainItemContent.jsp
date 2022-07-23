@@ -146,7 +146,7 @@
   
 <!-- 현재 판매 중인 전체상품 List-->
  <p style="text-align:center; margin-top:30px"><span class="w3-white w3-xlarge mt-5">전체 상품</span></p>
-  <div class="w3-row-padding w3-padding-16 w3-center">
+  <div id="item_list_all" class="w3-row-padding w3-padding-16 w3-center">
   	<c:forEach var="itemVO" items="${itemVOS}" varStatus="st">
   		<div class="w3-quarter">
 	  		<a href="${ctp}/item/itemView?item_code=${itemVO.item_code}">

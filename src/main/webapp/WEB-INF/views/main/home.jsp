@@ -10,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 <link rel="icon" href="${ctp}/images/favicon.png">
+<link rel="stylesheet" href="${ctp}/css/main.css">
 <style type="text/css">
 	#discountPrice {
 		text-decoration: line-through;

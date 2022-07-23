@@ -25,6 +25,11 @@ public class ItemServiceImpl implements ItemService {
 	public void setStockQuantityUpdate(int item_idx, int order_quantity) {
 		itemDAO.setStockQuantityUpdate(item_idx, order_quantity);
 	}
+
+	@Override
+	public int getGivePoint(int item_idx) {
+		return itemDAO.getGivePoint(item_idx);
+	}
 	
 	
 

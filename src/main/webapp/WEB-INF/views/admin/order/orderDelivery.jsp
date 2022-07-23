@@ -238,7 +238,7 @@
 							</c:if>
 	        			</td>
 	        			<td width="10%">
-	        				<select name="courier_company" id="courier_company" class="select w3-left">
+	        				<select name="courier_company_${vo.order_list_idx}" id="courier_company" class="select w3-left">
 								<option value="CJ대한통운" selected>CJ대한통운</option>
 								<option value="롯데택배">롯데택배</option>
 								<option value="우체국택배">우체국택배</option>
@@ -249,10 +249,10 @@
 							</select>
 	        			</td>
 	        			<td width="7%">
-	        				<input type="text" class="input" id="order_delivery_number">
+	        				<input type="text" class="input" id="order_delivery_number_${vo.order_list_idx}">
 	        			</td>
 	        			<td class="text-center">
-							<a onclick="" class="btn w3-2021-mint btn-sm">입력</a>
+							<a onclick="invoiceinsert(${vo.order_number},${vo.order_list_idx})" class="btn w3-2021-mint btn-sm">입력</a>
 	        			</td>
 	        		</tr>
 	        	</c:forEach>
@@ -264,14 +264,14 @@
 	 	 <div class="mb-2"><b>${pageVo.pag} Page</b></div>
 	    <div class="w3-bar w3-white">
 	      <c:if test="${pageVo.pag > 1}">
-		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">«</a>
+		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=1&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">«</a>
 	      </c:if>
 	      <c:forEach var="i" begin="${(pageVo.curBlock*pageVo.blockSize)+1}" end="${(pageVo.curBlock*pageVo.blockSize)+pageVo.blockSize}">
 	      	<c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${i}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 		    <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		      <a href="${ctp}/admin/order/orderDelivery?part=2&pag=${i}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 	      </c:forEach>
 		  <c:if test="${pageVo.pag != pageVo.totPage}">

@@ -11,12 +11,35 @@
 		select * from ga_user where user_idx = #{user_idx};
 	</select>
 	
+	<select id="getCouponInfor" resultType="com.spring.javagreenS_ljs.vo.CouponVO">
+		select * from ga_coupon where coupon_idx = #{coupon_idx}
+	</select>
+	
+	<select id="getUserCouponList" resultType="com.spring.javagreenS_ljs.vo.CouponVO">
+		select * from ga_coupon_user cu
+		JOIN ga_coupon c
+		ON cu.coupon_idx = c.coupon_idx
+		where user_idx = #{user_idx}
+	</select>
+	
+	<select id="getUserCouponListOnlyUseOk" resultType="com.spring.javagreenS_ljs.vo.CouponVO">
+		select * from ga_coupon_user cu
+		JOIN ga_coupon c
+		ON cu.coupon_idx = c.coupon_idx
+		where user_idx = #{user_idx} and use_flag = 'n'
+		and str_to_date(expiry_date, '%Y-%m-%d') >= str_to_date(now(), '%Y-%m-%d')
+	</select>
+	
 	<insert id="setUserJoin">
 		insert into ga_user values (DEFAULT, #{vo.user_id}, #{vo.user_pwd}, #{vo.name}, #{vo.gender}, #{vo.email}, #{vo.tel}, #{vo.user_image}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{vo.agreement}, NULL, DEFAULT, NULL, NULL, NULL, NULL);
 	</insert>
 	
 	<insert id="setUserLog">
 		insert into ga_user_log values (DEFAULT, #{user_idx}, DEFAULT, #{host_ip});
+	</insert>
+	
+	<insert id="setCouponInsert">
+		insert into ga_coupon_user values (DEFAULT, #{vo.user_idx}, #{vo.coupon_idx}, #{vo.reason}, #{vo.expiry_date}, DEFAULT, NULL, DEFAULT)
 	</insert>
 	
 	<update id="setUserLoginUpdate">
@@ -53,5 +76,13 @@
 	
 	<update id="setUserPwdUpdate">
 		update ga_user set user_pwd = #{encPwd}, updated_date = now() where user_idx = #{user_idx}
+	</update>
+	
+	<update id="setCouponUseFlag">
+		update ga_coupon_user set use_flag = 'y', use_date = now() where coupon_user_idx = #{coupon_user_idx}
+	</update>
+	
+	<update id="setUserGivePoint">
+		update ga_user set point = point + #{point} where user_idx = #{user_idx}
 	</update>
 </mapper>

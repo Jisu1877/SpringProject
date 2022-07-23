@@ -224,4 +224,18 @@ public class AdminOrderController {
     public String sendProcessGet() {
     	return "admin/order/sendProcess";
     }
+    
+    //개별 송장 입력
+    @ResponseBody
+    @RequestMapping(value = "/invoiceinsert", method = RequestMethod.POST)
+    public String invoiceinsertPost(ShippingListVO vo) {
+    	
+    	//해당 주문 목록 상태값 변경
+		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "4");
+    	
+    	//배송 목록 테이블에 저장
+    	orderAdminService.setShippingListHistory(vo);
+    	
+    	return "1";
+    }
 }

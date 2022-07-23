@@ -18,6 +18,7 @@ import com.spring.javagreenS_ljs.service.ItemService;
 import com.spring.javagreenS_ljs.service.OrderAdminService;
 import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
+import com.spring.javagreenS_ljs.vo.CouponVO;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
@@ -103,7 +104,7 @@ public class OrderController {
 		}
 		
 		//등록한 배송정보 가져오기
-		UserDeliveryVO deliveryVO = deliveryService.getDeliveryList(user_idx);
+		UserDeliveryVO deliveryVO = deliveryService.getDeliveryVO(user_idx);
 		String deliveryFlag = "";
 		if(deliveryVO == null) {
 			deliveryFlag = "n";
@@ -118,6 +119,10 @@ public class OrderController {
 		//등록한 임시 DB 가져오기
 		ArrayList<OrderListVO> orderListTemp = orderService.getOrderListTempList(user_idx);
 		
+		//보유 쿠폰 목록 가져오기
+		ArrayList<CouponVO> couponList = userService.getUserCouponListOnlyUseOk(user_idx);
+		
+		model.addAttribute("couponList", couponList);
 		model.addAttribute("deliveryFlag", deliveryFlag);
 		model.addAttribute("deliveryVO", deliveryVO);
 		model.addAttribute("userVO", userVO);
@@ -165,26 +170,41 @@ public class OrderController {
 			}
 		}
 		
- 		//결제로 이동하기 전 최종 결제 총 금액과 사용 포인트를 temp 데이터베이스에 저장한다.
+ 		//결제로 이동하기 전 최종 결제 총 금액과 사용 포인트 혹은 쿠폰 할인금액을 temp 데이터베이스에 저장한다.
  		int total_amount = 0;
  		int point = 0;
+ 		int coupon_amount = 0;
+ 		int coupon_user_idx = 0;
  		
  		if(orderVO.getOrder_total_amount_calc() != 0 && !orderVO.getPoint().equals("")) {
  			total_amount = orderVO.getOrder_total_amount_calc();
  			point = Integer.parseInt(orderVO.getPoint());
  		}
+ 		else if(orderVO.getOrder_total_amount_calc() != 0 && orderVO.getCoupon_amount() != 0) {
+ 			total_amount = orderVO.getOrder_total_amount_calc();
+ 			coupon_amount = orderVO.getCoupon_amount();
+ 			coupon_user_idx = orderVO.getCoupon_user_idx();
+ 		}
  		else {
  			total_amount = orderVO.getOrder_total_amount();
  		}
  		
- 		orderService.setOrder_total_amount_and_point(user_idx, total_amount, point);
+ 		OrderVO temp = new OrderVO();
  		
+ 		temp.setUser_idx(user_idx);
+ 		temp.setOrder_total_amount(total_amount);
+ 		temp.setUse_point(point);
+ 		temp.setCoupon_amount(coupon_amount);
+ 		temp.setCoupon_user_idx(coupon_user_idx);
+ 		
+ 		//임시 테이블에 정보 저장
+ 		orderService.setOrder_total_amount_and_point(temp);
  		
 		//회원 정보 가져오기
 		UserVO userVO = userService.getUserInfor(user_id);
 		
 		//선택 기본 주소 가져오기
-		UserDeliveryVO deliveryVO = deliveryService.getDeliveryList(user_idx);
+		UserDeliveryVO deliveryVO = deliveryService.getDeliveryVO(user_idx);
 		
 		//임시 주문 테이블에서 정보를 가져오기
 		ArrayList<OrderListVO> OrderTempList = orderService.getOrderListTempList(user_idx);
@@ -278,7 +298,11 @@ public class OrderController {
 		if(vo.getUse_point() != 0) {
 			orderService.setUsePointSub(vo.getOrder_idx(), vo.getUse_point());
 		}
+		
 		// 나중에 여기에 쿠폰 사용 할인 금액도 차감 추가 필요
+		if(vo.getCoupon_amount() != 0)  {
+			orderService.setCouponAmountSub(vo.getOrder_idx(), vo.getCoupon_amount());
+		}
 		
 		return "1";
 	}
@@ -292,7 +316,7 @@ public class OrderController {
 		OrderCancelVO vo = orderService.getorderCancelInfor(listIdx);
 		model.addAttribute("vo", vo);
 		
-		//취소하고자하는 주문 내용 가져오기
+		//주문 내용 가져오기
 		OrderListVO orderVO = orderService.getOrderListInfor(listIdx,orderIdx);
 		model.addAttribute("orderVO", orderVO);
 		
@@ -351,16 +375,49 @@ public class OrderController {
 	//주문 상태값 변경(구매확정)
 	@ResponseBody
 	@RequestMapping(value = "/orderCodeChange", method = RequestMethod.POST)
-	public String orderCodeChangePost(@RequestParam int idx, @RequestParam String code) {
+	public String orderCodeChangePost(
+			@RequestParam int idx, @RequestParam String code, 
+			@RequestParam int order_idx, @RequestParam int total_amount,@RequestParam int item_idx, HttpSession session) {
+		String result = "1";
+		int user_idx = (int) session.getAttribute("sUser_idx");
 		//구매확정시 첫 구매이거나 결제 금액이 10만원 이상 결제 인 경우 10% 할인 쿠폰 발급
 		if(code.equals("6")) {
+			//첫 구매인지 ?
+			int buyCnt = orderService.getBuyCnt(user_idx);
+			
+			if(buyCnt == 0) {
+				//10% 쿠폰 발급 처리
+				userService.setCouponInsertFirstBuy(user_idx, 2);
+				result = "2";
+			}
+			
+			//10만원 이상 결제 인지?
+			if(total_amount > 100000) {
+				//같은 order_idx를 가진 상품 중에 이미 구매확정을 진행한 상품이 있는지 확인
+				int alreadyConfirmCheck = orderService.getAlreadyConfirmCheck(user_idx,order_idx);
+				
+				if(alreadyConfirmCheck == 0) {
+					//10% 쿠폰 발급
+					userService.setCouponInsertFirstBuy(user_idx, 3);
+					result = "2";
+					
+				}
+			}
 			
 		}
 		
+		//회원 구매 획수와 구매 총 금액 누적
+		orderService.setOrderUpdate(user_idx, total_amount);
 		
-		//주문 상태값 구매확정 완료로 변경
+		//회원 포인트 지급
+		//지급할 포인트 알아오기
+		int point = itemService.getGivePoint(item_idx);
+		
+		userService.setUserGivePoint(user_idx,point);
+		
+		//주문 상태값 변경
 		orderAdminService.setOrderCodeChange(idx,code);
 		
-		return "1";
+		return result;
 	}
 }

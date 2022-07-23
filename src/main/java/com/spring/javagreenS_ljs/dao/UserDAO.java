@@ -1,7 +1,10 @@
 package com.spring.javagreenS_ljs.dao;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javagreenS_ljs.vo.CouponVO;
 import com.spring.javagreenS_ljs.vo.UserVO;
 
 public interface UserDAO {
@@ -31,5 +34,17 @@ public interface UserDAO {
 	public void setUserPwdUpdate(@Param("user_idx") int user_idx,@Param("encPwd") String encPwd);
 
 	public UserVO getUserInforIdx(@Param("user_idx") int user_idx);
+
+	public CouponVO getCouponInfor(@Param("coupon_idx") int coupon_idx);
+
+	public void setCouponInsert(@Param("vo") CouponVO vo);
+
+	public ArrayList<CouponVO> getUserCouponList(@Param("user_idx") int user_idx);
+
+	public ArrayList<CouponVO> getUserCouponListOnlyUseOk(@Param("user_idx") int user_idx);
+
+	public void setCouponUseFlag(@Param("coupon_user_idx") int coupon_user_idx);
+
+	public void setUserGivePoint(@Param("user_idx") int user_idx, @Param("point") int point);
 
 }

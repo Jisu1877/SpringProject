@@ -1,5 +1,7 @@
 package com.spring.javagreenS_ljs.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 	DeliveryDAO deliveryDAO;
 	
 	@Override
-	public UserDeliveryVO getDeliveryList(int user_idx) {
-		return deliveryDAO.getDeliveryList(user_idx);
+	public UserDeliveryVO getDeliveryVO(int user_idx) {
+		return deliveryDAO.getDeliveryVO(user_idx);
 	}
 
 	@Override
@@ -25,6 +27,21 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Override
 	public UserDeliveryVO getUserDeliveryInfor(int delivery_idx) {
 		return deliveryDAO.getUserDeliveryInfor(delivery_idx);
+	}
+
+	@Override
+	public ArrayList<UserDeliveryVO> getDeliveryList(int user_idx) {
+		return deliveryDAO.getDeliveryList(user_idx);
+	}
+
+	@Override
+	public void setDefaultChange(int idx) {
+		deliveryDAO.setDefaultChange(idx);
+	}
+
+	@Override
+	public void setDefaultDelete(int user_idx) {
+		deliveryDAO.setDefaultDelete(user_idx);
 	}
 
 }

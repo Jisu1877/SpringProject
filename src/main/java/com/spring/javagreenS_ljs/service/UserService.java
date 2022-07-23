@@ -1,7 +1,11 @@
 package com.spring.javagreenS_ljs.service;
 
+import java.util.ArrayList;
+
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.spring.javagreenS_ljs.vo.CouponVO;
 import com.spring.javagreenS_ljs.vo.UserVO;
 
 public interface UserService {
@@ -27,5 +31,15 @@ public interface UserService {
 	public void setUserPwdUpdate(int user_idx, String encPwd);
 
 	public UserVO getUserInforIdx(int user_idx);
+
+	public void setCouponInsertFirstBuy(int user_idx, int coupon_idx);
+
+	public ArrayList<CouponVO> getUserCouponList(int user_idx);
+
+	public ArrayList<CouponVO> getUserCouponListOnlyUseOk(int user_idx);
+
+	public void setUserGivePoint(int user_idx, int point);
+	
+	public void setMyPage(UserVO userVO, Model model);
 
 }

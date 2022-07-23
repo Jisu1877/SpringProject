@@ -1,5 +1,7 @@
 package com.spring.javagreenS_ljs;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javagreenS_ljs.service.DeliveryService;
@@ -35,7 +38,7 @@ public class DeliveryController {
 		vo.setUser_idx(user_idx);
 		
 		//이미 등록한 배송지가 있는지 확인
-		UserDeliveryVO deliveryVO = deliveryService.getDeliveryList(user_idx);
+		UserDeliveryVO deliveryVO = deliveryService.getDeliveryVO(user_idx);
 		
 		String deliveryFlag = "";
 		if(deliveryVO == null) {
@@ -56,7 +59,31 @@ public class DeliveryController {
 	
 	//배송지 목록 불러오기
 	@RequestMapping(value = "/deliveryList", method = RequestMethod.GET)
-	public String deliveryListGet() {
-		return "";
+	public String deliveryListGet(HttpSession session, Model model) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		
+		ArrayList<UserDeliveryVO> deliverList = deliveryService.getDeliveryList(user_idx);
+		model.addAttribute("deliverList",deliverList);
+		
+		return "order/deliveryList";
+	}
+	
+	
+	//기본 배송지로 변경
+	@RequestMapping(value = "/defaultChange", method = RequestMethod.GET)
+	public String defaultChangeGet(HttpSession session, @RequestParam int idx, Model model) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		
+		//기존에 기본 배송지를 해제하기
+		deliveryService.setDefaultDelete(user_idx);
+		
+		//기본 배송지로 변경
+		deliveryService.setDefaultChange(idx);
+		
+
+		ArrayList<UserDeliveryVO> deliverList = deliveryService.getDeliveryList(user_idx);
+		model.addAttribute("deliverList",deliverList);
+		
+		return "order/deliveryList";
 	}
 }

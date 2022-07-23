@@ -13,6 +13,8 @@ public class OrderVO {
 	private int user_delivery_idx;
 	private String order_admin_memo;
 	private int use_point;
+	private int coupon_user_idx;
+	private int coupon_amount;
 	private String created_date;
 	
 	private String[] order_item_idx;

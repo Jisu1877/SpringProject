@@ -8,5 +8,7 @@ public interface ItemService {
 
 	public void setStockQuantityUpdate(int item_idx, int order_quantity);
 
+	public int getGivePoint(int item_idx);
+
 
 }

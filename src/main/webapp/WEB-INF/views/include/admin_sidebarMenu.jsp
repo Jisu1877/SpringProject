@@ -14,6 +14,7 @@
 	a:hover {
 		color : burlywood;
 		font-weight : 600;
+		cursor: pointer;
 	}
 </style>
 <script>
@@ -92,7 +93,18 @@ function userImageChange() {
   <hr>
   <div class="w3-container">
   	<div class="w3-dropdown-click">
-	  <button onclick="slideDown(1)" class="w3-2019-brown-granite menu"><strong>일반상품 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  <button onclick="slideDown(2)" class="w3-2019-brown-granite menu"><strong>판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  <i class="fa-solid fa-sort-down"></i></button>
+	  <div id="Demo2" class="w3-bar-block w3-2020-ash" style="display: none">
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderList">통합 주문 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderDelivery">배송 처리 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">교환 요청 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 요청 관리</a></button>
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
+	  </div>
+	</div>
+  	<div class="w3-dropdown-click">
+	  <button onclick="slideDown(1)" class="w3-2019-brown-granite menu"><strong>상품 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo1" class="w3-bar-block w3-2020-ash" style="display: none">
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/category/categoryHome">카테고리 관리</a></button>
@@ -100,18 +112,7 @@ function userImageChange() {
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/item/itemList">상품 관리</a></button>
 	  </div>
 	</div>
-  	<div class="w3-dropdown-click">
-	  <button onclick="slideDown(2)" class="w3-2019-brown-granite menu"><strong>일반판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	  <i class="fa-solid fa-sort-down"></i></button>
-	  <div id="Demo2" class="w3-bar-block w3-2020-ash" style="display: none">
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderList">통합 주문 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/order/orderDelivery">배송 처리 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 요청 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">교환 요청 관리</a></button>
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">구매확정 내역</a></button>
-	  </div>
-	</div>
-  	<div class="w3-dropdown-click">
+  	<!-- <div class="w3-dropdown-click">
 	  <button onclick="slideDown(3)" class="w3-2019-brown-granite menu"><strong>경매판매 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo3" class="w3-bar-block w3-2020-ash" style="display: none">
@@ -124,9 +125,16 @@ function userImageChange() {
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">반품 관리</a></button>
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="">판매방해 관리</a></button>
 	  </div>
+	</div> -->
+  	<div class="w3-dropdown-click">
+	  <button onclick="slideDown(4)" class="w3-2019-brown-granite menu"><strong>회원 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  <i class="fa-solid fa-sort-down"></i></button>
+	  <div id="Demo4" class="w3-bar-block w3-2020-ash" style="display: none">
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/user/UserInfor">회원 정보 관리</a></button> <!-- 컨트롤러 따로 만들어서 진행..! -->
+	  </div>
 	</div>
   	<div class="w3-dropdown-click">
-	  <button onclick="slideDown(4)" class="w3-2019-brown-granite menu"><strong>기타설정 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  <button onclick="slideDown(4)" class="w3-2019-brown-granite menu"><strong>기타 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo4" class="w3-bar-block w3-2020-ash" style="display: none">
 	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/offlineStoreInsert">오프라인매장 등록</a></button>

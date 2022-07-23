@@ -41,7 +41,7 @@
 		    }
 		    alert(msg);
 		    if(paySw == 'no') {
-			    alert("다시 장바구니로 이동합니다.");
+			    alert("장바구니로 이동합니다.");
 		    	location.href='${ctp}/cart/cartList';
 		    }
 		    else {

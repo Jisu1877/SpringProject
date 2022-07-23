@@ -10,6 +10,7 @@ a {
 a:hover {
 	color : black;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 ul {

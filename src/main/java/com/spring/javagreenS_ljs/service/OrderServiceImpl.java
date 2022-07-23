@@ -144,8 +144,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void setOrder_total_amount_and_point(int user_idx, int total_amount, int point) {
-		orderDAO.setOrder_total_amount_and_point(user_idx, total_amount, point);
+	public void setOrder_total_amount_and_point(OrderVO temp) {
+		orderDAO.setOrder_total_amount_and_point(temp);
 	}
 
 	@Override
@@ -164,7 +164,7 @@ public class OrderServiceImpl implements OrderService {
 		UserVO userVO = userDAO.getUserInfor(user_id);
 		
 		//회원 선택 배송지 정보 가져오기
-		UserDeliveryVO deliveryVO = diDeliveryDAO.getDeliveryList(user_idx);
+		UserDeliveryVO deliveryVO = diDeliveryDAO.getDeliveryVO(user_idx);
 		
 		// 필요한 정보 vo set
 		OrderVO orderVO = new OrderVO();
@@ -180,6 +180,12 @@ public class OrderServiceImpl implements OrderService {
 		//사용 포인트
 		int point = orderListTemp.get(0).getUse_point();
 		orderVO.setUse_point(point);
+		
+		//사용 쿠폰 할인
+		int coupon_user_idx = orderListTemp.get(0).getCoupon_user_idx();
+		int coupon_amount = orderListTemp.get(0).getCoupon_amount();
+		orderVO.setCoupon_amount(coupon_amount);
+		orderVO.setCoupon_user_idx(coupon_user_idx);
 		
 		//주문번호 만들기
 		String applyNum = payMentVO.getApply_num();
@@ -241,8 +247,10 @@ public class OrderServiceImpl implements OrderService {
 			userDAO.setPointUseUpate(user_idx, point);
 		}
 		
-		//회원 정보 수정(구매 횟수 추가 / 구매 총가격 누적 업데이트)
-		//userDAO.setOrderUpdate(user_idx,total_amount); //구매확정 시 추가해주는 것으로 변경
+		//쿠폰 사용시 해당 쿠폰 '사용됨'으로 업뎃처리
+		if(coupon_amount != 0) {
+			userDAO.setCouponUseFlag(coupon_user_idx);
+		}
 		
 		//임시 DB 삭제
 		orderDAO.setOrderListTempDelete(user_idx);
@@ -358,6 +366,27 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void setUsePointPlus(int order_idx, int use_point) {
 		orderDAO.setUsePointPlus(order_idx,use_point);
+	}
+
+	@Override
+	public int getBuyCnt(int user_idx) {
+		return orderDAO.getBuyCnt(user_idx);
+	}
+
+	@Override
+	public int getAlreadyConfirmCheck(int user_idx, int order_idx) {
+		return orderDAO.getAlreadyConfirmCheck(user_idx,order_idx);
+	}
+
+	@Override
+	public void setOrderUpdate(int user_idx, int total_amount) {
+		//회원 정보 수정(구매 횟수 추가 / 구매 총가격 누적 업데이트)
+		userDAO.setOrderUpdate(user_idx,total_amount);
+	}
+
+	@Override
+	public void setCouponAmountSub(int order_idx, int coupon_amount) {
+		orderDAO.setCouponAmountSub(order_idx,coupon_amount);
 	}
 
 }

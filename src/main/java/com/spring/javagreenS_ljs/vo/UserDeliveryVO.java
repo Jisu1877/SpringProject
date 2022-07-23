@@ -15,5 +15,6 @@ public class UserDeliveryVO {
 	private String detailAddress;
 	private String extraAddress;
 	private String message;
+	private String delete_flag;
 	private String created_date;
 }

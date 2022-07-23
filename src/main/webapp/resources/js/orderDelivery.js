@@ -78,3 +78,33 @@ function sendProcess() {
     let y = (window.screen.height/2) - (winY/2)
 	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }
+
+/* 개별 송장 입력 */
+function invoiceinsert(order_number,order_list_idx) {
+	let company = $("select[name=courier_company_"+order_list_idx+"]").val();
+	let invoice_number = $("#order_delivery_number_"+order_list_idx).val();
+	
+	if(invoice_number == "") {
+		alert("송장번호를 입력하세요.");
+		return false;
+	}
+	
+	$.ajax({
+		type : "post",
+		url : "/javagreenS_ljs/admin/order/invoiceinsert",
+		data : {order_list_idx : order_list_idx,
+				order_number : order_number,
+				shipping_company : company,
+				invoice_number : invoice_number
+		},
+		success : function(res) {
+			if(res == "1") {
+				alert("개별 발송 처리가 완료되었습니다.");
+				location.reload();
+			}
+		},
+		error : function() {
+			alert("전송오류");
+		}
+	});
+}

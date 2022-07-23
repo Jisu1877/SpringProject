@@ -24,17 +24,24 @@ $(document).ready(function() {
 });
 
 /* 구매확정 처리 */
-function confirmCheck(idx) {
+function confirmCheck(listIdx,orderIdx,total_amount, item_idx) {
 	
 	$.ajax({
 		type : "post",
 		url : "${ctp}/order/orderCodeChange",
-		data : {idx : idx,
-			    code : 6
+		data : {idx : listIdx,
+			    code : 6,
+			    order_idx : orderIdx,
+			    total_amount : total_amount,
+			    item_idx : item_idx
 		},
 		success : function(res) {
 			if(res == "1") {
-				alert("구매 확정이 완료되었습니다.");
+				alert("구매 확정이 완료되었습니다.\n감사합니다.");
+				location.reload();
+			}
+			else if(res == "2") {
+				alert("구매 확정과 쿠폰 발급이 완료되었습니다.\n감사합니다.");
 				location.reload();
 			}
 		},
@@ -111,7 +118,7 @@ function confirmCheck(idx) {
 	         	</div>
 	         	<div class="w3-half text-center">
 	         		<b>보유 쿠폰</b><br>
-	         		개
+	         		<a onclick="couponList()" title="보유 쿠폰 확인">${couponCnt}개</a>
 	         	</div>
 	         </div>
 	         <hr>
@@ -361,7 +368,7 @@ function confirmCheck(idx) {
 								<font size="3" color="gray">배송완료</font><br>
 								<i class="fa-solid fa-box-check"></i> 배송이 완료되었습니다. 구매확정을 진행해주세요.
 								<div class="mt-2">
-									<a class="btn w3-amber btn-sm mr-1" href="javascript:confirmCheck(${vo.order_list_idx})">구매확정</a>
+									<a class="btn w3-amber btn-sm mr-1" href="javascript:confirmCheck(${vo.order_list_idx},${vo.order_idx},${vo.order_total_amount},${vo.item_idx})">구매확정</a>
 									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2021-cerulean btn-sm mr-1">교환 요청</a>
 									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2021-cerulean btn-sm">반품 요청</a>
 								</div>

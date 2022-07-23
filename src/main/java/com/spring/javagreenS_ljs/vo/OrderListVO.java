@@ -40,4 +40,7 @@ public class OrderListVO {
 	private String item_summary;
 	private String user_id;
 	private UserDeliveryVO deliveryVO;
+	
+	private int coupon_amount;
+	private int coupon_user_idx;
 }

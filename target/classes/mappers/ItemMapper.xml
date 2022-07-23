@@ -11,6 +11,10 @@
 		select option_stock_quantity from ga_item_option where item_option_idx = #{option_idx}
 	</select>
 	
+	<select id="getGivePoint" resultType="int">
+		select seller_point from ga_item where item_idx = #{item_idx}
+	</select>
+	
 	<update id="setOrderUpdate">
 		update ga_item set stock_quantity = stock_quantity - #{quantity}, sale_quantity = sale_quantity + #{quantity} where item_idx = #{item_idx}
 	</update>

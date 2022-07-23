@@ -42,11 +42,18 @@
 					</tr>
 					<tr>
 						<th>차감금액</th>
-						<td><fmt:formatNumber value="${orderVO.use_point}"/>원</td>
+						<td>
+							<c:if test="${vo.coupon_amount == 0}">
+								<fmt:formatNumber value="${vo.use_point}"/>원
+							</c:if>
+							<c:if test="${vo.coupon_amount != 0}">
+								<fmt:formatNumber value="${vo.coupon_amount}"/>원
+							</c:if>
+						</td>
 					</tr>
 					<tr>
 						<th>최종 환불금액</th>
-						<c:set var="refund" value="${orderVO.item_price - orderVO.use_point}"/>
+						<c:set var="refund" value="${orderVO.item_price - (vo.use_point + vo.coupon_amount)}"/>
 						<td><fmt:formatNumber value="${refund}"/>원</td>
 					</tr>
 				</table>

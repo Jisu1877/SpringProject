@@ -18,7 +18,7 @@
     </style>
     <script>
     	'use strict';
-    	function orderCancel(ilstIdx,price,point,orderIdx) {
+    	function orderCancel(ilstIdx,price,point,orderIdx,coupon) {
 			let cancel_reason = $("select[name=cancel_reason]").val();
 			let return_bank_name = $("select[name=return_bank_name]").val();
 			let return_bank_user_name = $("#return_bank_user_name").val();
@@ -55,7 +55,8 @@
 					order_list_idx : ilstIdx,
 					return_price : num1,
 					use_point : point,
-					order_idx : orderIdx
+					order_idx : orderIdx,
+					coupon_amount : coupon
 				},
 				success : function(data) {
 					if(data == "1") {
@@ -101,11 +102,11 @@
 					</tr>
 					<tr>
 						<th>차감금액</th>
-						<td><fmt:formatNumber value="${vo.use_point}"/>원</td>
+						<td><fmt:formatNumber value="${vo.use_point  + vo.coupon_amount}"/>원</td>
 					</tr>
 					<tr>
 						<th>최종 환불금액</th>
-						<c:set var="refund" value="${vo.item_price - vo.use_point}"/>
+						<c:set var="refund" value="${vo.item_price - (vo.use_point + vo.coupon_amount)}"/>
 						<td><fmt:formatNumber value="${refund}"/>원</td>
 					</tr>
 				</table>
@@ -172,7 +173,7 @@
 					</tr>
 				</table>
 				<div class="text-center">
-					<input type="button" value="주문 취소" class="w3-btn w3-2019-princess-blue" onclick="orderCancel(${vo.order_list_idx},${refund},${vo.use_point},${vo.order_idx})"/>&nbsp;
+					<input type="button" value="주문 취소" class="w3-btn w3-2019-princess-blue" onclick="orderCancel(${vo.order_list_idx},${refund},${vo.use_point},${vo.order_idx},${vo.coupon_amount})"/>&nbsp;
 					<input type="button" value="닫기" class="w3-btn w3-2021-illuminating" onclick="window.close();"/>
 				</div>
 		    </div>

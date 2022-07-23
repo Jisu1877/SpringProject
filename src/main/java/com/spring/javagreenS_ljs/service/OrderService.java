@@ -17,7 +17,7 @@ public interface OrderService {
 
 	public void setOrderListTempDelete(int user_idx);
 
-	public void setOrder_total_amount_and_point(int user_idx, int total_amount, int point);
+	public void setOrder_total_amount_and_point(OrderVO temp);
 
 	public void setOrderProcess(String user_id, int user_idx, PayMentVO payMentVO);
 
@@ -52,5 +52,13 @@ public interface OrderService {
 	public void setUsePointSub(int order_idx, int use_point);
 
 	public void setUsePointPlus(int order_idx, int use_point);
+
+	public int getBuyCnt(int user_idx);
+
+	public int getAlreadyConfirmCheck(int user_idx, int order_idx);
+
+	public void setOrderUpdate(int user_idx, int total_amount);
+
+	public void setCouponAmountSub(int order_idx, int coupon_amount);
 
 }

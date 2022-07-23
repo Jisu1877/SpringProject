@@ -349,17 +349,17 @@
 	 	 <div class="mb-2"><b>${pageVo.pag} Page</b></div>
 	    <div class="w3-bar w3-white">
 	      <c:if test="${pageVo.pag > 1}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">«</a>
+		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=1&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">«</a>
 	      </c:if>
 	    <%--   <c:if test="${pageVo.curBlock > 0}">
 		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${(pageVo.curBlock-1)*pageVo.blockSize + 1}&pageSize=${pageVo.pageSize}" class="w3-bar-item w3-black w3-button">◁</a>
 	      </c:if> --%>
 	      <c:forEach var="i" begin="${(pageVo.curBlock*pageVo.blockSize)+1}" end="${(pageVo.curBlock*pageVo.blockSize)+pageVo.blockSize}">
 	      	<c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${i}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 		    <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${i}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 	      </c:forEach>
 	     <%--  <c:if test="${pageVo.curBlock < pageVo.lastBlock}">

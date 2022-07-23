@@ -16,7 +16,7 @@ public interface OrderDAO {
 
 	public void setOrderListTempDelete(@Param("user_idx") int user_idx);
 
-	public void setOrder_total_amount_and_point(@Param("user_idx") int user_idx, @Param("total_amount") int total_amount, @Param("point") int point);
+	public void setOrder_total_amount_and_point(@Param("temp") OrderVO temp);
 
 	public void setOrderHistory(@Param("orderVO") OrderVO orderVO);
 
@@ -65,5 +65,11 @@ public interface OrderDAO {
 	public void setUsePointSub(@Param("order_idx") int order_idx, @Param("use_point") int use_point);
 
 	public void setUsePointPlus(@Param("order_idx") int order_idx, @Param("use_point") int use_point);
+
+	public int getBuyCnt(@Param("user_idx") int user_idx);
+
+	public int getAlreadyConfirmCheck(@Param("user_idx") int user_idx,@Param("order_idx") int order_idx);
+
+	public void setCouponAmountSub(@Param("order_idx") int order_idx, @Param("coupon_amount") int coupon_amount);
 
 }

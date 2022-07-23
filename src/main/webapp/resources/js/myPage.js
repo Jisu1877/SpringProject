@@ -65,6 +65,7 @@ function userImageChange() {
 	userImageForm.submit();
 }
 
+/* 상세 검색 */
 function searchCheck() {
 	let start = $("#start").val();
 	let end = $("#end").val();
@@ -79,15 +80,17 @@ function searchCheck() {
 		return false;
 	}
 	
-	if(!regDate.test(start)) {
-		alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
-		document.getElementById("start").focus();
-		return false;
-	}
-	else if(!regDate.test(end)) {
-		alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
-		document.getElementById("end").focus();
-		return false;
+	if(start != "" && end != "") {
+		if(!regDate.test(start)) {
+			alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
+			document.getElementById("start").focus();
+			return false;
+		}
+		else if(!regDate.test(end)) {
+			alert("입력하신 날짜가 날짜형식에 맞지 않습니다.");
+			document.getElementById("end").focus();
+			return false;
+		}
 	}
 	
 	orderSearchForm.submit();
@@ -131,6 +134,16 @@ function orderCancelRequest(listIdx,orderIdx) {
 function orderCancelRequestInfor(listIdx,orderIdx) {
 	let url = "/javagreenS_ljs/order/orderCancelRequestInfor?orderIdx="+orderIdx+"&listIdx=" + listIdx;
 	let winX = 520;
+    let winY = 650;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}
+
+/* 보유 쿠폰 리스트 오픈*/
+function couponList() {
+	let url = "/javagreenS_ljs/user/couponListOpen";
+	let winX = 500;
     let winY = 650;
     let x = (window.screen.width/2) - (winX/2);
     let y = (window.screen.height/2) - (winY/2)

@@ -10,13 +10,7 @@
 <title>주문/결제</title>
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 <link rel="icon" href="${ctp}/images/favicon.png">
-<style>
-  	#total_price, #pointUse, #priceCalc {
-	font-size: 20px;
-	font-weight: bold;
-	margin: 20px;
-}
-</style>
+<script src="${ctp}/js/orderPay.js"></script>
 <script>
 	/* 배송지 등록하기 */
 	function deliveryInsert(flag) {
@@ -30,9 +24,9 @@
 		
 		let url = "${ctp}/delivery/deliveryInsert?flag="+default_flag;
 		let winX = 700;
-        let winY = 600;
-        let x = (window.screen.width/2) - (winX/2);
-        let y = (window.screen.height/2) - (winY/2)
+	    let winY = 600;
+	    let x = (window.screen.width/2) - (winX/2);
+	    let y = (window.screen.height/2) - (winY/2)
 		window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 	}
 	
@@ -40,9 +34,9 @@
 	function deliveryList() {
 		let url = "${ctp}/delivery/deliveryList";
 		let winX = 700;
-        let winY = 600;
-        let x = (window.screen.width/2) - (winX/2);
-        let y = (window.screen.height/2) - (winY/2)
+	    let winY = 600;
+	    let x = (window.screen.width/2) - (winX/2);
+	    let y = (window.screen.height/2) - (winY/2)
 		window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 	}
 	
@@ -52,6 +46,20 @@
 		let ownPoint = ${userVO.point};
 		let payment_price = $("#total_price").data("price");
 		let payment_price_cal = 0;
+		let coupon_user_idx = $("select[name=couponList]").val();
+		
+		if(coupon_user_idx != "0") {
+			let ans = confirm("포인트 할인과 쿠폰 할인 중 하나만 적용할 수 있습니다.\n포인트 적용을 선택하시겠습니까?");
+			
+			if(!ans) {
+				return false;
+			}
+			else {
+				$("#couponList").val("0").attr("selected", true);
+			}
+			
+		}
+		
 		// 보유포인트가 결제금액보다 많으면..
 		if(ownPoint > payment_price) {
 			document.getElementById("point").value = payment_price;
@@ -64,7 +72,7 @@
 					payment_price_cal = Number(payment_price) - Number(point2); 
 					
 					document.getElementById("priceCalc").style.display = "block";
-					document.getElementById("priceCalc").innerHTML = " = "+payment_price_cal.toLocaleString() + " 원";
+					document.getElementById("priceCalc").innerHTML = " = "+payment_price_cal.toLocaleString() + "원";
 					$(".calcPrice").attr("data-cal", payment_price_cal);
 					$(".calcPrice").data("cal", payment_price_cal);
 					
@@ -78,7 +86,7 @@
 				payment_price_cal = Number(payment_price) - Number(point2); 
 				
 				document.getElementById("priceCalc").style.display = "block";
-				document.getElementById("priceCalc").innerHTML = payment_price_cal.toLocaleString() + " 원";
+				document.getElementById("priceCalc").innerHTML = payment_price_cal.toLocaleString() + "원";
 				$(".calcPrice").attr("data-cal", payment_price_cal);
 				$(".calcPrice").data("cal", payment_price_cal);
 				
@@ -95,7 +103,7 @@
 					payment_price_cal = Number(payment_price) - Number(point2); 
 					
 					document.getElementById("priceCalc").style.display = "block";
-					document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + " 원";	
+					document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + "원";	
 					$(".calcPrice").attr("data-cal", payment_price_cal);
 					$(".calcPrice").data("cal", payment_price_cal);
 					return false;
@@ -108,7 +116,7 @@
 				
 				document.getElementById("priceCalc").style.display = "block";
 				
-				document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + " 원";	
+				document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + "원";	
 				$(".calcPrice").attr("data-cal", payment_price_cal);
 				$(".calcPrice").data("cal", payment_price_cal);
 				
@@ -120,6 +128,20 @@
 		let point = document.getElementById("point").value;
 		let ownPoint = ${userVO.point};
 		let payment_price = $("#total_price").data("price");
+		let coupon_user_idx = $("select[name=couponList]").val();
+		
+		if(coupon_user_idx != "0") {
+			let ans = confirm("포인트 할인과 쿠폰 할인 중 하나만 적용할 수 있습니다.\n포인트 적용을 선택하시겠습니까?");
+			
+			if(!ans) {
+				return false;
+			}
+			else {
+				$("#couponList").val("0").attr("selected", true);
+			}
+			
+		}
+		
 		
 		if(point > ownPoint) {
 			alert("보유하신 포인트보다 많은 포인트를 입력하셨습니다.");
@@ -148,7 +170,7 @@
 				let payment_price_cal = Number(payment_price) - Number(point); 
 				
 				document.getElementById("priceCalc").style.display = "block";
-				document.getElementById("priceCalc").innerHTML = " = "+payment_price_cal.toLocaleString() + " 원";
+				document.getElementById("priceCalc").innerHTML = " = "+payment_price_cal.toLocaleString() + "원";
 				$(".calcPrice").attr("data-cal", payment_price_cal);
 				$(".calcPrice").data("cal", payment_price_cal);
 				
@@ -163,7 +185,7 @@
 				
 				document.getElementById("priceCalc").style.display = "block";
 				
-				document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + " 원";	
+				document.getElementById("priceCalc").innerHTML = " = " + payment_price_cal.toLocaleString() + "원";	
 				$(".calcPrice").attr("data-cal", payment_price_cal);
 				$(".calcPrice").data("cal", payment_price_cal);
 			}
@@ -173,6 +195,7 @@
 	/* 결제하기  */
 	function order() {
 		let deliveryFlag = $("input[name=deliveryFlag]").val();
+		let coupon_user_idx = $("select[name=couponList]").val();
 		
 		if(deliveryFlag == 'n') {
 			alert("배송지를 등록한 후 결제할 수 있습니다.");
@@ -184,6 +207,12 @@
 		let priceCalc = 0;
 		if(point != "") {
 			priceCalc = Number($(".calcPrice").attr("data-cal"));
+			$("#coupon_amount").val(0);
+			$("#coupon_user_idx").val(0);
+		}
+		
+		if(point == "" && coupon_user_idx != "0") {
+			priceCalc = Number($(".calcPrice").attr("data-cal"));
 		}
 		
 		$("#order_total_amount").val(order_total_amount);
@@ -193,6 +222,13 @@
 		payForm.submit();
 	}
 </script>
+<style>
+  	#total_price, #pointUse, #priceCalc {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 20px;
+}
+</style>
 </head>
 <body>
 <!-- Nav  -->
@@ -314,16 +350,18 @@
 	    				</tr>
 	    			</table>
     				<div class="mt-3"><i class="fa-solid fa-ticket"></i>&nbsp; 쿠폰 적용</div>
-    				<div class="mt-4"> ✔️ 쿠폰의 일련번호를 작성하세요.</div>
 	    			<table class="w3-table">
 	    				<tr>
 	    					<td>
-								<div class="input-group">
-					    			<input class="input" width="60%" id="couponNum" name="couponNum" type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" placeholder="숫자만 입력하세요.">
-					    			<div class="input-group-append">
-								      	<input type="button" value="입력" class="btn w3-2021-buttercream" onclick=""/>
-								    </div>
-					    		</div>
+								<select class="w3-select" id="couponList" name="couponList" onchange="couponSelect()">
+									<option value="0">적용할 쿠폰을 선택하세요.</option>
+									<c:forEach var="vo" items="${couponList}">
+										<option value="${vo.coupon_user_idx}" data-rate="${vo.discount_rate}" id="optionCoupon_${vo.coupon_user_idx}">
+											${vo.reason}(${vo.discount_rate}% 할인)
+											&nbsp;[만료일 : ${vo.expiry_date}]
+										</option>
+									</c:forEach>
+								</select>
 							</td>
 	    				</tr>
 	    			</table>
@@ -394,6 +432,8 @@
    		</c:if>
    		<input type="hidden" name="order_total_amount" id="order_total_amount">
    		<input type="hidden" name="point" id="use_point">
+   		<input type="hidden" name="coupon_amount" id="coupon_amount">
+   		<input type="hidden" name="coupon_user_idx" id="coupon_user_idx">
    		<input type="hidden" name="order_total_amount_calc" id="order_total_amount_calc">
     	</form>
 	</div>
