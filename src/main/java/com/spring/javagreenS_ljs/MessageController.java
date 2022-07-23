@@ -94,7 +94,10 @@ public class MessageController {
 			model.addAttribute("msg", "프로필 사진이 변경되었습니다.");
 			model.addAttribute("url", "admin/mainHome"); 
 		}
-		 
+		else if(msgFlag.equals("fileUploadOk")) { 
+			model.addAttribute("msg", "");
+			model.addAttribute("url", "admin/order/sendProcess"); 
+		}
 		
 		return "include/message";
 	}

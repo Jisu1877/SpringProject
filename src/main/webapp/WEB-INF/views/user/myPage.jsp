@@ -21,8 +21,28 @@ $(document).ready(function() {
 	let dateArr = date.split('-');
 	let dateNum = Number(dateArr[1]);
 	let calDate = Number(dateArr[1]) - 1;
-	console.log(calDate);
 });
+
+/* 구매확정 처리 */
+function confirmCheck(idx) {
+	
+	$.ajax({
+		type : "post",
+		url : "${ctp}/order/orderCodeChange",
+		data : {idx : idx,
+			    code : 6
+		},
+		success : function(res) {
+			if(res == "1") {
+				alert("구매 확정이 완료되었습니다.");
+				location.reload();
+			}
+		},
+		error : function() {
+			alert("전송 오류 입니다.");
+		}
+	});
+}
 </script>
 <style>
 .date {
@@ -108,7 +128,7 @@ $(document).ready(function() {
 	      </div>
 	      <br>
 	      
-	      <!-- Accordion -->
+	     <!--  <!-- Accordion -->
 	      <div class="w3-card w3-round">
 	        <div class="w3-white">
 	          <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups</button>
@@ -147,7 +167,7 @@ $(document).ready(function() {
 	      </div>
 	      <br>
 	      
-	      <!-- Interests --> 
+	      Interests 
 	      <div class="w3-card w3-round w3-white w3-hide-small">
 	        <div class="w3-container">
 	          <p>Interests</p>
@@ -168,7 +188,7 @@ $(document).ready(function() {
 	      </div>
 	      <br>
 	      
-	      <!-- Alert Box -->
+	      Alert Box
 	      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
 	        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
 	          <i class="fa fa-remove"></i>
@@ -176,7 +196,7 @@ $(document).ready(function() {
 	        <p><strong>Hey!</strong></p>
 	        <p>People are looking at your profile. Find out who.</p>
 	      </div>
-	    
+	     -->
 	    <!-- End Left Column -->
 	    </div>
 	    
@@ -284,130 +304,135 @@ $(document).ready(function() {
           	  <c:set var="cnt" value="0"/>
 	          <c:set var="idx" value="0"/>
 	          <c:forEach var="vo" items="${orderListSearch}">
-          		<c:set var="date" value="${fn:split(vo.created_date, '-')}"/>
-          		<c:set var="date2" value="${fn:split(nowDate, '-')}"/>
-	          	<c:if test="${date[1] == date2[1] && cnt == 0}">
-		          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${nowDate}</span></div>
-		      	  	<hr>
-		      	  	<c:set var="cnt" value="1"/>
-	      	  	</c:if>
-	          	<c:if test="${date[1] != date2[1]}">
-	          		<c:set var="calSub" value="${date2[1] - date[1]}"/>
-	          		<c:set var="calDay" value="${date2[1] - calSub}"/>
-	          		<c:set var="el" value="-"/>
-	          		<c:set var="zero" value="0"/>
-	          		<c:set var="calDate" value="${date[0]}${el}${zero}${calDay}"/>
-		          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${calDate}</span></div>
-		      	  	<hr>
-		      	  	<c:set var="cnt" value="1"/>
-	      	  	</c:if>
-	          	<div class="w3-row">
-	          		<c:if test="${idx != vo.order_idx}">
-	          			<div class="w3-bottombar w3-2019-sweet-corn w3-padding" style="margin-bottom: 20px;">
-					    	<div>
-					    		<span>주문번호 <b>${vo.order_number}</b></span> &nbsp; | &nbsp;
-					    		총 결제금액 : <b><fmt:formatNumber value="${vo.order_total_amount}"/>원</b>
-					    	</div>
-					    </div>
-	          		</c:if>
-	          		<div class="w3-col m2">
-			          <img src="${ctp}/data/item/${vo.item_image}" class="w3-left w3-margin-right" style="width:100%">
-	          		</div>
-	          		<div class="w3-col m8 pl-2">
-			            <h5>${vo.item_summary}</h5>
-			            <c:if test="${vo.item_option_flag == 'y'}">
-						  <div>옵션 : ${vo.option_name}</div>		          
-			            </c:if>
-					    <div>수량 : ${vo.order_quantity} 개</div>
-					    <div>상품 금액 : <fmt:formatNumber value="${vo.item_price}"/>원</div>
-						<hr>
-						<c:if test="${vo.order_status_code == '1'}">
-							<font size="3" color="gray">결제완료</font><br>
-							✔️ 주문 확인 중입니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '2'}">
-							<font size="3" color="gray">확인완료</font><br>
-							✔️ 배송 준비 중입니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '3'}">
-							<font size="3" color="red">취소완료</font><br>
-							✔️ 취소처리가 완료되었습니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '4'}">
-							<font size="3" color="gray">배송중</font><br>
-							<i class="fa-solid fa-truck-bolt"></i> 배송 중입니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '5'}">
-							<font size="3" color="gray">배송완료</font><br>
-							<i class="fa-solid fa-box-check"></i> 배송이 완료되었습니다. 구매확정을 진행해주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '6'}">
-						<font size="3" color="gray">구매완료</font><br>
-							✔️ 구매확정이 완료되었습니다. 리뷰를 작성해주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '7'}">
-						<font size="3" color="red">교환신청 처리 중</font><br>
-							✔️ 교환 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '8'}">
-						<font size="3" color="red">교환승인 완료</font><br>
-							✔️ 상품 수거 처리 중입니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '9'}">
-						<font size="3" color="red">배송중(교환)</font><br>
-							✔️ 교환물품이 배송 중입니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '10'}">
-						<font size="3" color="red">교환거부</font><br>
-							✔ 교환이 거부되었습니다. 자세한 내용은 교환처리 페이지에서 확인해주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '11'}">
-						<font size="3" color="red">환불신청 처리 중</font><br>
-							✔ 환불 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '12'}">
-						<font size="3" color="red">환불승인</font><br>
-							✔ 상품 수거 처리 중입니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '13'}">
-						<font size="3" color="red">환불완료</font><br>
-							✔ 환불이 완료되었습니다.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '14'}">
-						<font size="3" color="red">환불거부</font><br>
-							✔ 환불이 거부되었습니다. 자세한 내용은 환불처리 페이지에서 확인해주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '15'}">
-						<font size="3" color="red">취소 요청 중</font><br>
-							✔ 취소 요청을 검토중입니다. 기다려주세요.
-						</c:if>					
-						<c:if test="${vo.order_status_code == '16'}">
-						<font size="3" color="red">취소 요청 반려</font><br>
-							✔ 취소 요청이 반려되었습니다. 처리 내용을 확인해주세요.
-						</c:if>					
-	          		</div>
-	          		<div class="w3-col m2">
-	          			<div class="mb-2">
-	          				<span class="w3-right w3-opacity">${fn:substring(vo.created_date, 0, 19)}</span>
-	          			</div><br>
-	          			<div style="margin-top: 20px;" class="w3-right">
-	          				<c:if test="${vo.order_status_code == '1'}">
-	          					<a onclick="orderCancel(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
-							</c:if>
-	          				<c:if test="${vo.order_status_code == '2'}">
-	          					<a onclick="orderCancelRequest(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-success btn-sm">취소 요청</a>
-							</c:if>
-	          				<c:if test="${vo.order_status_code == '3'}">
-	          					<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">취소 내역 확인</a>
-							</c:if>
-	          				<c:if test="${vo.order_status_code == '16'}">
-	          					<a onclick="orderCancelRequestInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2020-mosaic-blue btn-sm">처리 내용 확인</a>
-							</c:if>
-	          			</div>
-	          		</div>
-		        </div><br><hr>
-		        <c:set var="idx" value="${vo.order_idx}"/>
-		      </c:forEach>
+	          		<c:set var="date" value="${fn:split(vo.created_date, '-')}"/>
+	          		<c:set var="date2" value="${fn:split(nowDate, '-')}"/>
+		          	<c:if test="${date[1] == date2[1] && cnt == 0}">
+			          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${nowDate}</span></div>
+			      	  	<hr>
+			      	  	<c:set var="cnt" value="1"/>
+		      	  	</c:if>
+		          	<c:if test="${date[1] != date2[1]}">
+		          		<c:set var="calSub" value="${date2[1] - date[1]}"/>
+		          		<c:set var="calDay" value="${date2[1] - calSub}"/>
+		          		<c:set var="el" value="-"/>
+		          		<c:set var="zero" value="0"/>
+		          		<c:set var="calDate" value="${date[0]}${el}${zero}${calDay}"/>
+			          	<div class="w3-padding-16" style="font-size:22px;"><span class="pl-2 pr-2 date">${calDate}</span></div>
+			      	  	<hr>
+			      	  	<c:set var="cnt" value="1"/>
+		      	  	</c:if>
+		          	<div class="w3-row">
+		          		<c:if test="${idx != vo.order_idx}">
+		          			<div class="w3-bottombar w3-2019-sweet-corn w3-padding" style="margin-bottom: 20px;">
+						    	<div>
+						    		<span>주문번호 <b>${vo.order_number}</b></span> &nbsp; | &nbsp;
+						    		총 결제금액 : <b><fmt:formatNumber value="${vo.order_total_amount}"/>원</b>
+						    	</div>
+						    </div>
+		          		</c:if>
+		          		<div class="w3-col m2">
+				          <img src="${ctp}/data/item/${vo.item_image}" class="w3-left w3-margin-right" style="width:100%">
+		          		</div>
+		          		<div class="w3-col m8 pl-2">
+				            <h5>${vo.item_summary}</h5>
+				            <c:if test="${vo.item_option_flag == 'y'}">
+							  <div>옵션 : ${vo.option_name}</div>		          
+				            </c:if>
+						    <div>수량 : ${vo.order_quantity} 개</div>
+						    <div>상품 금액 : <fmt:formatNumber value="${vo.item_price}"/>원</div>
+							<hr>
+							<c:if test="${vo.order_status_code == '1'}">
+								<font size="3" color="gray">결제완료</font><br>
+								✔️ 주문 확인 중입니다.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '2' && vo.reject_code == '0'}">
+								<font size="3" color="gray">확인완료(배송 준비중)</font><br>
+								✔️ 배송 준비 중입니다☺️ 조금만 기다려주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '3'}">
+								<font size="3" color="red">취소완료</font><br>
+								✔️ 취소처리가 완료되었습니다. 감사합니다.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '4'}">
+								<font size="3" color="gray">배송중</font><br>
+								<i class="fa-solid fa-truck-bolt"></i> 배송 중입니다☺️ 금방 도착합니다~!
+							</c:if>					
+							<c:if test="${vo.order_status_code == '5'}">
+								<font size="3" color="gray">배송완료</font><br>
+								<i class="fa-solid fa-box-check"></i> 배송이 완료되었습니다. 구매확정을 진행해주세요.
+								<div class="mt-2">
+									<a class="btn w3-amber btn-sm mr-1" href="javascript:confirmCheck(${vo.order_list_idx})">구매확정</a>
+									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2021-cerulean btn-sm mr-1">교환 요청</a>
+									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2021-cerulean btn-sm">반품 요청</a>
+								</div>
+							</c:if>					
+							<c:if test="${vo.order_status_code == '6'}">
+							<font size="3" color="gray">구매완료</font><br>
+								✔️ 구매확정이 완료되었습니다. 리뷰를 작성해주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '7'}">
+							<font size="3" color="red">교환신청 처리 중</font><br>
+								✔️ 교환 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '8'}">
+							<font size="3" color="red">교환승인 완료</font><br>
+								✔️ 상품 수거 처리 중입니다.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '9'}">
+							<font size="3" color="red">배송중(교환)</font><br>
+								✔️ 교환물품이 배송 중입니다.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '10'}">
+							<font size="3" color="red">교환거부</font><br>
+								✔ 교환이 거부되었습니다. 자세한 내용은 교환처리 페이지에서 확인해주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '11'}">
+							<font size="3" color="red">환불신청 처리 중</font><br>
+								✔ 환불 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '12'}">
+							<font size="3" color="red">환불승인</font><br>
+								✔ 상품 수거 처리 중입니다.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '13'}">
+							<font size="3" color="red">환불완료</font><br>
+								✔ 환불이 완료되었습니다.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '14'}">
+							<font size="3" color="red">환불거부</font><br>
+								✔ 환불이 거부되었습니다. 자세한 내용은 환불처리 페이지에서 확인해주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '15'}">
+							<font size="3" color="red">취소 요청 중</font><br>
+								✔ 취소 요청을 검토중입니다. 기다려주세요.
+							</c:if>					
+							<c:if test="${vo.order_status_code == '2' && vo.reject_code == '1'}">
+							<font size="3" color="red">취소 요청 반려(배송 준비 중)</font><br>
+								✔ 취소 요청이 반려되었습니다. 처리 내용을 확인해주세요.
+							</c:if>					
+		          		</div>
+		          		<div class="w3-col m2">
+		          			<div class="mb-2">
+		          				<span class="w3-right w3-opacity">${fn:substring(vo.created_date, 0, 19)}</span>
+		          			</div><br>
+		          			<div style="margin-top: 20px;" class="w3-right">
+		          				<c:if test="${vo.order_status_code == '1'}">
+		          					<a onclick="orderCancel(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-primary btn-sm">주문 취소</a>
+								</c:if>
+		          				<c:if test="${vo.order_status_code == '2' && vo.reject_code == '0'}">
+		          					<a onclick="orderCancelRequest(${vo.order_list_idx},${vo.order_idx})" class="btn btn-outline-success btn-sm">취소 요청</a>
+								</c:if>
+		          				<c:if test="${vo.order_status_code == '3'}">
+		          					<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">취소 내역 확인</a>
+								</c:if>
+		          				<c:if test="${vo.reject_code == '1'}">
+		          					<a onclick="orderCancelRequestInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2020-mosaic-blue btn-sm">처리 내용 확인</a>
+								</c:if>
+		          			</div>
+		          		</div>
+			        </div><br><hr>
+			        <c:set var="idx" value="${vo.order_idx}"/>
+		     </c:forEach>
 	          </c:if>
 	      </div>
 	      </div> 

@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>송장 입력</title>
+    <title>배송 처리 관리</title>
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
     <link rel="icon" href="${ctp}/images/favicon.png">
     <script src="${ctp}/js/orderDelivery.js"></script>
@@ -78,7 +78,7 @@
 	    <!-- Header -->
 		<header style="padding-top:22px;">
 			<div class="w3-bottombar w3-light-gray w3-padding" style="margin-bottom: 20px;">
-		    	<span style="font-size:23px;">송장 입력</span>
+		    	<span style="font-size:23px;">배송 처리 관리</span>
 		    </div>
 		</header>
         <div class="w3-row-padding" style="margin:0 -16px;">

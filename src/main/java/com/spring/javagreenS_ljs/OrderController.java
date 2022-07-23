@@ -346,4 +346,21 @@ public class OrderController {
 		model.addAttribute("vo", vo);
 		return "order/orderCancelRequestInfor";
 	}
+	
+	
+	//주문 상태값 변경(구매확정)
+	@ResponseBody
+	@RequestMapping(value = "/orderCodeChange", method = RequestMethod.POST)
+	public String orderCodeChangePost(@RequestParam int idx, @RequestParam String code) {
+		//구매확정시 첫 구매이거나 결제 금액이 10만원 이상 결제 인 경우 10% 할인 쿠폰 발급
+		if(code.equals("6")) {
+			
+		}
+		
+		
+		//주문 상태값 구매확정 완료로 변경
+		orderAdminService.setOrderCodeChange(idx,code);
+		
+		return "1";
+	}
 }

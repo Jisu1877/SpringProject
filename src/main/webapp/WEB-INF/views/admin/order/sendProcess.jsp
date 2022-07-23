@@ -17,8 +17,52 @@
     </style>
     <script type="text/javascript">
     	function sendProcess() {
-			
+    		//확장자 체크
+    		let file = $("#file").val();
+    		
+    		if (file.indexOf(" ") != -1) { // 혹시 파일명에 공백이 있으면~~~
+				alert("업로드 파일명에 공백을 포함할 수 없습니다.");
+				return false;
+			}
+			else if (file != "") {
+				let ext = file.substring(file.lastIndexOf(".") + 1);
+				let uExt = ext.toUpperCase();
+		
+				if (uExt != "XLSX" && uExt != "XLS") {
+					alert("업로드 가능한 파일 확장자는 '.xlsx / .xls' 입니다.");
+					return false;
+				}
+			}
+    		
+    		var form = $('#uploadForm')[0];
+    		var formData = new FormData(form);
+    		 
+   		    $.ajax({
+   		        url : '${ctp}/excel/fileUpload',
+   		        type : 'POST',
+   		        data : formData,
+   		        contentType : false,
+   		        processData : false,
+   				success : function(res) {
+   					if(res == "1") {
+	   					alert("일괄 발송 처리가 완료되었습니다.");
+	   	   				window.opener.location.reload();
+	   					window.close();
+   					}
+   					else if(res == "0") {
+   						alert("송장번호를 모두 입력하세요.");
+   						location.reload();
+   						return false;
+   					}
+				},
+				error : function() {
+					alert("주문 목록 번호, 택배사, 송장번호 입력칸은 빈칸이 허용되지 않습니다. \n수정 후 다시 시도하세요.");
+				}
+   		    });
+    		
+    		//uploadForm.submit();
 		}
+    	
     </script>
 </head>
 <body>
@@ -38,18 +82,18 @@
 				</div>
 				<div class="mb-3">
 					<span>
-					※ 엑셀 2007 버전 이상을 이용해야 합니다.
+					※ 주문 목록 번호, 택배사, 송장번호 입력칸은 빈칸이 허용되지 않습니다.
 					</span>
 				</div>
 				<div class="mb-3">
 					<span>
-					※ 같은 주문 번호인 상품은 동일 송장번호를 입력하셔야 정상 처리됩니다. 개별 발송인 경우 개별 입력 창을 이용하시길 바랍니다.
+					※ 엑셀 2007 버전 이상을 이용해야 합니다.
 					</span>
 				</div>
 				<div style="border: 0.5px solid;" class="w3-padding">
 					<label><b>파일 등록</b></label>
-					<form>
-						<input type="file" class="w3-file w3-2020-brilliant-white" accept=".xlsx"> 
+					<form name="uploadForm" id="uploadForm" action="${ctp}/excel/fileUpload" method="POST" enctype="multipart/form-data">
+						<input type="file" name="file" id="file" class="w3-file w3-2020-brilliant-white" accept=".xlsx"> 
 						<input type="button" value="일괄 발송" onclick="sendProcess()">
 					</form>
 					<br>

@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.javagreenS_ljs.pagination.PageVO;
 import com.spring.javagreenS_ljs.pagination.PagingProcess;
@@ -22,6 +24,7 @@ import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
+import com.spring.javagreenS_ljs.vo.ShippingListVO;
 import com.spring.javagreenS_ljs.vo.UserDeliveryVO;
 import com.spring.javagreenS_ljs.vo.UserVO;
 
@@ -85,11 +88,22 @@ public class AdminOrderController {
     	//주문 정보 가져오기
     	ArrayList<OrderListVO> orderList = orderAdminService.getOrderInfor(idx);
     	
-    	//배송 정보 가져오기
+    	//배송지 정보 가져오기
     	int delivery_idx = orderList.get(0).getUser_delivery_idx();
     	UserDeliveryVO deliveryVO = deliveryService.getUserDeliveryInfor(delivery_idx);
     	
+    	ArrayList<ShippingListVO> shippingList = new ArrayList<ShippingListVO>();
+    	
+    	//배송 정보 가져오기
+    	for(int i = 0; i < orderList.size(); i++) {
+    		ShippingListVO shippingVO = orderAdminService.getShippingList(orderList.get(i).getOrder_list_idx());
+    		if(shippingVO != null) {
+    			shippingList.add(shippingVO);
+    		}
+    	}
+    	
     	model.addAttribute("orderList", orderList);
+    	model.addAttribute("shippingList", shippingList);
     	model.addAttribute("deliveryVO", deliveryVO);
     	return "admin/order/orderInfor";
     }
@@ -105,7 +119,7 @@ public class AdminOrderController {
     //주문 상태 변경(idx : 주문 리스트 idx / code : 값 삽입해줄 상태코드)
     @ResponseBody
     @RequestMapping(value = "/orderCodeChange", method = RequestMethod.POST)
-    public String orderCodeChangePost(int idx, String code) {
+    public String orderCodeChangePost(@RequestParam int idx, @RequestParam String code) {
     	orderAdminService.setOrderCodeChange(idx,code);
     	return "1";
     }
@@ -161,7 +175,8 @@ public class AdminOrderController {
     	else {
     		//취소 반려 시..
     		//주문 목록 상태값 변경
-    		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "16");
+    		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "2");
+    		orderAdminService.setRejectCodeUpdate(vo.getOrder_list_idx(), "1");
     		
     		//주문 테이블의 사용 포인트 차감 돌려놓기
     		if(vo.getUse_point() != 0) {

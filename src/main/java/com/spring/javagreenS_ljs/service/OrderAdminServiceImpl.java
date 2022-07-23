@@ -9,6 +9,7 @@ import com.spring.javagreenS_ljs.dao.OrderAdminDAO;
 import com.spring.javagreenS_ljs.dao.OrderDAO;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
+import com.spring.javagreenS_ljs.vo.ShippingListVO;
 import com.spring.javagreenS_ljs.vo.UserDeliveryVO;
 
 @Service
@@ -83,5 +84,27 @@ public class OrderAdminServiceImpl implements OrderAdminService {
 	@Override
 	public ArrayList<OrderListVO> getOrderListWithDelivery() {
 		return orderAdminDAO.getOrderListWithDelivery();
+	}
+
+	@Override
+	public void setRejectCodeUpdate(int order_list_idx, String reject_code) {
+		orderAdminDAO.setRejectCodeUpdate(order_list_idx, reject_code);
+	}
+
+	@Override
+	public void setShippingListHistory(ShippingListVO vo) {
+		
+		//주문 목록 번호로 필요한 정보 모두 가져오기
+		OrderListVO listVO = orderAdminDAO.getOrderListInfor(vo.getOrder_list_idx());
+		
+		vo.setUser_idx(listVO.getUser_idx());
+		vo.setUser_delivery_idx(listVO.getUser_delivery_idx());
+		
+		orderAdminDAO.setShippingListHistory(vo);
+	}
+
+	@Override
+	public ShippingListVO getShippingList(int order_list_idx) {
+		return orderAdminDAO.getShippingList(order_list_idx);
 	}
 }

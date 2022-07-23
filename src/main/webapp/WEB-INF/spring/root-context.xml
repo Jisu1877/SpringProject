@@ -18,9 +18,11 @@
 	<!-- 데이터베이스 연동을 위한 처리(JDBC 설정)  -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/javagreen_ljs?allowMultiQueries=true"/>
+		<!-- <property name="url" value="jdbc:mysql://localhost:3306/javagreen_ljs?allowMultiQueries=true"/> -->
+		<property name="url" value="jdbc:mysql://localhost:3306/javagreen_ljs?useSSL=true&amp;verifyServerCertificate=false&amp;serverTimezone=UTC&amp;allowMultiQueries=true"/>
 		<property name="username" value="root"/>
 		<property name="password" value="1234"/>
+		<!-- <property name="password" value="cjgreen"/> -->
 	</bean>
 	
 	<!-- MyBatis Spring 연동하기(모듈설정) - mapper정보설정  -->

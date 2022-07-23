@@ -178,8 +178,8 @@
 	   				<option value="12" ${code == 12 ? 'selected' : '' }>환불승인</option>
 	   				<option value="13" ${code == 13 ? 'selected' : '' }>환불완료</option>
 	   				<option value="14" ${code == 14 ? 'selected' : '' }>환불거부</option>
-	   				<option value="14" ${code == 15 ? 'selected' : '' }>취소요청</option>
-	   				<option value="14" ${code == 16 ? 'selected' : '' }>취소반려</option>
+	   				<option value="15" ${code == 15 ? 'selected' : '' }>취소요청</option>
+	   				<option value="16" ${code == 16 ? 'selected' : '' }>취소반려</option>
        			</select>
        			<label>&nbsp;</label>
 	     		<select name="pageSize" id="pageSize" onchange="pageCheck()" class="w3-select w3-left" style="width:20%">
@@ -253,10 +253,10 @@
 								<font size="3" color="red">취소완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '4'}">
-								<font size="3" color="gray">배송중</font>
+								<font size="3" color="navy">배송중</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '5'}">
-								<font size="3" color="gray">배송완료</font>
+								<font size="3" color="navy">배송완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '6'}">
 								<font size="3" color="gray">구매완료</font>
@@ -297,16 +297,16 @@
 								<input type="button" value="주문확인" class="btn btn-sm w3-2020-navy-blazer" onclick="orderCodeChange1(${vo.order_list_idx})"/>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '2' || vo.order_status_code == '16'}">
-								<a onclick="location.href='${ctp}/admin/order/orderDelivery'" class="btn w3-2021-mint btn-sm">송장 입력</a>
+								<a onclick="location.href='${ctp}/admin/order/orderDelivery'" class="btn w3-2021-mint btn-sm">배송 처리</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '3'}">
 								<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-yellow btn-sm">내역 확인</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '4'}">
-								<font size="3" color="gray">배송중</font>
+								<a onclick="deliveryOk(${vo.order_list_idx})" class="btn w3-2021-french-blue btn-sm">완료 처리</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '5'}">
-								<font size="3" color="gray">배송완료</font><br>
+								-
 							</c:if>					
 							<c:if test="${vo.order_status_code == '6'}">
 							<font size="3" color="gray">구매완료</font><br>

@@ -1,11 +1,15 @@
 package com.spring.javagreenS_ljs;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,11 +17,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS_ljs.service.OrderAdminService;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
+import com.spring.javagreenS_ljs.vo.ShippingListVO;
 
 @Controller
 @RequestMapping("/excel")
@@ -25,7 +35,6 @@ public class ExcelController {
 	
 	@Autowired
 	OrderAdminService orderAdminService;
-	
 	
 	@RequestMapping(value = "/deliveryDownload", method = RequestMethod.GET)
 	public void DeliveryDownloadGet(HttpServletResponse response, HttpSession session, String company) throws IOException {
@@ -39,7 +48,7 @@ public class ExcelController {
       //Header1
       row = sheet.createRow(rowNum++);
       cell = row.createCell(0);
-      cell.setCellValue("※ 주문번호가 같은 상품은 동일한 송장번호를 입력하세요.");
+      cell.setCellValue("※ 주문번호가 같은 상품은 동일한 송장번호를 입력하세요. 다르게 입력시 개별 발송으로 처리됩니다.");
       
       // Header2
       row = sheet.createRow(rowNum++);
@@ -81,7 +90,7 @@ public class ExcelController {
       for (int i=0; i<orderList.size(); i++) {
           row = sheet.createRow(rowNum++);
           cell = row.createCell(0);
-          cell.setCellValue(i);
+          cell.setCellValue((i + 1));
           cell = row.createCell(1);
           cell.setCellValue(orderList.get(i).getOrder_list_idx());
           cell = row.createCell(2);
@@ -121,5 +130,81 @@ public class ExcelController {
       // Excel File Output
       wb.write(response.getOutputStream());
       wb.close();
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@ResponseBody
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
+	public String fileUploadPost(@RequestParam("file") MultipartFile file, Model model) throws IOException {
+		
+		ArrayList<ShippingListVO> ShippingList = new ArrayList<ShippingListVO>();
+		
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		
+		if (!extension.equals("xlsx") && !extension.equals("xls")) {
+		      throw new IOException("엑셀파일만 업로드 해주세요.");
+		}
+		
+		Workbook workbook = new XSSFWorkbook(file.getInputStream());
+		
+		Sheet worksheet = workbook.getSheetAt(0); 
+		
+		for (int i = 2; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+		      Row row = worksheet.getRow(i);
+
+		      ShippingListVO vo = new ShippingListVO();
+		      
+		      vo.setOrder_list_idx((int) row.getCell(1).getNumericCellValue());
+		      vo.setOrder_number(row.getCell(2).getStringCellValue());
+		      vo.setShipping_company(row.getCell(13).getStringCellValue());
+		      
+		      //아래와 같이 했을때 형변환 에러가 발생.
+		      //vo.setShipping_company(row.getCell(14).getStringCellValue());
+		      
+		      //따라서 아래와 같이 string 타입으로 변환시켜줌.
+		      Cell cell1 = row.getCell(14);
+		      String invoice = new BigDecimal(String.valueOf(cell1.getNumericCellValue())).toPlainString();
+		      
+		      //이렇게 하면 제대로 값을 못가져 온다.
+		      //Stirng invoice = cell1.toString();
+		      
+		      vo.setInvoice_number(invoice);
+		      
+		      ShippingList.add(vo);
+		}
+		
+		//System.out.println(ShippingList.get(0));
+		workbook.close();
+		
+		//일괄 발송 처리 하기
+		for(int i =0; i < ShippingList.size(); i++) {
+			System.out.println(ShippingList.get(i));
+			int order_list_idx = ShippingList.get(i).getOrder_list_idx();
+			String invoice_number = ShippingList.get(i).getInvoice_number();
+			String order_number = ShippingList.get(i).getOrder_number();
+			String shipping_company = ShippingList.get(i).getShipping_company();
+			
+			System.out.println("invoice_number : " + invoice_number);
+			
+			if(invoice_number.equals("")) {
+				return "0";
+			}
+			
+			//해당 주문 목록 상태값 변경
+			orderAdminService.setOrderCodeChange(order_list_idx, "4");
+			
+			//배송 목록 테이블에 저장
+			ShippingListVO vo = new ShippingListVO();
+			
+			vo.setOrder_list_idx(order_list_idx);
+			vo.setInvoice_number(invoice_number);
+			vo.setOrder_number(order_number);
+			vo.setShipping_company(shipping_company);
+			
+			orderAdminService.setShippingListHistory(vo);
+		}
+		
+		return "1";
 	}
 }

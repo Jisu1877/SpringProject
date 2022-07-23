@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
+import com.spring.javagreenS_ljs.vo.ShippingListVO;
 
 public interface OrderAdminService {
 
@@ -20,5 +21,11 @@ public interface OrderAdminService {
 	public void setOrderCancelRequestAnswer(OrderCancelVO vo);
 
 	public ArrayList<OrderListVO> getOrderListWithDelivery();
+
+	public void setRejectCodeUpdate(int order_list_idx, String string);
+
+	public void setShippingListHistory(ShippingListVO vo);
+
+	public ShippingListVO getShippingList(int order_list_idx);
 
 }

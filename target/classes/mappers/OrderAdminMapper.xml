@@ -317,6 +317,19 @@
 		where o.order_idx = #{idx}
 	</select>
 	
+	<select id="getOrderListInfor" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
+		SELECT * FROM ga_order o
+		JOIN ga_order_list ol
+		ON o.order_idx = ol.order_idx
+		JOIN ga_item it
+		ON ol.item_idx = it.item_idx
+		JOIN ga_user us
+		ON o.user_idx = us.user_idx
+		JOIN ga_user_delivery ud
+		ON o.user_idx = ud.user_idx
+		where ol.order_list_idx = #{order_list_idx}
+	</select>
+	
 	<select id="getOrderCancelRequestInfor" resultType="com.spring.javagreenS_ljs.vo.OrderCancelVO">
 		select * from ga_order_cancel_request ocr
 		JOIN ga_order o
@@ -434,6 +447,10 @@
 		where ud.default_flag = 'y' and ol.order_status_code = '2'
 	</select>
 	
+	<select id="getShippingList" resultType="com.spring.javagreenS_ljs.vo.ShippingListVO">
+		select * from ga_shipping_list where order_list_idx = #{order_list_idx}
+	</select>
+	
 	<update id="setOrderAdminMemo">
 		update ga_order set order_admin_memo = #{memo} where order_idx = #{idx}
 	</update>
@@ -442,8 +459,16 @@
 		update ga_order_list set order_status_code = #{code}, update_date = now() where order_list_idx = #{idx}
 	</update>
 	
+	<update id="setRejectCodeUpdate">
+		update ga_order_list set reject_code = #{reject_code} where where order_list_idx = #{order_list_idx}
+	</update>
+	
 	<update id="setOrderCancelRequestAnswer">
 		update ga_order_cancel_request set request_answer = #{vo.request_answer}, cancel_admin_memo = #{vo.cancel_admin_memo} 
 		where order_cancel_request_idx = #{vo.order_cancel_request_idx}
 	</update>
+	
+	<insert id="setShippingListHistory">
+		insert into ga_shipping_list values (DEFAULT, #{vo.user_idx}, #{vo.order_list_idx}, #{vo.order_number}, #{vo.user_delivery_idx}, #{vo.shipping_company}, #{vo.invoice_number}, DEFAULT);
+	</insert>
 </mapper>

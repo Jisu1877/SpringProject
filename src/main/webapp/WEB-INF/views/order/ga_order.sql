@@ -83,3 +83,17 @@ CREATE TABLE ga_order_cancel_request(
 );
 
 drop table ga_order_cancel_request;
+
+
+CREATE TABLE ga_shipping_list(
+	shipping_list_idx		INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_idx				INT NOT NULL,
+    order_list_idx	 		INT NOT NULL,
+    user_delivery_idx		INT NOT NULL,
+    shipping_company		VARCHAR(255) NOT NULL,
+    invoice_number			VARCHAR(255) NOT NULL,
+    created_date 			DATETIME NOT NULL DEFAULT now(),
+    foreign key(user_idx) references ga_user(user_idx),
+	foreign key(order_list_idx) references ga_order_list(order_list_idx),
+    foreign key(user_delivery_idx) references ga_user_delivery(user_delivery_idx)
+);

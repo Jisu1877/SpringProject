@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
+import com.spring.javagreenS_ljs.vo.ShippingListVO;
 import com.spring.javagreenS_ljs.vo.UserDeliveryVO;
 
 public interface OrderAdminDAO {
@@ -58,5 +59,13 @@ public interface OrderAdminDAO {
 			@Param("start") String start,@Param("end") String end, @Param("code") String code);
 
 	public ArrayList<OrderListVO> getOrderListWithDelivery();
+
+	public void setRejectCodeUpdate(@Param("order_list_idx") int order_list_idx,@Param("reject_code") String reject_code);
+
+	public OrderListVO getOrderListInfor(@Param("order_list_idx") int order_list_idx);
+
+	public void setShippingListHistory(@Param("vo") ShippingListVO vo);
+
+	public ShippingListVO getShippingList(@Param("order_list_idx") int order_list_idx);
 
 }

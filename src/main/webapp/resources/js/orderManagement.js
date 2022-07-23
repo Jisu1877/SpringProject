@@ -144,3 +144,21 @@ function orderCancelInfor(listIdx, orderIdx) {
     let y = (window.screen.height/2) - (winY/2)
 	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }
+
+/* 배송 완료 처리 */
+function deliveryOk(idx) {
+	$.ajax({
+		type : "post",
+		url : "/javagreenS_ljs/admin/order/orderCodeChange",
+		data : {idx : idx,
+				code : 5},
+		success : function(data) {
+			if(data == "1") {
+				location.reload();
+			}
+		},
+		error : function() {
+			alert("전송오류.");
+		}
+	});
+}

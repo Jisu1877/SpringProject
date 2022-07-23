@@ -57,6 +57,35 @@
     		});
 		}
     	
+    	function invoiceSerach(company) {
+    		let address = "";
+			if(company == 'CJ대한통운') {
+				address = "https://www.cjlogistics.com/ko/tool/parcel/tracking";
+			}
+			else if(company == '롯데택배') {
+				address = "https://www.lotteglogis.com/home/reservation/tracking/index";
+			}
+			else if(company == '우체국택배') {
+				address = "https://service.epost.go.kr/iservice/";
+			}
+			else if(company == '로젠택배') {
+				address = "https://www.ilogen.com/m/personal/tkSearch";
+			}
+			else if(company == '한진택배') {
+				address = "https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillSch.do?mCode=MN038";
+			}
+			else if(company == '경동택배') {
+				address = "https://kdexp.com/";
+			}
+			else if(company == '대신택배') {
+				address = "http://www.ds3211.co.kr/";
+			}
+			window.open(address, "newWin", "width:300, height:300");
+		}
+    	
+    	function copy(number) {
+    		navigator.clipboard.writeText(number);
+		}
     </script>
 </head>
 <body>
@@ -102,7 +131,7 @@
 						</tr>
 					</table>
 					<br>
-					<label class="w3-yellow"><b>배송 정보</b></label>
+					<label class="w3-yellow"><b>배송지 정보</b></label>
 					<table class="table w3-bordered">
 						<tr>
 							<th>배송지명</th>
@@ -203,7 +232,39 @@
 							</tr>
 						</table>
 					</c:forEach>
+					<br>
+					<c:set var="sw" value="0"/>
+					<c:if test="${shippingList[0].invoice_number != null}">
+						<label class="w3-2021-french-blue"><b>배송 정보</b></label><br>
+						<c:set var="sw" value="1"/>
+					</c:if>
+					<c:if test="${sw == 0 && shippingList.size() > 0}">
+						<label class="w3-2021-french-blue"><b>배송 정보</b></label><br>
+					</c:if>
+					<c:set var="number" value="1"/>
+					<c:forEach var="vo" items="${shippingList}" varStatus="st">
+						<c:if test="${vo.invoice_number != number && vo.invoice_number != null}">
+						<table class="table w3-bordered">
+							<tr>
+								<th>택배사</th>
+								<td>${vo.shipping_company}</td>
+							</tr>
+							<tr>
+								<th>송장번호</th>
+								<td><a href="javascript:copy(${vo.invoice_number})" id="invoice">${vo.invoice_number}</a> &nbsp;
+									<a href="javascript:invoiceSerach('${vo.shipping_company}');"><span class="badge badge-success">송장조회</span></a>
+								</td>
+							</tr>
+							<tr>
+								<th>발송일</th>
+								<td>${fn:substring(vo.created_date, 0, 19)}</td>
+							</tr>
+						</table>
+						<c:set var="number" value="${vo.invoice_number}"/>
+						</c:if>
+					</c:forEach>
 				</div>
+				<br>
 				<label class="w3-yellow"><b>관리자 메세지</b></label>
 				<br>
 				<c:set var="sw"/>

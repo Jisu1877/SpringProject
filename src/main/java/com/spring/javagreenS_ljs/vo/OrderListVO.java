@@ -16,6 +16,7 @@ public class OrderListVO {
 	private String option_price;
 	private int order_quantity;
 	private String order_status_code;
+	private String reject_code;
 	private String update_date;
 	private String created_date;
 	

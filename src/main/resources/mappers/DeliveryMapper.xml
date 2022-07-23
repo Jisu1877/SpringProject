@@ -12,7 +12,7 @@
 	</select>
 	
 	<insert id="setDeliveryInfor">
-		insert into ga_user_delivery values (DEFAULT, #{vo.user_idx}, #{vo.default_flag}, #{vo.title}, #{vo.delivery_name}, #{vo.delivery_tel}, #{vo.postcode}, #{vo.roadAddress}, #{vo.detailAddress}, #{vo.extraAddress}, #{vo.message}, DEFAULT)
+		insert into ga_user_delivery values (DEFAULT, #{vo.user_idx}, #{vo.default_flag}, #{vo.title}, #{vo.delivery_name}, #{vo.delivery_tel}, #{vo.postcode}, #{vo.roadAddress}, #{vo.detailAddress}, #{vo.extraAddress}, #{vo.message}, DEFAULT, DEFAULT)
 	</insert>
 	
 </mapper>

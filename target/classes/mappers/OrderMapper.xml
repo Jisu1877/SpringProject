@@ -12,7 +12,7 @@
 	</insert>
 	
 	<insert id="setOrderListHistory">
-		insert into ga_order_list values (DEFAULT, #{vo.order_idx}, #{vo.item_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT, NULL, DEFAULT);
+		insert into ga_order_list values (DEFAULT, #{vo.order_idx}, #{vo.item_idx}, #{vo.item_name}, #{vo.item_image}, #{vo.item_price}, #{vo.item_option_flag}, #{vo.option_idx}, #{vo.option_name}, #{vo.option_price}, #{vo.order_quantity}, DEFAULT, DEFAULT, NULL, DEFAULT);
 	</insert>
 	
 	<insert id="setOrderCancelHistory">
