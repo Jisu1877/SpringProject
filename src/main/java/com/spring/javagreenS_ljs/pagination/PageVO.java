@@ -2,7 +2,8 @@ package com.spring.javagreenS_ljs.pagination;
 
 import lombok.Data;
 
-public @Data class PageVO {
+@Data
+public class PageVO {
 	private int pageSize;
 	private int totRecCnt;
 	private int totPage;
@@ -12,6 +13,6 @@ public @Data class PageVO {
 	private int curBlock;
 	private int lastBlock;
 	private int pag;
-	
+
 	private String part; // 검색 조건
 }

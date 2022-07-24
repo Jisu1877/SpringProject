@@ -1,7 +1,5 @@
 package com.spring.javagreenS_ljs;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.spring.javagreenS_ljs.pagination.PageVO;
+import com.spring.javagreenS_ljs.enums.AgreeEnum;
+import com.spring.javagreenS_ljs.enums.LevelEnum;
+import com.spring.javagreenS_ljs.enums.SellerYnEnum;
+import com.spring.javagreenS_ljs.enums.UserStatusCodeEnum;
 import com.spring.javagreenS_ljs.pagination.PagingProcess;
 import com.spring.javagreenS_ljs.service.UserAdminService;
 import com.spring.javagreenS_ljs.service.UserService;
-import com.spring.javagreenS_ljs.vo.ItemVO;
-import com.spring.javagreenS_ljs.vo.UserStatusCodeEnum;
 import com.spring.javagreenS_ljs.vo.UserVO;
 
 @Controller
@@ -32,18 +31,34 @@ public class AdminUserController {
 	PagingProcess pagingProcess;
 	
 	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	public String userListGet(UserVO searchVO, Model model, HttpSession session) {
-		String user_id = (String)session.getAttribute("sUser_id");
-		//회원정보 가져오기
+	public String userListGet(UserVO searchVO, HttpSession session, Model model) {
+		String user_id = (String) session.getAttribute("sUser_id");
 		UserVO userVO = userService.getUserInfor(user_id);
 		
-//		//페이징처리
+		// 페이징
 		int totCnt = userAdminService.getUserListTotalCnt(searchVO);
-//		PageVO pageVO = pagingProcess.pageProcess3(searchVO, totCnt);
+		pagingProcess.pageProcess3(searchVO, totCnt);
 		
 		model.addAttribute("userVO", userVO);
+		model.addAttribute("searchVO", searchVO);
 		model.addAttribute("userList", userAdminService.getUserList(searchVO));
-//		model.addAttribute("pageVo", pageVO);
 		return "admin/user/userList";
+	}
+	
+	@RequestMapping(value = "/userInforUpdate", method = RequestMethod.GET)
+	public String userInforUpdateGet(UserVO searchVO, HttpSession session, Model model) {
+		String user_id = (String) session.getAttribute("sUser_id");
+		UserVO userVO = userService.getUserInfor(user_id);
+		
+		UserVO user = userService.getUserInfor(searchVO.getUser_id());
+		
+		model.addAttribute("userVO", userVO);
+		model.addAttribute("user", user);
+		model.addAttribute("statusList", UserStatusCodeEnum.values());
+		model.addAttribute("levelList", LevelEnum.values());
+		model.addAttribute("sellerYnList", SellerYnEnum.values());
+		model.addAttribute("agreeList", AgreeEnum.values());
+		
+		return "admin/user/userInforUpdate";
 	}
 }

@@ -121,8 +121,19 @@ public class PagingProcess {
 		return pageVO;
 	}
 	
-	// 인자 : 1.pag 번호 2. page크기 3.소속(예:게시판-board) 4.분류 5.검색어
-	public PageVO pageProcess3(PageVO pageVO, int totRecCnt) {
+	public void pageProcess3(PageVO pageVO, int totRecCnt) {
+		if (pageVO != null) {
+			if (pageVO.getPageSize() == 0) {
+				pageVO.setPageSize(10);
+			}
+			if (pageVO.getBlockSize() == 0) {
+				pageVO.setBlockSize(3);
+			}
+			if (pageVO.getPag() == 0) {
+				pageVO.setPag(1);
+			}
+		}
+		
 		pageVO.setTotPage((totRecCnt % pageVO.getPageSize()) == 0 ? totRecCnt / pageVO.getPageSize() : (totRecCnt / pageVO.getPageSize()) + 1);
 		int startIndexNo = (pageVO.getPag() - 1) * pageVO.getPageSize();
 		int curScrStartNo = totRecCnt - startIndexNo;
@@ -138,8 +149,6 @@ public class PagingProcess {
 		pageVO.setCurBlock(curBlock);
 		pageVO.setLastBlock(lastBlock);
 		pageVO.setPart(pageVO.getPart());
-
-		return pageVO;
 	}
 	
 }

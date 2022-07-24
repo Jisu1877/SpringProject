@@ -7,13 +7,15 @@
 	<sql id="userAdminWhere">
 		<where>
 			<if test="search != null and search != ''">
-				${search} = #{searchValue}
+				AND ${search} = #{searchValue}
+			</if>
+			<if test="status_code != null and status_code >= 0">
+				AND status_code = #{status_code}
+			</if>
+			<if test="level != null and level != ''">
+				AND level = #{level}
 			</if>
 		</where>
-		
-		<if test="startIndexNo > 0">
-			LIMIT #{startIndexNo}, #{pageSize}
-		</if>
 	</sql>
 
 	<select id="getUserListTotalCnt" resultType="Integer">
@@ -24,6 +26,7 @@
 	<select id="getUserList" parameterType="com.spring.javagreenS_ljs.vo.UserVO" resultType="com.spring.javagreenS_ljs.vo.UserVO">
 		SELECT * FROM ga_user
 		<include refid="userAdminWhere"></include>
+		LIMIT #{startIndexNo}, #{pageSize}
 	</select>
 	
 </mapper>

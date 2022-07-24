@@ -7,18 +7,20 @@
 <application generated-by="eclipse" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://update.zeroturnaround.com/jrebel/rebel-2_1.xsd">
 
 	<classpath>
-		<dir name="C:/Users/Hayoung/Desktop/JISU/JavaGreen/springframework/project/javagreenS_ljs/javagreenS_ljs/target/classes">
+		<dir name="C:/Users/gkdud/git/SpringProject/target/classes">
+		</dir>
+		<dir name="C:/Users/gkdud/git/SpringProject/target/test-classes">
 		</dir>
 	</classpath>
 
 	<web>
 		<link target="/">
-			<dir name="C:/Users/Hayoung/Desktop/JISU/JavaGreen/springframework/project/javagreenS_ljs/javagreenS_ljs/target/m2e-wtp/web-resources">
+			<dir name="C:/Users/gkdud/git/SpringProject/target/m2e-wtp/web-resources">
 				<exclude name="/"/>
 			</dir>
 		</link>
 		<link target="/">
-			<dir name="C:/Users/Hayoung/Desktop/JISU/JavaGreen/springframework/project/javagreenS_ljs/javagreenS_ljs/src/main/webapp">
+			<dir name="C:/Users/gkdud/git/SpringProject/src/main/webapp">
 			</dir>
 		</link>
 	</web>

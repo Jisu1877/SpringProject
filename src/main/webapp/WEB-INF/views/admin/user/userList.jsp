@@ -164,14 +164,14 @@
     	//페이지사이즈 검색
       	function pageCheck() {
 			let pageSize = $("#pageSize").val();
-			location.href="${ctp}/admin/item/itemList?part=${pageVo.part}&pag=${pag}&pageSize="+pageSize;
+			location.href="${ctp}/admin/item/itemList?part=${searchVO.part}&pag=${pag}&pageSize="+pageSize;
 		}
     	
       	//분류별 검색
     	function partCheck() {
 			let part = $("select[name=part]").val();
 			let pageSize = $("#pageSize").val();
-			location.href="${ctp}/admin/item/itemList?part="+part+"&pag=${pag}&pageSize="+pageSize;
+			location.href="${ctp}/admin/user/userList?part="+part+"&pag=${pag}&pageSize="+pageSize;
 		}
       	
       	function submitForm() {
@@ -183,8 +183,6 @@
 		function searchCheck() {
 			let search = $("select[name=search]").val();
 			let searchValue = $("#searchValue").val();
-			let pageSize = $("#pageSize").val();
-			let part = $("select[name=part]").val();
 			
 			if(search != "" && searchValue == "") {
 				alert("상세 조건을 선택하세요.");
@@ -194,6 +192,12 @@
 				alert("상세 검색 내용을 입력하세요.");
 				return false;
 			}
+			
+			const status_code = $('#status_code').val();
+			$('#status_code').attr('disabled', status_code == null || status_code == '');
+			
+			const level = $('#level').val();
+			$('#level').attr('disabled', level == null || level == '');
 			
 			return true;
 		}
@@ -220,34 +224,47 @@
 	          <div class="w3-third w3-margin-bottom">
 	            <select name="search" id="search" class="w3-select w3-border">
 	   				<option value="">상세 조건 선택</option>
-	   				<option value="user_id" ${search == 'user_id' ? 'selected' : '' }>아이디</option>
-	   				<option value="name" ${search == 'name' ? 'selected' : '' }>성명</option>
-	   				<option value="email" ${search == 'email' ? 'selected' : '' }>이메일</option>
-	   				<option value="tel" ${search == 'tel' ? 'selected' : '' }>전화번호</option>
+	   				<option value="user_id" ${searchVO.search == 'user_id' ? 'selected' : '' }>아이디</option>
+	   				<option value="name" ${searchVO.search == 'name' ? 'selected' : '' }>성명</option>
+	   				<option value="email" ${searchVO.search == 'email' ? 'selected' : '' }>이메일</option>
+	   				<option value="tel" ${searchVO.search == 'tel' ? 'selected' : '' }>전화번호</option>
 	   			</select>
 	          </div>
 	          <div class="w3-third w3-margin-bottom">
-	          	<input type="text" class="w3-input w3-border" type="text" placeholder="상세검색 내용 입력" name="searchValue" id="searchValue" value="${searchValue}" />
+	          	<input type="text" class="w3-input w3-border" type="text" placeholder="상세검색 내용 입력" name="searchValue" id="searchValue" value="${searchVO.searchValue}" />
 	          </div>
 	          <div class="w3-third w3-margin-bottom">
 	     		<a class="w3-button w3-2019-soybean" onclick="return submitForm();"><i class="fa fa-search w3-margin-right"></i> Search</a>
-	     		<select name="pageSize" id="pageSize" onchange="pageCheck()" class="w3-select w3-right mr-3" style="width:20%">
-						<option value="5" ${pageVo.pageSize == 5 ? 'selected' : '' }>5건</option>
-						<option value="10" ${pageVo.pageSize == 10 ? 'selected' : '' }>10건</option>
-						<option value="15" ${pageVo.pageSize == 15 ? 'selected' : '' }>15건</option>
-						<option value="20" ${pageVo.pageSize == 20 ? 'selected' : '' }>20건</option>
+	     		<select name="pageSize" id="pageSize" class="w3-select w3-right mr-3" style="width:15%">
+						<option value="5" ${searchVO.pageSize == 5 ? 'selected' : '' }>5건</option>
+						<option value="10" ${searchVO.pageSize == 10 ? 'selected' : '' }>10건</option>
+						<option value="15" ${searchVO.pageSize == 15 ? 'selected' : '' }>15건</option>
+						<option value="20" ${searchVO.pageSize == 20 ? 'selected' : '' }>20건</option>
 					</select>
-					<select name="part" onchange="partCheck()"class="w3-select w3-right mr-3" style="width:25%">
-						<option value="전체" ${pageVo.part == '전체' ? 'selected' : ''}>전체</option>
-						<option value="판매중" ${pageVo.part == '판매중' ? 'selected' : ''}>활동중</option>
-						<option value="판매중" ${pageVo.part == '판매중' ? 'selected' : ''}>탈퇴</option>
-						<option value="전시중지" ${pageVo.part == '전시중지' ? 'selected' : ''}>골드레벨</option>
-						<option value="품절" ${pageVo.part == '품절' ? 'selected' : ''}>실버레벨</option>
+					<select name="status_code" id="status_code" class="w3-select w3-right mr-3" style="width:20%">
+						<option value="" ${searchVO.status_code == '' ? 'selected' : ''}>전체</option>
+						<option value="9" ${searchVO.status_code == '9' ? 'selected' : ''}>활동중</option>
+						<option value="0" ${searchVO.status_code == '0' ? 'selected' : ''}>탈퇴</option>
+					</select>
+					<select name="level" id="level" class="w3-select w3-right mr-3" style="width:20%">
+						<option value="" ${searchVO.level == '' ? 'selected' : ''}>전체</option>
+						<option value="1" ${searchVO.level == '1' ? 'selected' : ''}>골드레벨</option>
+						<option value="2" ${searchVO.level == '2' ? 'selected' : ''}>실버레벨</option>
 					</select>
 	    	  </div>
 	        </div>
 			<div class="w3-responsive tableStyle">
-			<table class="w3-table w3-striped table-bordered w3-white" style="width:auto;">
+			<table class="w3-table w3-striped table-bordered w3-white" style="width:100%;">
+				<colgroup>
+					<col style="width:5%;">
+					<col style="width:13.5%;">
+					<col style="width:13.5%;">
+					<col style="width:13.5%;">
+					<col style="width:13.5%;">
+					<col style="width:13.5%;">
+					<col style="width:13.5%;">
+					<col style="width:13.5%;">
+				</colgroup>
 	        	<tr>
 	        		<th class="text-center"><i class="fa-solid fa-check"></i></th>
 	        		<th class="text-center">아이디</th>
@@ -258,10 +275,13 @@
 	        		<th class="text-center">레벨</th>
 	        		<th class="text-center">가입일</th>
 	        	</tr>
+	        	<c:if test="${fn:length(userList) > 0}">
 	        	<c:forEach var="user" items="${userList}">
 	        		<tr>
 	        			<td class="text-center"><input type="checkbox"></td>
-	        			<td class="text-center">${user.user_id}</td>
+	        			<td class="text-center">
+	        				<a href="${ctp}/admin/user/userInforUpdate?user_id=${user.user_id}" alt="${searchVO.name} 회원 정보 수정">${user.user_id}</a>
+	        			</td>
 	        			<td>${user.name}</td>
 	        			<td class="text-center">${user.email}</td>
 	        			<td class="text-center">${user.tel}</td>
@@ -287,26 +307,32 @@
 	        			<td class="text-center">${user.created_date}</td>
 	        		</tr>
 	        	</c:forEach>
+	        	</c:if>
+	        	<c:if test="${fn:length(userList) == 0}">
+	        		<tr>
+	        			<td class="text-center" colspan="8">조회된 회원이 없습니다.</td>
+	        		</tr>
+	        	</c:if>
 	        </table>
 	     </div>
 	    </form>
 	     <!-- 블록 페이징 처리 -->
 	  <div class="w3-center w3-padding-32">
-	 	 <div class="mb-2"><b>${pageVo.pag} Page</b></div>
+	 	 <div class="mb-2"><b>${searchVO.pag} Page</b></div>
 	    <div class="w3-bar w3-white">
-	      <c:if test="${pageVo.pag > 1}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=1&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">«</a>
+	      <c:if test="${searchVO.pag > 1}">
+		      <a href="${ctp}/admin/user/userList${searchVO.getParams(searchVO)}&pag=1" class="w3-bar-item w3-button w3-hover-black">«</a>
 	      </c:if>
-	      <c:forEach var="i" begin="${(pageVo.curBlock*pageVo.blockSize)+1}" end="${(pageVo.curBlock*pageVo.blockSize)+pageVo.blockSize}">
-	      	<c:if test="${i <= pageVo.totPage && i == pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${i}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+	      <c:forEach var="i" begin="${(searchVO.curBlock*searchVO.blockSize)+1}" end="${(searchVO.curBlock*searchVO.blockSize)+searchVO.blockSize}">
+	      	<c:if test="${i <= searchVO.totPage && i == searchVO.pag}">
+		      <a href="${ctp}/admin/user/userList${searchVO.getParams(searchVO)}&pag=${i}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
-		    <c:if test="${i <= pageVo.totPage && i != pageVo.pag}">
-		      <a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${i}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
+		    <c:if test="${i <= searchVO.totPage && i != searchVO.pag}">
+		      <a href="${ctp}/admin/user/userList${searchVO.getParams(searchVO)}&pag=${i}" class="w3-bar-item w3-button w3-hover-black">${i}</a>
 		    </c:if>
 	      </c:forEach>
-		  <c:if test="${pageVo.pag != pageVo.totPage}">
-		  	<a href="${ctp}/admin/order/orderList?part=${pageVo.part}&pag=${pageVo.totPage}&pageSize=${pageVo.pageSize}&search=${search}&searchValue=${searchValue}&start=${start}&end=${end}" class="w3-bar-item w3-button w3-hover-black">»</a>
+		  <c:if test="${searchVO.pag != searchVO.totPage}">
+		  	<a href="${ctp}/admin/user/userList${searchVO.getParams(searchVO)}&pag=${searchVO.totPage}" class="w3-bar-item w3-button w3-hover-black">»</a>
 		  </c:if>
 	    </div>
 	  </div>	

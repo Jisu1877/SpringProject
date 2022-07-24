@@ -2,13 +2,15 @@ package com.spring.javagreenS_ljs.vo;
 
 import java.util.ArrayList;
 
-import com.spring.javagreenS_ljs.pagination.PageVO;
+import com.spring.javagreenS_ljs.pagination.SearchVO;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class UserVO extends PageVO {
-	private int user_idx;
+@EqualsAndHashCode(callSuper = false)
+public class UserVO extends SearchVO {
+	private Integer user_idx;
 	private String user_id;
 	private String user_pwd;
 	private String name;
@@ -16,23 +18,20 @@ public class UserVO extends PageVO {
 	private String email;
 	private String tel;
 	private String user_image;
-	private int status_code;
-	private int login_count;
-	private int buy_count;
-	private int buy_price;
-	private int level;
-	private int point;
+	private Integer status_code;
+	private Integer login_count;
+	private Integer buy_count;
+	private Integer buy_price;
+	private Integer level;
+	private Integer point;
 	private String seller_yn;
-	private int agreement;
+	private Integer agreement;
 	private String login_date;
 	private String created_date;
 	private String updated_date;
 	private String deny_date;
 	private String leave_date;
 	private String leave_reason;
-	
+
 	ArrayList<OrderListVO> orderList;
-	
-	private String search;
-	private String searchValue;
 }

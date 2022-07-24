@@ -19,9 +19,9 @@
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 		<!-- <property name="url" value="jdbc:mysql://localhost:3306/javagreen_ljs?allowMultiQueries=true"/> -->
-		<property name="url" value="jdbc:mysql://localhost:3306/javagreen_ljs?useSSL=true&amp;verifyServerCertificate=false&amp;serverTimezone=UTC&amp;allowMultiQueries=true"/>
-		<property name="username" value="root"/>
-		<property name="password" value="1234"/>
+		<property name="url" value="jdbc:mysql://192.168.1.233:27360/javagreen_ljs?useSSL=true&amp;verifyServerCertificate=false&amp;serverTimezone=UTC&amp;allowMultiQueries=true"/>
+		<property name="username" value="jisu1877"/>
+		<property name="password" value="jisu1877!@#$"/>
 		<!-- <property name="password" value="cjgreen"/> -->
 	</bean>
 	
