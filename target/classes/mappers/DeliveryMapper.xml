@@ -26,4 +26,8 @@
 	<update id="setDefaultDelete">
 		update ga_user_delivery set default_flag = 'n' where user_idx = #{user_idx} and default_flag = 'y'
 	</update>
+	
+	<update id="setDelete">
+		update ga_user_delivery set delete_flag = 'y' where user_delivery_idx = #{idx}
+	</update>
 </mapper>

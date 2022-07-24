@@ -1,13 +1,22 @@
 package com.spring.javagreenS_ljs.service;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.javagreenS_ljs.dao.CartDAO;
 import com.spring.javagreenS_ljs.dao.DeliveryDAO;
@@ -16,6 +25,7 @@ import com.spring.javagreenS_ljs.dao.OrderDAO;
 import com.spring.javagreenS_ljs.dao.PointDAO;
 import com.spring.javagreenS_ljs.dao.UserDAO;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
+import com.spring.javagreenS_ljs.vo.OrderExchangeVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 import com.spring.javagreenS_ljs.vo.PayMentVO;
@@ -387,6 +397,72 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void setCouponAmountSub(int order_idx, int coupon_amount) {
 		orderDAO.setCouponAmountSub(order_idx,coupon_amount);
+	}
+
+	@Override
+	public void setExchangeRequest(MultipartHttpServletRequest mfile, OrderExchangeVO vo) {
+		try {
+			String photo = "";
+			List<MultipartFile> fileList = mfile.getFiles("file"); //file input 태그의 name을 ()안에 적어주기. file 안에 선택된 각 사진 파일들을 각각의 객체로 만들어주는 작업.
+			
+			for(MultipartFile file : fileList) {
+				String oFileName = file.getOriginalFilename();
+				String sFileName = saveFileName(oFileName); //서버에 저장될 파일명을 결정해준다.
+				
+				//서버에 파일 저장처리하기
+				writeFile(file, sFileName);
+				
+				photo += sFileName + "/";
+			}
+			
+			//서버에 파일 저장완료후 DB에 내역을 저장시켜준다.
+			vo.setPhoto(photo);
+			orderDAO.setExchangeRequest(vo);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//서버에 파일 저장하기
+	private void writeFile(MultipartFile file, String sFileName) throws IOException {
+		byte[] data = file.getBytes(); //넘어온 객체를 byte 단위로 변경시켜줌.
+		
+		//request 객체 꺼내오기.
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		//실제로 업로드되는 경로를 찾아오기
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/exchange/");
+		//이 경로에 이 파일이름으로 저장할 껍데기 만들기
+		FileOutputStream fos = new FileOutputStream(uploadPath + sFileName);
+		fos.write(data); //내용물 채우기
+		fos.close();
+	}
+
+	//저장되는 파일명의 중복을 방지하기 위해 새로 파일명을 만들어준다.
+	private String saveFileName(String oFileName) {
+		String fileName = "";
+
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+
+		fileName += sdf.format(date) + "_" + oFileName;
+
+		return fileName;
+	}
+
+	@Override
+	public OrderExchangeVO getOrderExchangeInfor(int order_list_idx) {
+		return orderDAO.getOrderExchangeInfor(order_list_idx);
+	}
+
+	@Override
+	public void setExchangeAns(OrderExchangeVO vo) {
+		orderDAO.setExchangeAns(vo);
+	}
+
+	@Override
+	public void setExchangeShipping(OrderExchangeVO vo) {
+		orderDAO.setExchangeShipping(vo);
 	}
 
 }

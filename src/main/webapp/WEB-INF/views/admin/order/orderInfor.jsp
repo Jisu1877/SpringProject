@@ -202,7 +202,7 @@
 										<font size="3" color="gray">배송완료</font><br>
 									</c:if>					
 									<c:if test="${vo.order_status_code == '6'}">
-										<font size="3" color="gray">구매완료</font><br>
+										<font size="3" color="gray">확정완료</font><br>
 									</c:if>					
 									<c:if test="${vo.order_status_code == '7'}">
 										<font size="3" color="red">교환신청 처리 중</font><br>

@@ -97,3 +97,26 @@ CREATE TABLE ga_shipping_list(
 	foreign key(order_list_idx) references ga_order_list(order_list_idx),
     foreign key(user_delivery_idx) references ga_user_delivery(user_delivery_idx)
 );
+
+
+CREATE TABLE ga_order_exchange(
+	order_exchange_idx		INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_idx				INT NOT NULL,
+    order_idx				INT NOT NULL,
+    order_list_idx	 		INT NOT NULL,
+    exchange_reason			VARCHAR(255) NOT NULL,
+    photo					MEDIUMTEXT NOT NULL,
+    user_message			MEDIUMTEXT,
+    request_flag			VARCHAR(1),
+    exchange_admin_memo		MEDIUMTEXT,
+    bring_invoice_number	VARCHAR(255) NOT NULL,
+    request_answer_date		DATETIME,
+    bring_status			int DEFAULT 0,
+    exchange_invoice_number	VARCHAR(255),
+    exchange_delivery_date	DATETIME,
+    exchange_status			int DEFAULT 0,
+    created_date 			DATETIME NOT NULL DEFAULT now(),
+    foreign key(user_idx) references ga_user(user_idx),
+    foreign key(order_idx) references ga_order(order_idx),
+	foreign key(order_list_idx) references ga_order_list(order_list_idx)
+);

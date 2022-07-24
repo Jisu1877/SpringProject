@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.javagreenS_ljs.service.DeliveryService;
 import com.spring.javagreenS_ljs.service.ItemService;
@@ -19,7 +20,9 @@ import com.spring.javagreenS_ljs.service.OrderAdminService;
 import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
 import com.spring.javagreenS_ljs.vo.CouponVO;
+import com.spring.javagreenS_ljs.vo.ItemVO;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
+import com.spring.javagreenS_ljs.vo.OrderExchangeVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 import com.spring.javagreenS_ljs.vo.PayMentVO;
@@ -411,13 +414,58 @@ public class OrderController {
 		
 		//회원 포인트 지급
 		//지급할 포인트 알아오기
-		int point = itemService.getGivePoint(item_idx);
+		ItemVO itemVO = itemService.getItemInfor(item_idx); 
+		int point = itemVO.getSeller_point();
 		
+		//골드 레벨인 경우 지급 포인트 2배 처리
+		//회원 레벨 알아오기
+		int level = userService.getUserLevel(user_idx);
+		
+		if(level == 1) {
+			point = point * 2;
+		}
+		
+		//포인트 지급
 		userService.setUserGivePoint(user_idx,point);
 		
 		//주문 상태값 변경
 		orderAdminService.setOrderCodeChange(idx,code);
 		
 		return result;
+	}
+	
+	//교환요청 창 호출
+	@RequestMapping(value = "/exchangeRequest", method = RequestMethod.GET)
+	public String exchangeRequestGet(int listIdx, int orderIdx, int item_idx, Model model, HttpSession session) {
+		//주문 내용 가져오기
+		OrderListVO vo = orderService.getOrderListInfor(listIdx,orderIdx);
+		
+		//상품 정보 가져오기
+		ItemVO itemVO = itemService.getItemInfor(item_idx);
+		
+		//등록한 배송정보 가져오기
+		UserDeliveryVO deliveryVO = deliveryService.getUserDeliveryInfor(vo.getUser_delivery_idx());
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("itemVO", itemVO);
+		model.addAttribute("deliveryVO", deliveryVO);
+		return "order/exchangeRequest";
+		
+	}
+	
+	//교환요청 처리
+	@RequestMapping(value = "/exchangeRequest", method = RequestMethod.POST)
+	public String exchangeRequestPost(MultipartHttpServletRequest file, OrderExchangeVO vo, Model model, HttpSession session) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		vo.setUser_idx(user_idx);
+		
+		//교환 요청 테이블에 저장
+		orderService.setExchangeRequest(file, vo);
+		
+		//주문 상태값 변경
+		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "7");
+		
+		return "redirect:/msg/exchangeRequest";
+		
 	}
 }

@@ -30,6 +30,10 @@
 		and str_to_date(expiry_date, '%Y-%m-%d') >= str_to_date(now(), '%Y-%m-%d')
 	</select>
 	
+	<select id="getUserLevel" resultType="int">
+		select level from ga_user where user_idx = #{user_idx}
+	</select>
+	
 	<insert id="setUserJoin">
 		insert into ga_user values (DEFAULT, #{vo.user_id}, #{vo.user_pwd}, #{vo.name}, #{vo.gender}, #{vo.email}, #{vo.tel}, #{vo.user_image}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{vo.agreement}, NULL, DEFAULT, NULL, NULL, NULL, NULL);
 	</insert>

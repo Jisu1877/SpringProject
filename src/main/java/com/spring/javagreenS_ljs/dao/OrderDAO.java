@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
+import com.spring.javagreenS_ljs.vo.OrderExchangeVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 
@@ -71,5 +72,13 @@ public interface OrderDAO {
 	public int getAlreadyConfirmCheck(@Param("user_idx") int user_idx,@Param("order_idx") int order_idx);
 
 	public void setCouponAmountSub(@Param("order_idx") int order_idx, @Param("coupon_amount") int coupon_amount);
+
+	public void setExchangeRequest(@Param("vo") OrderExchangeVO vo);
+
+	public OrderExchangeVO getOrderExchangeInfor(@Param("order_list_idx") int order_list_idx);
+
+	public void setExchangeAns(@Param("vo") OrderExchangeVO vo);
+
+	public void setExchangeShipping(@Param("vo") OrderExchangeVO vo);
 
 }

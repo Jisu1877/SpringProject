@@ -2,7 +2,10 @@ package com.spring.javagreenS_ljs.service;
 
 import java.util.ArrayList;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
+import com.spring.javagreenS_ljs.vo.OrderExchangeVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.OrderVO;
 import com.spring.javagreenS_ljs.vo.PayMentVO;
@@ -60,5 +63,13 @@ public interface OrderService {
 	public void setOrderUpdate(int user_idx, int total_amount);
 
 	public void setCouponAmountSub(int order_idx, int coupon_amount);
+
+	public void setExchangeRequest(MultipartHttpServletRequest file, OrderExchangeVO vo);
+
+	public OrderExchangeVO getOrderExchangeInfor(int order_list_idx);
+
+	public void setExchangeAns(OrderExchangeVO vo);
+
+	public void setExchangeShipping(OrderExchangeVO vo);
 
 }

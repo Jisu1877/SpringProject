@@ -42,8 +42,8 @@ public class MessageController {
 			model.addAttribute("msg", user_id+"님 환영합니다.");
 			model.addAttribute("url", "main/mainHome");
 		}
-		else if(msgFlag.equals("userLoginOtherOk")) {
-			model.addAttribute("msg", user_id+"님 환영합니다.");
+		else if(msgFlag.equals("userLoginOtherOk")) {     //TODO 여기 체크
+			model.addAttribute("msg", user_id+"님 환영합니다."); 
 			model.addAttribute("url", "main/close");
 		}
 		else if(msgFlag.equals("itemInsertOk")) {
@@ -97,6 +97,18 @@ public class MessageController {
 		else if(msgFlag.equals("fileUploadOk")) { 
 			model.addAttribute("msg", "");
 			model.addAttribute("url", "admin/order/sendProcess"); 
+		}
+		else if(msgFlag.equals("exchangeRequest")) {
+			model.addAttribute("msg", "교환 요청이 완료되었습니다.");
+			model.addAttribute("url", "main/close"); 
+		}
+		else if(msgFlag.equals("exchangeAnsOk")) {
+			model.addAttribute("msg", "처리가 완료되었습니다.");
+			model.addAttribute("url", "admin/order/orderList"); 
+		}
+		else if(msgFlag.equals("exchangeProcessOk")) {
+			model.addAttribute("msg", "교환 상품 발송 처리가 완료되었습니다.");
+			model.addAttribute("url", "admin/order/orderList"); 
 		}
 		
 		return "include/message";

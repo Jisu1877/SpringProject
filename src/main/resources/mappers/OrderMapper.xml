@@ -23,6 +23,10 @@
 		insert into ga_order_cancel_request values (DEFAULT, #{vo.user_idx}, #{vo.order_idx}, #{vo.order_list_idx}, #{vo.use_point}, #{vo.cancel_reason}, #{vo.return_price}, #{vo.return_bank_name}, #{vo.return_bank_user_name}, #{vo.return_bank_number}, NULL, NULL, DEFAULT);
 	</insert>
 	
+	<insert id="setExchangeRequest">
+		insert into ga_order_exchange values (DEFAULT, #{vo.user_idx}, #{vo.order_idx}, #{vo.order_list_idx}, #{vo.exchange_reason}, #{vo.photo}, #{vo.user_message}, NULL, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL, NULL, DEFAULT, DEFAULT);
+	</insert>
+	
 	<select id="getOrderListTempList" resultType="com.spring.javagreenS_ljs.vo.OrderListVO">
 		select * from ga_order_list_temp where user_idx = #{user_idx}
 	</select>
@@ -71,7 +75,7 @@
 		ON o.order_idx = ol.order_idx
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
-		WHERE o.user_idx = #{user_idx} and  ol.order_status_code = '1' or ol.order_status_code = '2'
+		WHERE o.user_idx = #{user_idx} and (ol.order_status_code = '1' or ol.order_status_code = '2')
 		order by o.created_date desc
 	</select>
 	
@@ -81,7 +85,7 @@
 		ON o.order_idx = ol.order_idx
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
-		WHERE o.user_idx = #{user_idx} and  ol.order_status_code = '1' or ol.order_status_code = '2'
+		WHERE o.user_idx = #{user_idx} and (ol.order_status_code = '1' or ol.order_status_code = '2')
 		and date(o.created_date) between date(#{start}) and date(#{end}) 
 		order by o.created_date desc
 	</select>
@@ -92,7 +96,7 @@
 		ON o.order_idx = ol.order_idx
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
-		WHERE o.user_idx = #{user_idx} and  ol.order_status_code = '5' or ol.order_status_code = '6'
+		WHERE o.user_idx = #{user_idx} and (ol.order_status_code = '5' or ol.order_status_code = '6')
 		order by o.created_date desc
 	</select>
 	
@@ -103,7 +107,7 @@
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and 
-		ol.order_status_code = '7' or ol.order_status_code = '8' or ol.order_status_code = '9' or ol.order_status_code = '10' 
+		(ol.order_status_code = '7' or ol.order_status_code = '8' or ol.order_status_code = '9' or ol.order_status_code = '10')
 		order by o.created_date desc
 	</select>
 	
@@ -114,8 +118,8 @@
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and 
-		ol.order_status_code = '3' or ol.order_status_code = '7' or ol.order_status_code = '8' or ol.order_status_code = '9' or ol.order_status_code = '10' 
-		or ol.order_status_code = '11' or ol.order_status_code = '12' or ol.order_status_code = '13' or ol.order_status_code = '14'
+		(ol.order_status_code = '3' or ol.order_status_code = '7' or ol.order_status_code = '8' or ol.order_status_code = '9' or ol.order_status_code = '10' 
+		or ol.order_status_code = '11' or ol.order_status_code = '12' or ol.order_status_code = '13' or ol.order_status_code = '14')
 		order by o.created_date desc
 	</select>
 	
@@ -126,7 +130,7 @@
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and 
-		ol.order_status_code = '11' or ol.order_status_code = '12' or ol.order_status_code = '13' or ol.order_status_code = '14'
+		(ol.order_status_code = '11' or ol.order_status_code = '12' or ol.order_status_code = '13' or ol.order_status_code = '14')
 		order by o.created_date desc
 	</select>
 	
@@ -147,7 +151,7 @@
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and date(o.created_date) between date(#{start}) and date(#{end}) 
-		and ol.order_status_code = '7' or ol.order_status_code = '8' or ol.order_status_code = '9' or ol.order_status_code = '10'
+		and (ol.order_status_code = '7' or ol.order_status_code = '8' or ol.order_status_code = '9' or ol.order_status_code = '10')
 		order by o.created_date desc
 	</select>
 	
@@ -158,7 +162,7 @@
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and date(o.created_date) between date(#{start}) and date(#{end}) 
-		and ol.order_status_code = '11' or ol.order_status_code = '12' or ol.order_status_code = '13' or ol.order_status_code = '14'
+		and (ol.order_status_code = '11' or ol.order_status_code = '12' or ol.order_status_code = '13' or ol.order_status_code = '14')
 		order by o.created_date desc
 	</select>
 	
@@ -169,7 +173,7 @@
 		JOIN ga_item it
 		ON ol.item_idx = it.item_idx
 		WHERE o.user_idx = #{user_idx} and date(o.created_date) between date(#{start}) and date(#{end})
-		and  ol.order_status_code = #{code}
+		and ol.order_status_code = #{code}
 		order by o.created_date desc
 	</select>
 	
@@ -202,6 +206,10 @@
 		where ol.order_status_code = '6' and o.user_idx = #{user_idx} and o.order_idx = #{order_idx};
 	</select>
 	
+	<select id="getOrderExchangeInfor" resultType="com.spring.javagreenS_ljs.vo.OrderExchangeVO">
+		select * from ga_order_exchange where order_list_idx = #{order_list_idx}
+	</select>
+	
 	<delete id="setOrderListTempDelete">
 		delete from ga_order_list_temp where user_idx = #{user_idx}
 	</delete>
@@ -220,5 +228,15 @@
 	
 	<update id="setCouponAmountSub">
 		update ga_order set coupon_amount = coupon_amount - #{coupon_amount} where order_idx = #{order_idx}
+	</update>
+	
+	<update id="setExchangeAns">
+		update ga_order_exchange set request_flag = #{vo.request_flag}, exchange_admin_memo = #{vo.exchange_admin_memo}, bring_shipping_company = #{vo.bring_shipping_company}, bring_invoice_number = #{vo.bring_invoice_number}, request_answer_date = now()
+		where order_exchange_idx = #{vo.order_exchange_idx}
+	</update>
+	
+	<update id="setExchangeShipping">
+		update ga_order_exchange set bring_status = 1, exchange_shipping_company = #{vo.exchange_shipping_company}, exchange_invoice_number = #{vo.exchange_invoice_number}, exchange_delivery_date = now(), exchange_admin_memo = #{vo.exchange_admin_memo}
+		where order_exchange_idx = #{vo.order_exchange_idx}
 	</update>
 </mapper>

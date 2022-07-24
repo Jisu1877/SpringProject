@@ -205,14 +205,15 @@
 		let order_total_amount = $("#total_price").data("price");
 		let point = document.getElementById("point").value;
 		let priceCalc = 0;
-		if(point != "") {
+		if(point != "") { // 포인트 사용 시
 			priceCalc = Number($(".calcPrice").attr("data-cal"));
 			$("#coupon_amount").val(0);
 			$("#coupon_user_idx").val(0);
-		}
-		
-		if(point == "" && coupon_user_idx != "0") {
-			priceCalc = Number($(".calcPrice").attr("data-cal"));
+		} else if (coupon_user_idx != "0") { // 쿠폰 사용 시
+			priceCalc = Number($(".calcPrice").attr("data-cal"));			
+		} else { // 둘 다 사용 안 함
+			$("#coupon_amount").val(0);
+			$("#coupon_user_idx").val(0);
 		}
 		
 		$("#order_total_amount").val(order_total_amount);

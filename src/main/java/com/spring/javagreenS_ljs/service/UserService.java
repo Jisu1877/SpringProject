@@ -42,4 +42,6 @@ public interface UserService {
 	
 	public void setMyPage(UserVO userVO, Model model);
 
+	public int getUserLevel(int user_idx);
+
 }

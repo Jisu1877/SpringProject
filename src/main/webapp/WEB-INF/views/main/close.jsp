@@ -7,8 +7,8 @@
 		WinClose();
 	});
 	
-	function WinClose()
-	 {
-		window.open('about:blank','_self').self.close();  
+	function WinClose() {
+		window.open('about:blank', '_self').self.close();
+		opener.parent.location.reload();
 	}
 </script>

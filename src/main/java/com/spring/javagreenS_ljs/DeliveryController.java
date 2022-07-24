@@ -70,8 +70,8 @@ public class DeliveryController {
 	
 	
 	//기본 배송지로 변경
-	@RequestMapping(value = "/defaultChange", method = RequestMethod.GET)
-	public String defaultChangeGet(HttpSession session, @RequestParam int idx, Model model) {
+	@RequestMapping(value = "/defaultChange", method = RequestMethod.POST)
+	public String defaultChangePost(HttpSession session, @RequestParam int idx, Model model) {
 		int user_idx = (int) session.getAttribute("sUser_idx");
 		
 		//기존에 기본 배송지를 해제하기
@@ -85,5 +85,19 @@ public class DeliveryController {
 		model.addAttribute("deliverList",deliverList);
 		
 		return "order/deliveryList";
+	}
+	
+	//배송지삭제
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String deleteGet(HttpSession session, @RequestParam int idx, Model model) {
+		int user_idx = (int) session.getAttribute("sUser_idx");
+		
+		//삭제처리
+		deliveryService.setDelete(idx);
+		
+		ArrayList<UserDeliveryVO> deliverList = deliveryService.getDeliveryList(user_idx);
+		model.addAttribute("deliverList",deliverList);
+		return "order/deliveryList";
+		
 	}
 }
