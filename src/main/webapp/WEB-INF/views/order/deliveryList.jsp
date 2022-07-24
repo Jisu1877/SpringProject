@@ -15,6 +15,24 @@
     		text-decoration: none;
     	}
     </style>
+    <script>
+    	function defaultChange(idx) {
+			$.ajax({
+				type : "post",
+				url : "${ctp}/delivery/defaultChange",
+				data : {idx : idx},
+				success : function() {
+					alert("기본 배송지 변경이 완료되었습니다.");
+					window.opener.location.reload();
+					window.close();
+				},
+				error : function() {
+					alert("전송오류.");
+				}
+			});
+		}
+    </script>
+    
 </head>
 <body>
 <!-- !PAGE CONTENT! -->
@@ -26,17 +44,21 @@
 		<div class="w3-row-padding w3-padding-16">
 			<div class="w3-col m1 w3-margin-bottom"></div>
 			<div class="w3-col m10 w3-margin-bottom">
-				<label class="w3-yellow mt-3"><b>주문 정보</b></label><br>
+				<label class="mt-3"><b>※ 기본 배송지는 삭제할 수 없습니다.</b></label><br>
 				<c:forEach var="deliveryVO" items="${deliverList}" varStatus="st">
 				[${st.count}번 배송지]&nbsp;
 				<c:if test="${deliveryVO.default_flag == 'y'}">
 					<font color="tomato">기본배송지</font>
 				</c:if>
 				<c:if test="${deliveryVO.default_flag == 'n'}">
-					<a href="${ctp}/delivery/defaultChange?idx=${deliveryVO.user_delivery_idx}">👇기본배송지로 변경</a> <!-- ajax로 변경 후 부모 창 새로고침 추가 -->
-					<a href="" class="w3-right">[삭제]</a>
+					<a href="javascript:defaultChange(${deliveryVO.user_delivery_idx})">👇기본배송지로 변경</a> <!-- ajax로 변경 후 부모 창 새로고침 추가 -->
+					<a href="${ctp}/delivery/delete?idx=${deliveryVO.user_delivery_idx}" class="w3-right">[삭제]</a>
 				</c:if>
 				<table class="table w3-bordered">
+					<tr>
+						<th width="20%" class="text-center">배송지 이름</th>
+    					<td>${deliveryVO.title}</td>
+					</tr>
 					<tr>
     					<th width="20%" class="text-center">수령인</th>
     					<td>${deliveryVO.delivery_name}</td>

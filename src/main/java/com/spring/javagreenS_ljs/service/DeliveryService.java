@@ -18,4 +18,6 @@ public interface DeliveryService {
 
 	public void setDefaultDelete(int user_idx);
 
+	public void setDelete(int idx);
+
 }

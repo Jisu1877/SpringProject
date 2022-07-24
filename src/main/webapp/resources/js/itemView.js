@@ -192,12 +192,12 @@ function deleteOption(ths) {
 	let price2 = Number(price) * Number(amount);
 	
 	let idx = $("#"+id).find(".option_cnt").data('idx');
-	//옵션 idx, name, 가격, 수량 삭제
-	for(let i = 0; i < ($(".option_div").length)-1; i++) {
-		if(optionIdxArr[i] == idx) {
-			delete optionIdxArr[i];
-			delete order_quantity[i];
-		}
+	//옵션 idx, name, 가격, 수량 삭제		
+	const arrIndex = optionIdxArr.indexOf(String(idx));
+	if (arrIndex > -1) { // only splice array when item is found
+		optionIdxArr.splice(arrIndex, 1); // 2nd parameter means remove one item only
+		order_quantity.splice(arrIndex, 1); // 2nd parameter means remove one item only
+		console.log(optionIdxArr, order_quantity);
 	}
 	
 	$( 'div' ).remove('#'+id);

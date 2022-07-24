@@ -1,5 +1,7 @@
 package com.spring.javagreenS_ljs.service;
 
+import com.spring.javagreenS_ljs.vo.ItemVO;
+
 public interface ItemService {
 
 	public int getStockquantity(int item_idx);
@@ -8,7 +10,7 @@ public interface ItemService {
 
 	public void setStockQuantityUpdate(int item_idx, int order_quantity);
 
-	public int getGivePoint(int item_idx);
+	public ItemVO getItemInfor(int item_idx);
 
 
 }

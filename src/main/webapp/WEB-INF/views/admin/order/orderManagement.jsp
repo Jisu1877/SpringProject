@@ -170,10 +170,10 @@
 	   				<option value="4" ${code == 4 ? 'selected' : '' }>배송중</option>
 	   				<option value="5" ${code == 5 ? 'selected' : '' }>배송완료</option>
 	   				<option value="6" ${code == 6 ? 'selected' : '' }>구매확정완료</option>
-	   				<option value="7" ${code == 7 ? 'selected' : '' }>교환신청</option>
+	   				<option value="7" ${code == 7 ? 'selected' : '' }>교환요청</option>
 	   				<option value="8" ${code == 8 ? 'selected' : '' }>교환승인</option>
 	   				<option value="9" ${code == 9 ? 'selected' : '' }>배송중(교환)</option>
-	   				<option value="10" ${code == 10 ? 'selected' : '' }>교환거부</option>
+	   				<option value="10" ${code == 10 ? 'selected' : '' }>교환반려</option>
 	   				<option value="11" ${code == 11 ? 'selected' : '' }>환불신청</option>
 	   				<option value="12" ${code == 12 ? 'selected' : '' }>환불승인</option>
 	   				<option value="13" ${code == 13 ? 'selected' : '' }>환불완료</option>
@@ -259,19 +259,19 @@
 								<font size="3" color="navy">배송완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '6'}">
-								<font size="3" color="gray">구매완료</font>
+								<font size="3" color="gray">확정완료</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '7'}">
-								<font size="3" color="red">교환신청 처리 중</font>
+								<font size="3" color="blue">교환요청</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '8'}">
-								<font size="3" color="red">교환승인 완료</font>
+								<font size="3" color="pupple">교환승인</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '9'}">
 								<font size="3" color="red">배송중(교환)</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '10'}">
-								<font size="3" color="red">교환거부</font>
+								<font size="3" color="pupple">교환반려</font>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '11'}">
 								<font size="3" color="red">환불신청 처리 중</font>
@@ -306,22 +306,22 @@
 								<a onclick="deliveryOk(${vo.order_list_idx})" class="btn w3-2021-french-blue btn-sm">완료 처리</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '5'}">
-								-
+								<a onclick="" class="btn w3-2021-french-blue btn-sm">배송 내역</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '6'}">
-							<font size="3" color="gray">구매완료</font><br>
+								-
 							</c:if>					
 							<c:if test="${vo.order_status_code == '7'}">
-							<font size="3" color="red">교환신청 처리 중</font><br>
+								<a href="${ctp}/admin/order/exchangeManagement?order_idx=${vo.order_idx}&order_list_idx=${vo.order_list_idx}" class="btn w3-2020-orange-peel btn-sm">요청 처리</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '8'}">
-							<font size="3" color="red">교환승인 완료</font><br>
+								<a href="${ctp}/admin/order/exchangeManagement2?order_idx=${vo.order_idx}&order_list_idx=${vo.order_list_idx}" class="btn w3-2020-grape-compote btn-sm">수거 완료</a>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '9'}">
 							<font size="3" color="red">배송중(교환)</font><br>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '10'}">
-							<font size="3" color="red">교환거부</font><br>
+								-
 							</c:if>					
 							<c:if test="${vo.order_status_code == '11'}">
 							<font size="3" color="red">환불신청 처리 중</font><br>

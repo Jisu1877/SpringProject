@@ -327,7 +327,7 @@
 		ON o.user_idx = us.user_idx
 		JOIN ga_user_delivery ud
 		ON o.user_idx = ud.user_idx
-		where ol.order_list_idx = #{order_list_idx}
+		where ol.order_list_idx = #{order_list_idx} and ud.default_flag = 'y'
 	</select>
 	
 	<select id="getOrderCancelRequestInfor" resultType="com.spring.javagreenS_ljs.vo.OrderCancelVO">

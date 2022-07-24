@@ -44,4 +44,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 		deliveryDAO.setDefaultDelete(user_idx);
 	}
 
+	@Override
+	public void setDelete(int idx) {
+		deliveryDAO.setDelete(idx);
+	}
+
 }

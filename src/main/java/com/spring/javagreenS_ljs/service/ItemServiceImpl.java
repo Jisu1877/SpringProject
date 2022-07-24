@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.javagreenS_ljs.dao.ItemDAO;
+import com.spring.javagreenS_ljs.vo.ItemVO;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -27,8 +28,8 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public int getGivePoint(int item_idx) {
-		return itemDAO.getGivePoint(item_idx);
+	public ItemVO getItemInfor(int item_idx) {
+		return itemDAO.getItemInfor(item_idx);
 	}
 	
 	

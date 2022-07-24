@@ -2,6 +2,8 @@ package com.spring.javagreenS_ljs.dao;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javagreenS_ljs.vo.ItemVO;
+
 public interface ItemDAO {
 
 	public int getStockquantity(@Param("item_idx") int item_idx);
@@ -14,6 +16,6 @@ public interface ItemDAO {
 
 	public void setStockQuantityUpdate(@Param("item_idx") int item_idx, @Param("order_quantity") int order_quantity);
 
-	public int getGivePoint(@Param("item_idx") int item_idx);
+	public ItemVO getItemInfor(@Param("item_idx") int item_idx);
 	
 }

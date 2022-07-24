@@ -20,4 +20,6 @@ public interface DeliveryDAO {
 
 	public void setDefaultDelete(@Param("user_idx") int user_idx);
 
+	public void setDelete(@Param("idx") int idx);
+
 }

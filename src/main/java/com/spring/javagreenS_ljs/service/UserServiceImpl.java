@@ -212,4 +212,9 @@ public class UserServiceImpl implements UserService {
 		model.addAttribute("orderListOnlyReturnCnt", orderListOnlyReturnCnt);
 	}
 
+	@Override
+	public int getUserLevel(int user_idx) {
+		return userDAO.getUserLevel(user_idx);
+	}
+
 }

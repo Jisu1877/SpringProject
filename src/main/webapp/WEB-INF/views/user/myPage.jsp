@@ -369,8 +369,8 @@ function confirmCheck(listIdx,orderIdx,total_amount, item_idx) {
 								<i class="fa-solid fa-box-check"></i> 배송이 완료되었습니다. 구매확정을 진행해주세요.
 								<div class="mt-2">
 									<a class="btn w3-amber btn-sm mr-1" href="javascript:confirmCheck(${vo.order_list_idx},${vo.order_idx},${vo.order_total_amount},${vo.item_idx})">구매확정</a>
-									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2021-cerulean btn-sm mr-1">교환 요청</a>
-									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2021-cerulean btn-sm">반품 요청</a>
+									<a href="javascript:exchangeRequest(${vo.order_list_idx},${vo.order_idx},${vo.item_idx})" class="btn w3-2020-orange-peel btn-sm mr-1">교환 요청</a>
+									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-black btn-sm">반품 요청</a>
 								</div>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '6'}">
@@ -382,16 +382,20 @@ function confirmCheck(listIdx,orderIdx,total_amount, item_idx) {
 								✔️ 교환 신청이 완료되었습니다. 관리자 승인여부 처리를 기다려주세요.
 							</c:if>					
 							<c:if test="${vo.order_status_code == '8'}">
-							<font size="3" color="red">교환승인 완료</font><br>
-								✔️ 상품 수거 처리 중입니다.
+							<font size="3" color="blue">교환승인 완료</font><br>
+								✔️ 상품 수거 처리 중입니다. 불편을 끼쳐드려 죄송합니다.
 							</c:if>					
 							<c:if test="${vo.order_status_code == '9'}">
 							<font size="3" color="red">배송중(교환)</font><br>
 								✔️ 교환물품이 배송 중입니다.
 							</c:if>					
 							<c:if test="${vo.order_status_code == '10'}">
-							<font size="3" color="red">교환거부</font><br>
-								✔ 교환이 거부되었습니다. 자세한 내용은 교환처리 페이지에서 확인해주세요.
+							<font size="3" color="red">교환요청 반려</font><br>
+								✔ 교환 요청이 반려되었습니다. 관리자 답변을 확인해주세요.<br>
+								<div class="mt-2">
+									<a class="btn w3-amber btn-sm mr-1" href="javascript:confirmCheck(${vo.order_list_idx},${vo.order_idx},${vo.order_total_amount},${vo.item_idx})">구매확정</a>
+									<a onclick="orderCancelInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-black btn-sm">반품 요청</a>
+								</div>
 							</c:if>					
 							<c:if test="${vo.order_status_code == '11'}">
 							<font size="3" color="red">환불신청 처리 중</font><br>
@@ -435,6 +439,9 @@ function confirmCheck(listIdx,orderIdx,total_amount, item_idx) {
 		          				<c:if test="${vo.reject_code == '1'}">
 		          					<a onclick="orderCancelRequestInfor(${vo.order_list_idx},${vo.order_idx})" class="btn w3-2020-mosaic-blue btn-sm">처리 내용 확인</a>
 								</c:if>
+								<c:if test="${vo.order_status_code == '8' || vo.order_status_code == '10'}">
+									<a onclick="" class="btn w3-yellow btn-sm">관리자 답변 확인</a>
+								</c:if>	
 		          			</div>
 		          		</div>
 			        </div><br><hr>

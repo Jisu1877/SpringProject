@@ -149,3 +149,14 @@ function couponList() {
     let y = (window.screen.height/2) - (winY/2)
 	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
 }
+
+
+/* 교환 요청 */
+function exchangeRequest(listIdx, orderIdx, item_idx) {
+	let url = "/javagreenS_ljs/order/exchangeRequest?orderIdx="+orderIdx+"&listIdx="+listIdx+"&item_idx="+item_idx;
+	let winX = 720;
+    let winY = 750;
+    let x = (window.screen.width/2) - (winX/2);
+    let y = (window.screen.height/2) - (winY/2)
+	window.open(url, "nWin", "width="+winX+",height="+winY+", left="+x+", top="+y+", resizable = no, scrollbars = no");
+}

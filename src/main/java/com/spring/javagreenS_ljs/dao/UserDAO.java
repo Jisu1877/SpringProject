@@ -47,4 +47,6 @@ public interface UserDAO {
 
 	public void setUserGivePoint(@Param("user_idx") int user_idx, @Param("point") int point);
 
+	public int getUserLevel(@Param("user_idx") int user_idx);
+
 }

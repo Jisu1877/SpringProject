@@ -11,8 +11,8 @@
 		select option_stock_quantity from ga_item_option where item_option_idx = #{option_idx}
 	</select>
 	
-	<select id="getGivePoint" resultType="int">
-		select seller_point from ga_item where item_idx = #{item_idx}
+	<select id="getItemInfor" resultType="com.spring.javagreenS_ljs.vo.ItemVO">
+		select * from ga_item where item_idx = #{item_idx}
 	</select>
 	
 	<update id="setOrderUpdate">

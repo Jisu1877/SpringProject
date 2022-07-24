@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +24,7 @@ import com.spring.javagreenS_ljs.service.OrderAdminService;
 import com.spring.javagreenS_ljs.service.OrderService;
 import com.spring.javagreenS_ljs.service.UserService;
 import com.spring.javagreenS_ljs.vo.OrderCancelVO;
+import com.spring.javagreenS_ljs.vo.OrderExchangeVO;
 import com.spring.javagreenS_ljs.vo.OrderListVO;
 import com.spring.javagreenS_ljs.vo.ShippingListVO;
 import com.spring.javagreenS_ljs.vo.UserDeliveryVO;
@@ -83,6 +85,7 @@ public class AdminOrderController {
 		return "admin/order/orderManagement";
 	} 
  
+    //주문 상세 정보 가져오기
     @RequestMapping(value = "/orderInfor", method = RequestMethod.GET)
     public String orderInforGet(int idx, Model model) {
     	//주문 정보 가져오기
@@ -101,6 +104,10 @@ public class AdminOrderController {
     			shippingList.add(shippingVO);
     		}
     	}
+    	
+    	//TODO 교환 요청 정보 가져오기
+    	
+    	//TODO 환불 요청 정보 가져오기
     	
     	model.addAttribute("orderList", orderList);
     	model.addAttribute("shippingList", shippingList);
@@ -230,12 +237,80 @@ public class AdminOrderController {
     @RequestMapping(value = "/invoiceinsert", method = RequestMethod.POST)
     public String invoiceinsertPost(ShippingListVO vo) {
     	
-    	//해당 주문 목록 상태값 변경
-		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "4");
-    	
     	//배송 목록 테이블에 저장
     	orderAdminService.setShippingListHistory(vo);
     	
+    	//해당 주문 목록 상태값 변경
+    	orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "4");
+    	
     	return "1";
+    }
+    
+    //교환 요청 승인/거부 처리 창 호출
+    @RequestMapping(value = "/exchangeManagement", method = RequestMethod.GET)
+    public String exchangeManagementGet(OrderExchangeVO vo, Model model, HttpSession session) {
+    	String user_id = (String)session.getAttribute("sUser_id");
+		//회원정보 가져오기
+		UserVO userVO = userService.getUserInfor(user_id);
+    	
+    	//주문 내용 가져오기
+    	OrderListVO listVO = orderService.getOrderListInfor(vo.getOrder_list_idx(), vo.getOrder_idx());
+    	
+    	//교환 요청 내용 가져오기
+    	OrderExchangeVO exVO = orderService.getOrderExchangeInfor(vo.getOrder_list_idx());
+    	
+    	model.addAttribute("userVO", userVO);
+    	model.addAttribute("listVO", listVO);
+    	model.addAttribute("exVO", exVO);
+    	
+		return "admin/order/exchangeManagement";
+    }
+    
+    //교환 요청 승인/거부 처리 창 호출
+    @RequestMapping(value = "/exchangeManagement2", method = RequestMethod.GET)
+    public String exchangeManagement2Get(OrderExchangeVO vo, Model model, HttpSession session) {
+    	String user_id = (String)session.getAttribute("sUser_id");
+    	//회원정보 가져오기
+    	UserVO userVO = userService.getUserInfor(user_id);
+    	
+    	//주문 내용 가져오기
+    	OrderListVO listVO = orderService.getOrderListInfor(vo.getOrder_list_idx(), vo.getOrder_idx());
+    	
+    	//교환 요청 내용 가져오기
+    	OrderExchangeVO exVO = orderService.getOrderExchangeInfor(vo.getOrder_list_idx());
+    	
+    	model.addAttribute("userVO", userVO);
+    	model.addAttribute("listVO", listVO);
+    	model.addAttribute("exVO", exVO);
+    	return "admin/order/exchangeManagement2";
+    }
+    
+    // 교환 승인 및 거부 처리
+    @RequestMapping(value = "/exchangeAns", method = RequestMethod.POST)
+    public String exchangeAnsPost(OrderExchangeVO vo) {
+    	//교환DB 업뎃
+    	orderService.setExchangeAns(vo);
+    	
+    	//교환 거부 시..
+    	if(vo.getRequest_flag().equals("n")) {
+    		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "10");
+    	}
+    	else {
+    		orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "8");
+    	}
+    	
+    	return "redirect:/msg/exchangeAnsOk";
+    }
+    
+    //교환 상품 발송
+    @RequestMapping(value = "/exchangeShipping", method = RequestMethod.POST)
+    public String exchangeProcessPost(OrderExchangeVO vo) {
+    	//수거 완료 상태 처리
+    	orderAdminService.setOrderCodeChange(vo.getOrder_list_idx(), "9");
+    	
+    	//교환DB 업뎃
+    	orderService.setExchangeShipping(vo);
+    	
+    	return "redirect:/msg/exchangeProcessOk";
     }
 }
