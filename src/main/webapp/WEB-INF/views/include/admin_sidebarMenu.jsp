@@ -130,7 +130,7 @@ function userImageChange() {
 	  <button onclick="slideDown(4)" class="w3-2019-brown-granite menu"><strong>회원 관리</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  <i class="fa-solid fa-sort-down"></i></button>
 	  <div id="Demo4" class="w3-bar-block w3-2020-ash" style="display: none">
-	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/user/UserInfor">회원 정보 관리</a></button> <!-- 컨트롤러 따로 만들어서 진행..! -->
+	    <button class="w3-bar-item w3-2019-brown-granite"><a href="${ctp}/admin/user/userList">회원 정보 관리</a></button> <!-- 컨트롤러 따로 만들어서 진행..! -->
 	  </div>
 	</div>
   	<div class="w3-dropdown-click">

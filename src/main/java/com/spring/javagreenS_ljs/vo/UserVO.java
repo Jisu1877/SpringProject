@@ -2,9 +2,12 @@ package com.spring.javagreenS_ljs.vo;
 
 import java.util.ArrayList;
 
+import com.spring.javagreenS_ljs.pagination.PageVO;
+
 import lombok.Data;
 
-public @Data class UserVO {
+@Data
+public class UserVO extends PageVO {
 	private int user_idx;
 	private String user_id;
 	private String user_pwd;
@@ -29,4 +32,7 @@ public @Data class UserVO {
 	private String leave_reason;
 	
 	ArrayList<OrderListVO> orderList;
+	
+	private String search;
+	private String searchValue;
 }

@@ -13,5 +13,5 @@ public @Data class PageVO {
 	private int lastBlock;
 	private int pag;
 	
-	private String part;
+	private String part; // 검색 조건
 }
